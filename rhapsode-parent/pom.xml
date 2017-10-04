@@ -45,7 +45,7 @@
 
     <groupId>org.rhapsode</groupId>
     <artifactId>rhapsode-parent</artifactId>
-    <version>0.3.2-SNAPSHOT</version>
+    <version>0.3.2-BETA</version>
 
     <packaging>pom</packaging>
 

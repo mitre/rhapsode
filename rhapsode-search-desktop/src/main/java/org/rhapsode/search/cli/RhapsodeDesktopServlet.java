@@ -72,7 +72,7 @@ public class RhapsodeDesktopServlet {
     public final static int DEFAULT_PORT = 8092;
 
     public static String getVersion() {
-        return "Rhapsode Prototype, v0.3.2-SNAPSHOT";
+        return "Rhapsode Prototype, v0.3.2-BETA";
     }
 
     public void execute(Path propsFile) throws Exception {
