@@ -15,3 +15,5 @@ To run:
 6) Click on "Search Tools"
 
 Enjoy!
+
+See a preprint of our upcoming JASIST [article](https://www.mitre.org/sites/default/files/publications/pr-16-1413-collaborative-exploratory-search-nformation-filtering-preprint.pdf).
