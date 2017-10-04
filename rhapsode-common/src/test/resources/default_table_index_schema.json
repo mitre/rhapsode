@@ -1,0 +1,52 @@
+{
+  "system_fields": {
+    "unique_file_key_field": "_fid",
+    "unique_doc_key_field": "_did",
+    "rel_path_field": "rel_path",
+    "contains_digest_field": "contains_md5",
+    "default_content_field": "content",
+    "attachment_offset_field" : "_ao",
+    "attachment_offset_sort_field" : "_aos"
+  },
+
+  "field_mapper": {
+  },
+
+  "fields": {
+    "_fid": {
+      "type": "text",
+      "multivalued": "false",
+      "index_analyzer": "string"
+    }
+  },
+
+  "analyzers": {
+    "text": {
+      "charfilters": [
+        {
+          "factory": "oala.fa.PersianCharFilterFactory",
+          "params": {}
+        }
+      ],
+      "tokenizer": {
+        "factory": "oala.standard.StandardTokenizerFactory",
+        "params": {}
+      },
+      "tokenfilters": [
+        {
+          "factory": "oala.icu.ICUFoldingFilterFactory",
+          "params": {}
+        },
+        {
+          "factory": "oala.cjk.CJKBigramFilterFactory",
+          "params": {}
+        }
+      ]
+    },
+    "string": {
+      "tokenizer": {
+        "factory": "oala.core.KeywordTokenizerFactory"
+      }
+    }
+  }
+}

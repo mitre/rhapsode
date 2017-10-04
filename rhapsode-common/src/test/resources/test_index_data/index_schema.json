@@ -1,0 +1,236 @@
+{
+  "system_fields": {
+    "unique_file_key_field": "_fid",
+    "unique_doc_key_field": "_did",
+    "rel_path_field": "rel_path",
+    "contains_digest_field": "contains_md5",
+    "default_content_field": "content",
+    "attachment_offset_field" : "_ao",
+    "attachment_offset_sort_field" : "_aos"
+  },
+
+  "field_mapper": {
+    "_comment": "map fields from Tika to Lucene fields",
+    "_comment": "f = from (Tika); t = to (Lucene)",
+    "_comment": "for 'capture', valid fail policies include:",
+    "_comment": " 'skip', 'store_as_is', 'exception'",
+
+    "ignore_case": "false",
+    "mappings": [
+      {
+        "f":"_ao",
+        "t":"_ao"
+      },
+      {
+        "f": "dc:title",
+        "t": "title"
+      },
+      {
+        "f": "Content-Type",
+        "t": "mime"
+      },
+      {
+        "f": "tika_batch_fs:relative_path",
+        "t": "rel_path"
+      },
+      {
+        "f": "tika_batch_fs:relative_path",
+        "t": "display_name",
+        "capture": {
+          "find": "([^\/\\\\]+)$",
+          "replace": "$1",
+          "fail_policy":"store_as_is"
+        }
+      },
+      {
+        "f":"X-TIKA:embedded_resource_path",
+        "t":"embedded_path"
+      },
+      {
+        "f": "resourceName",
+        "t": "file_name"
+      },
+      {
+        "f": "X-TIKA:content",
+        "t": "content"
+      },
+      {
+        "f": "X-TIKA:digest:MD5",
+        "t": "md5"
+      },
+      {
+        "f": "contains_md5",
+        "t": "contains_md5"
+      },
+      {
+        "f": "dc:creator",
+        "t": "author"
+      },
+      {
+        "f": "dc:publisher",
+        "t": "publisher"
+      },
+      { "f":"extended-properties:Company",
+        "t":"company"
+      },
+      {
+        "f":"extended-properties:Manager",
+        "t":"manager"
+      },
+      {
+        "f":"dcterms:created",
+        "t":"created",
+        "capture": {
+          "find": "^(\\d\\d\\d\\d)-(\\d\\d)-(\\d\\d)T",
+          "replace": "$1$2$3",
+          "fail_policy": "skip"
+        }
+
+      },
+      {
+        "f":"dcterms:modified",
+        "t":"modified",
+        "capture": {
+          "find": "^(\\d\\d\\d\\d)-(\\d\\d)-(\\d\\d)T",
+          "replace": "$1$2$3",
+          "fail_policy": "skip"
+        }
+      },
+      {
+        "f": "X-TIKA:content",
+        "t": "lang",
+        "langid":{
+          "minChars" : -1,
+          "maxChars" : 10000,
+          "langOnly" : false
+        }
+      }
+    ]
+  },
+
+  "fields": {
+    "_fid": {
+      "type": "text",
+      "multivalued": "false",
+      "index_analyzer": "keyword"
+    },
+    "_did": {
+      "type": "text",
+      "multivalued": "false",
+      "index_analyzer": "keyword"
+    },
+    "_ao":{
+      "type":"string",
+      "multivalued":false
+    },
+    "content": {
+      "type": "text",
+      "multivalued": "true",
+      "index_analyzer": "persian_icu"
+    },
+    "title": {
+      "type": "text",
+      "multivalued": "true",
+      "index_analyzer": "persian_icu"
+    },
+    "author": {
+      "type": "text",
+      "multivalued": "true",
+      "index_analyzer": "persian_icu"
+    },
+    "publisher": {
+      "type": "text",
+      "multivalued": "true",
+      "index_analyzer": "persian_icu"
+    },
+    "company": {
+      "type": "text",
+      "multivalued": "true",
+      "index_analyzer": "persian_icu"
+    },
+    "manager": {
+      "type": "text",
+      "multivalued": "true",
+      "index_analyzer": "persian_icu"
+    },
+    "created": {
+      "type": "text",
+      "multivalued": "false",
+      "index_analyzer": "keyword"
+    },
+    "modified": {
+      "type": "text",
+      "multivalued": "false",
+      "index_analyzer": "keyword"
+    },
+    "rel_path": {
+      "type": "text",
+      "index_analyzer": "persian_icu",
+      "multivalued": "false"
+    },
+    "embedded_path": {
+      "type": "text",
+      "index_analyzer": "persian_icu",
+      "multivalued": "false"
+    },
+    "file_name": {
+      "type": "text",
+      "index_analyzer": "persian_icu",
+      "multivalued": "false"
+    },
+    "md5": {
+      "type": "text",
+      "index_analyzer": "keyword",
+      "multivalued": "false"
+    },
+    "contains_md5": {
+      "type": "text",
+      "index_analyzer": "keyword",
+      "multivalued": "true"
+    },
+    "lang": {
+      "type": "text",
+      "index_analyzer": "persian_icu",
+      "multivalued": "false"
+    },
+    "mime": {
+      "type": "text",
+      "index_analyzer": "persian_icu",
+      "multivalued": "false"
+    },
+    "display_name": {
+      "type": "text",
+      "index_analyzer": "keyword",
+      "multivalued": "false"
+    }
+  },
+  "analyzers": {
+    "persian_icu": {
+      "charfilters": [
+        {
+          "factory": "oala.fa.PersianCharFilterFactory",
+          "params": {}
+        }
+      ],
+      "tokenizer": {
+        "factory": "oala.standard.StandardTokenizerFactory",
+        "params": {}
+      },
+      "tokenfilters": [
+        {
+          "factory": "oala.icu.ICUFoldingFilterFactory",
+          "params": {}
+        },
+        {
+          "factory": "oala.cjk.CJKBigramFilterFactory",
+          "params": {}
+        }
+      ]
+    },
+    "keyword": {
+      "tokenizer": {
+        "factory": "oala.core.KeywordTokenizerFactory"
+      }
+    }
+  }
+}

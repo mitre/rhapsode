@@ -1,0 +1,171 @@
+{
+
+
+  "field_mapper": {
+    "_comment": "map fields from Tika to Lucene fields",
+    "_comment": "f = from (Tika); t = to (Lucene)",
+    "ignore_case": "false",
+    "mappings": [
+      {
+        "f": "dc:title",
+        "t": "title"
+      },
+      {
+        "f": "Content-Type",
+        "t": "mime"
+      },
+      {
+        "f": "tika_batch_fs:relative_path",
+        "t": "rel_path"
+      },
+      {
+        "f": "tika_batch_fs:relative_path",
+        "t": "display_name",
+        "capture": {
+          "find": "([^\/\\.]{4})\\.",
+          "replace": "$1",
+          "fail_policy":"skip"
+        }
+      },
+      {
+        "f": "resourceName",
+        "t": "file_name"
+      },
+      {
+        "f": "X-TIKA:content",
+        "t": "content"
+      },
+      {
+        "f": "X-TIKA:digest:MD5",
+        "t": "md5"
+      },
+      {
+        "f": "X-TIKA:content",
+        "t": "lang",
+        "lang_id":{
+          "min_chars" : -1,
+          "max_chars" : 10000,
+          "lang_only" : false
+        }
+      },
+      {
+        "f": "X-TIKA:content",
+        "t": "langs",
+        "lang_ids":{
+          "min_chars" : -1,
+          "max_chars" : 10000,
+          "lang_only" : false,
+          "min_confidence" : 0.5
+        }
+      }
+    ]
+  },
+
+  "system_fields" :{
+    "unique_doc_key_field" : "_did",
+    "unique_file_key_field" : "_fid",
+    "default_content_field" : "content",
+    "attachment_offset_field" : "_ao",
+    "attachment_offset_sort_field" : "_aos"
+  },
+
+
+  "fields":{
+    "_fid":{
+      "type":"string",
+      "multivalued":"false"
+    },
+    "_did":{
+      "type":"string",
+      "multivalued":"false"
+    },
+    "_ao":{
+      "type":"string",
+      "multivalued":false
+    },
+    "content":{
+      "type":"text",
+      "multivalued":"true",
+      "index_analyzer":"persian_icu"
+    },
+
+    "title":{
+      "type":"text",
+      "multivalued":"true",
+      "index_analyzer":"persian_icu"
+    },
+
+    "rel_path": {
+      "type":"text",
+      "index_analyzer":"persian_icu",
+      "multivalued":"false"
+    },
+
+    "file_name": {
+      "type":"text",
+      "index_analyzer":"persian_icu",
+      "multivalued":"false"
+    },
+
+    "md5": {
+      "type":"text",
+      "index_analyzer":"persian_icu",
+      "multivalued":"false"
+    },
+
+    "mime": {
+      "type":"text",
+      "index_analyzer":"persian_icu",
+      "multivalued":"false"
+    },
+
+
+    "display_name": {
+      "type": "string",
+      "multivalued": "false"
+    },
+
+    "lang": {
+      "type":"text",
+      "index_analyzer":"persian_icu",
+      "multivalued":"false"
+    },
+
+    "langs": {
+      "type":"text",
+      "index_analyzer":"persian_icu",
+      "multivalued":"true"
+    }
+
+  },
+
+  "analyzers": {
+    "persian_icu": {
+      "charfilters": [
+        {
+          "factory": "oala.fa.PersianCharFilterFactory",
+          "params": {}
+        }
+      ],
+      "tokenizer": {
+        "factory": "oala.standard.StandardTokenizerFactory",
+        "params": {}
+      },
+      "tokenfilters": [
+        {
+          "factory": "oala.icu.ICUFoldingFilterFactory",
+          "params": {}
+        },
+        {
+          "factory": "oala.cjk.CJKBigramFilterFactory",
+          "params": {}
+        }
+      ]
+    },
+    "keyword": {
+      "tokenizer": {
+        "factory": "oala.core.KeywordTokenizerFactory"
+      }
+    }
+  }
+}

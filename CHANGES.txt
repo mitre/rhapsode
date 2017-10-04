@@ -1,0 +1,9 @@
+
+Release 0.3.1 (8/31/2017)
+
+    * Move static resources into the jar
+    * Make sure to highlight key terms in content field even if user doesn't
+      select content field as a "viewable field".
+
+Release 0.3.0 (8/18/2017) -
+    * First release after complete rebuild
