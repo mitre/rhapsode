@@ -7,13 +7,18 @@ Prerequisite:
 Java >= 8 needs to be installed and callable from the command line
 
 To run:
-1) put documents to search in "input" directory
-2) run 01_buildIndex.(bat|sh)
-3) Once that finishes, close out command window and run 02_startRhapsodeDesktop
+
+1) Unzip the release.
+2) Put documents to search in the "input" directory.
+2) Run 01_buildIndex.(bat|sh).
+3) Once that finishes, close out command window and run 02_startRhapsodeDesktop.(bat|sh).
 4) Open a browser and navigate to http://localhost:8092/rhapsode/admin/collection
-5) Select "collection1" and click open
-6) Click on "Search Tools"
+5) Select "collection1" and click open.
+6) Click on "Search Tools".
 
 Enjoy!
 
-See a preprint of our upcoming JASIST [article](https://www.mitre.org/sites/default/files/publications/pr-16-1413-collaborative-exploratory-search-nformation-filtering-preprint.pdf).
+Much more work remains. Including documentation.  :)
+
+See a preprint of "EXPLORATORY SEARCH FOR FILTERING AND TRIAGE", our upcoming JASIST
+[article](https://www.mitre.org/sites/default/files/publications/pr-16-1413-collaborative-exploratory-search-nformation-filtering-preprint.pdf),
