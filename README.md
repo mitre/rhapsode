@@ -23,4 +23,5 @@ Much more work remains. :)
 See an initial draft of a Users Guide under [here](https://github.com/mitre/rhapsode/tree/master/documentation).
 
 See a preprint of "EXPLORATORY SEARCH FOR FILTERING AND TRIAGE", our upcoming JASIST
-[article](https://www.mitre.org/sites/default/files/publications/pr-16-1413-collaborative-exploratory-search-nformation-filtering-preprint.pdf),
+[article](https://www.mitre.org/publications/technical-papers/collaborative-exploratory-search-for-information-filtering-and-large)
+/ [pdf](https://www.mitre.org/sites/default/files/publications/pr-16-1413-collaborative-exploratory-search-nformation-filtering-preprint.pdf).
