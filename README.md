@@ -23,11 +23,13 @@ Much more work remains. :)
 
 ##Background
 The vast majority of search -- web and intranet -- is focused on helping users find the most 
-relevant document, the best piece of information or product to meet their need.
+relevant document, the best piece of information or the best product to meet their need.  Learning
+to Rank** and other machine learning methods are revolutionizing relevance ranking for 
+intranet and site search.
 
-There's an entirely different type of search -- exploratory search -- that doesn't appear to be well supported
-among the mainstream search tools because the market is far smaller.  In exploratory search,
-the goal is to make sense of what is in a document set -- while it
+There are other types of search, which I'll broadly categorize as exploratory search, that don't appear 
+to be well supported among some of the mainstream search tools because the market is far smaller.  
+In exploratory search, the goal is to make sense of what is in a document set -- while it
 would be useful for a patent examiner to find the existing patents most relevant to
 the one under consideration, s/he really does need to go through all existing patents
 and find even potentially distant matches.  Legal analysts, journalists, investigators,
@@ -75,6 +77,7 @@ Search consultants and developers, such as [Lucidworks](https://lucidworks.com/)
 [OpenSourceConnections](http://opensourceconnections.com/), might find these capabilities
  useful for _specific_ (and likely rare) clients.
 
+E-Discovery tools including...?
  
 ##Documentation/References
 See an initial draft of a Users Guide under [here](https://github.com/mitre/rhapsode/tree/master/documentation).
@@ -84,5 +87,9 @@ See a preprint of "Collaborative Exploratory Search for Information Filtering an
 / [pdf](https://www.mitre.org/sites/default/files/publications/pr-16-1413-collaborative-exploratory-search-nformation-filtering-preprint.pdf).
 
 ## Notes
-\* Advanced -- well, right, no fancy clustering, word2vec or deep blockchained learning, but some tools that are useful if you're trying to do more with a 
-bunch of documents than finding the best one for your need.
+\* Advanced -- well, right, no fancy clustering, word2vec or deep blockchained learning, but some tools that are 
+useful if you're trying to do more with a bunch of documents than finding the best one for your need.
+
+\** Bloomberg's Learning to Rank module in Apache Solr, Doug Turnbull/OpenSource Connection's
+ [Elasticsearch LTR plugin](https://github.com/o19s/elasticsearch-learning-to-rank) and 
+[Lucidworks](https://lucidworks.com)' Fusion platform, among others.
