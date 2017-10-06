@@ -29,17 +29,22 @@
 package org.rhapsode.lucene.schema;
 
 import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.analysis.CharFilter;
 import org.apache.lucene.analysis.core.KeywordAnalyzer;
 import org.apache.lucene.analysis.core.KeywordTokenizerFactory;
+import org.apache.lucene.analysis.custom.CustomAnalyzer;
 import org.apache.lucene.analysis.util.AbstractAnalysisFactory;
 import org.apache.lucene.analysis.util.CharFilterFactory;
 import org.apache.lucene.analysis.util.MultiTermAwareComponent;
 import org.apache.lucene.analysis.util.TokenFilterFactory;
 import org.apache.lucene.analysis.util.TokenizerFactory;
-import org.rhapsode.lucene.analysis.MyTokenizerChain;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Important components stolen directly from Solr
@@ -67,7 +72,7 @@ abstract class AnalyzingFieldDefBase {
     public void setAnalyzers(NamedAnalyzer namedIndexAnalyzer,
                              NamedAnalyzer namedQueryAnalyzer,
                              NamedAnalyzer namedMTQueryAnalyzer,
-                             NamedAnalyzer namedOffsetAnalyzer) {
+                             NamedAnalyzer namedOffsetAnalyzer) throws IOException {
         this.indexAnalyzer = (namedIndexAnalyzer != null) ? namedIndexAnalyzer.analyzer : null;
         this.queryAnalyzer = (namedQueryAnalyzer != null) ? namedQueryAnalyzer.analyzer : this.indexAnalyzer;
         this.mtQueryAnalyzer = (namedMTQueryAnalyzer != null) ? namedMTQueryAnalyzer.analyzer : constructMultiTermAnalyzer(this.queryAnalyzer);
@@ -110,30 +115,38 @@ abstract class AnalyzingFieldDefBase {
         return offsetAnalyzerName;
     }
 
-    private Analyzer constructMultiTermAnalyzer(Analyzer queryAnalyzer) {
+    private Analyzer constructMultiTermAnalyzer(Analyzer queryAnalyzer) throws IOException {
         if (queryAnalyzer == null) return null;
 
-        if (!(queryAnalyzer instanceof MyTokenizerChain)) {
+        if (!(queryAnalyzer instanceof CustomAnalyzer)) {
             return new KeywordAnalyzer();
         }
 
-        MyTokenizerChain tc = (MyTokenizerChain) queryAnalyzer;
-        MultiTermChainBuilder builder = new MultiTermChainBuilder();
+        CustomAnalyzer tc = (CustomAnalyzer) queryAnalyzer;
+        CustomAnalyzer.Builder mtAwareBuilder = CustomAnalyzer.builder();
 
-        CharFilterFactory[] charFactories = tc.getCharFilterFactories();
-        if (charFactories != null) {
-            for (CharFilterFactory fact : charFactories) {
-                builder.add(fact);
-            }
+        for (CharFilterFactory factory : tc.getCharFilterFactories()) {
+            mtAwareBuilder.addCharFilter(factory.getClass(), copyArgs(factory));
         }
 
-        builder.add(tc.getTokenizerFactory());
+        if (tc.getTokenizerFactory() instanceof MultiTermAwareComponent) {
+            mtAwareBuilder.withTokenizer(tc.getTokenizerFactory().getClass(), copyArgs(tc.getTokenizerFactory()));
+        } else {
+            mtAwareBuilder.withTokenizer(KeywordTokenizerFactory.class, copyArgs(null));
+        }
 
         for (TokenFilterFactory fact : tc.getTokenFilterFactories()) {
-            builder.add(fact);
+            mtAwareBuilder.addTokenFilter(fact.getClass(), copyArgs(fact));
         }
 
-        return builder.build();
+        return mtAwareBuilder.build();
+    }
+
+    private Map<String, String> copyArgs(AbstractAnalysisFactory factory) {
+        if (factory == null) {
+            return new HashMap<>();
+        }
+        return new HashMap<>(factory.getOriginalArgs());
     }
 
     private static class MultiTermChainBuilder {
@@ -164,10 +177,16 @@ abstract class AnalyzingFieldDefBase {
             }
         }
 
-        public MyTokenizerChain build() {
-            CharFilterFactory[] charFilterArr = charFilters == null ? null : charFilters.toArray(new CharFilterFactory[charFilters.size()]);
-            TokenFilterFactory[] filterArr = filters == null ? new TokenFilterFactory[0] : filters.toArray(new TokenFilterFactory[filters.size()]);
-            return new MyTokenizerChain(charFilterArr, tokenizer, filterArr);
+        public CustomAnalyzer build() throws IOException {
+            CustomAnalyzer.Builder builder = CustomAnalyzer.builder();
+            for (CharFilterFactory charFilterFactory : charFilters) {
+                builder.addCharFilter(charFilterFactory.getClass(), charFilterFactory.getOriginalArgs());
+            }
+            builder.withTokenizer(tokenizer.getClass(), tokenizer.getOriginalArgs());
+            for (TokenFilterFactory tokenFilterFactory : filters) {
+                builder.addTokenFilter(tokenFilterFactory.getClass(), tokenFilterFactory.getOriginalArgs());
+            }
+            return builder.build();
         }
     }
 

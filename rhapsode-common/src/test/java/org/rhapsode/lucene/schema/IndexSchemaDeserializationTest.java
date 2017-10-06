@@ -41,6 +41,7 @@ import java.util.List;
 
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.cjk.CJKBigramFilterFactory;
+import org.apache.lucene.analysis.custom.CustomAnalyzer;
 import org.apache.lucene.analysis.fa.PersianCharFilterFactory;
 import org.apache.lucene.analysis.icu.ICUFoldingFilterFactory;
 import org.apache.lucene.analysis.standard.StandardTokenizerFactory;
@@ -48,7 +49,6 @@ import org.apache.lucene.analysis.util.TokenFilterFactory;
 import org.apache.lucene.document.FieldType;
 import org.apache.lucene.index.IndexOptions;
 import org.junit.Test;
-import org.rhapsode.lucene.analysis.MyTokenizerChain;
 
 public class IndexSchemaDeserializationTest {
 
@@ -62,15 +62,15 @@ public class IndexSchemaDeserializationTest {
 
 
         Analyzer persian = indexSchema.getAnalyzerByName("persian_icu");
-        assertTrue(persian instanceof MyTokenizerChain);
+        assertTrue(persian instanceof CustomAnalyzer);
 
-        TokenFilterFactory[] tokenFilterFactories = ((MyTokenizerChain) persian).getTokenFilterFactories();
-        assertTrue(tokenFilterFactories[0] instanceof ICUFoldingFilterFactory);
-        assertTrue(tokenFilterFactories[1] instanceof CJKBigramFilterFactory);
+        List<TokenFilterFactory> tokenFilterFactories = ((CustomAnalyzer) persian).getTokenFilterFactories();
+        assertTrue(tokenFilterFactories.get(0) instanceof ICUFoldingFilterFactory);
+        assertTrue(tokenFilterFactories.get(1) instanceof CJKBigramFilterFactory);
 
-        assertTrue(((MyTokenizerChain)persian).getTokenizerFactory() instanceof StandardTokenizerFactory);
+        assertTrue(((CustomAnalyzer)persian).getTokenizerFactory() instanceof StandardTokenizerFactory);
 
-        assertTrue(((MyTokenizerChain) persian).getCharFilterFactories()[0]
+        assertTrue(((CustomAnalyzer) persian).getCharFilterFactories().get(0)
                 instanceof PersianCharFilterFactory);
 
 

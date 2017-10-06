@@ -88,7 +88,6 @@ public class DocHighlighterTest {
         h.highlightSingleFieldValue(field, s, highlightingQueries, analyzer, new AtomicBoolean(false), xhtml);
         xhtml.endElement(H.BODY);
         xhtml.endDocument();
-        System.out.println(handler.toString());
         assertTrue(handler.toString().contains("<span id=\"first\" class=\"this-the-one\">quick brown fox</span>"));
         assertTrue(handler.toString().contains("<span class=\"this-the-one\">fox and quick</span>"));
 
@@ -113,7 +112,6 @@ public class DocHighlighterTest {
         h.highlightSingleFieldValue(field, s, highlightingQueries, analyzer, new AtomicBoolean(false), xhtml);
         xhtml.endElement(H.BODY);
         xhtml.endDocument();
-        System.out.println(handler.toString());
         assertTrue(handler.toString().contains("brown <span id=\"first\" class=\"this-the-two\">fox</span>"));
         assertTrue(handler.toString().contains(" other <span class=\"this-the-two\">fox</span>"));
 

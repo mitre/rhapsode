@@ -59,7 +59,11 @@ class IndexSchemaDeserializer implements JsonDeserializer<org.rhapsode.lucene.sc
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        addFields(indexSchema, root.getAsJsonObject("fields"));
+        try {
+            addFields(indexSchema, root.getAsJsonObject("fields"));
+        } catch (IOException e) {
+            throw new JsonParseException("IOException loading analyzer", e);
+        }
         indexSchema.fieldMapper = FieldMapper.load(root.getAsJsonObject(FieldMapper.NAME));
 
         JsonElement iof = root.get("indexer_overwrite_field");
@@ -139,7 +143,7 @@ class IndexSchemaDeserializer implements JsonDeserializer<org.rhapsode.lucene.sc
     }
 
 
-    private void addFields(IndexSchema indexSchema, JsonObject fields) {
+    private void addFields(IndexSchema indexSchema, JsonObject fields) throws IOException {
         for (Map.Entry<String, JsonElement> e : fields.entrySet()) {
             String fieldName = e.getKey();
 
@@ -155,7 +159,7 @@ class IndexSchemaDeserializer implements JsonDeserializer<org.rhapsode.lucene.sc
     }
 
     private void addAnalyzersToField(FieldDef fieldDef, JsonObject jsonObject,
-                                     IndexSchema schema) {
+                                     IndexSchema schema) throws IOException {
         NamedAnalyzer indexAnalyzer = getAnalyzer(fieldDef, jsonObject, IndexSchemaSerializer.INDEX_ANALYZER, false, schema);
         NamedAnalyzer queryAnalyzer = getAnalyzer(fieldDef, jsonObject, IndexSchemaSerializer.QUERY_ANALYZER, true, schema);
         NamedAnalyzer mtQueryAnalyzer = getAnalyzer(fieldDef, jsonObject, IndexSchemaSerializer.MT_QUERY_ANALYZER, true, schema);

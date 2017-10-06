@@ -36,10 +36,10 @@ import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.analysis.custom.CustomAnalyzer;
 import org.apache.lucene.analysis.util.CharFilterFactory;
 import org.apache.lucene.analysis.util.TokenFilterFactory;
 import org.apache.lucene.document.FieldType;
-import org.rhapsode.lucene.analysis.MyTokenizerChain;
 
 import java.lang.reflect.Type;
 import java.util.List;
@@ -194,12 +194,13 @@ class IndexSchemaSerializer implements JsonSerializer<IndexSchema> {
     }
 
     private JsonElement serializeAnalyzer(String name, Analyzer analyzer) {
-        if (!(analyzer instanceof MyTokenizerChain)) {
-            throw new IllegalArgumentException("analyzer (" + name + ") must be a MyTokenizerChain!\n" +
+        if (!(analyzer instanceof CustomAnalyzer)) {
+            throw new IllegalArgumentException("analyzer (" + name + ") must be a CustomAnalyzer!\n" +
                     "However, I see that it is: " + ((analyzer == null) ? "null" : analyzer.getClass()));
         }
         JsonObject jsonAnalyzer = new JsonObject();
-        MyTokenizerChain tc = (MyTokenizerChain) analyzer;
+
+        CustomAnalyzer tc = (CustomAnalyzer) analyzer;
         JsonArray charFilters = new JsonArray();
         for (CharFilterFactory cff : tc.getCharFilterFactories()) {
 

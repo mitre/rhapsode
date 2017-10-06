@@ -35,6 +35,7 @@ import org.rhapsode.app.io.RowReader;
 import org.rhapsode.app.io.XLSTableReader;
 import org.rhapsode.app.io.XLSXStreamingTableReader;
 
+import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -91,10 +92,18 @@ public class TableReaderTest {
     @Test
     public void testIndexing() throws Exception {
         Path p = Paths.get(getClass().getResource("/test-docs/testInput.xlsx").toURI());
-        XLSXStreamingTableReader rx = new XLSXStreamingTableReader(p, "Sheet2", new DebugHandler(), true);
+        XLSXStreamingTableReader rx = new XLSXStreamingTableReader(p, "Sheet2", new IgnoringHandler(), true);
         rx.parse();
         rx.close();
 
+    }
+
+    private class IgnoringHandler extends RowReader {
+
+        @Override
+        public boolean process(Map<String, String> data) throws IOException {
+            return true;
+        }
     }
 
     private class DebugHandler extends RowReader {
