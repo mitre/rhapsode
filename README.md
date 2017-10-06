@@ -1,10 +1,13 @@
-# Rhapsode
+Rhapsode
+========
 Advanced* desktop search/corpus exploration prototype
 
-##News
+News
+----
 Initial release 0.3.2-BETA is now available.
 
-##Quick Start
+Quick Start
+-----------
 Prerequisite:
 Java >= 8 needs to be installed and callable from the command line
 
@@ -21,7 +24,8 @@ Enjoy!
 
 Much more work remains. :)
 
-##Background
+Background
+----------
 The vast majority of search -- web and intranet -- is focused on helping users find the most 
 relevant document, the best piece of information or the best product to meet their need.  Learning
 to Rank** and other machine learning methods are revolutionizing relevance ranking for 
@@ -49,7 +53,8 @@ even want to bother with double-quotes or boolean operators.  In exploratory sea
 users (or knowledge managers behind the scenes) are willing to construct some 
 pretty elaborate queries.
 
-##Goal of Rhapsode
+Goal of Rhapsode
+----------------
 The goal of Rhapsode and of open-sourcing Rhapsode is not to corner the market for
 this type of search or even, frankly, to build a community around it.  
 The goal is to demonstrate the utility of the concordance as well as the 
@@ -79,14 +84,16 @@ Search consultants and developers, such as [Lucidworks](https://lucidworks.com/)
 
 E-Discovery tools including...?
  
-##Documentation/References
+Documentation/References
+--------------------------
 See an initial draft of a Users Guide under [here](https://github.com/mitre/rhapsode/tree/master/documentation).
 
 See a preprint of "Collaborative Exploratory Search for Information Filtering and Large-Scale Information Triage", our upcoming JASIST
 [article](https://www.mitre.org/publications/technical-papers/collaborative-exploratory-search-for-information-filtering-and-large)
 / [pdf](https://www.mitre.org/sites/default/files/publications/pr-16-1413-collaborative-exploratory-search-nformation-filtering-preprint.pdf).
 
-## Notes
+Notes
+-----
 \* Advanced -- well, right, no fancy clustering, word2vec or deep blockchained learning, but some tools that are 
 useful if you're trying to do more with a bunch of documents than finding the best one for your need.
 
