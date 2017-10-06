@@ -114,15 +114,16 @@ to experiment with slop or other fuzzy queries to craft the query for your
 document set that has a good balance of precision/recall -- `mackintosh~2`
 brings back the right spelling variants, but `mackintosh~3` brings back too
 many false positives.
-* Stored Concepts -- let's say you have an `apple` query `(macintosh "red delicious")`,
-you can call that at search time with curly brackets, e.g. `{apple}`.  
-You can use that with all the query operators: `"{apple} peeler"~10` (one of the `apple` words 
-w/in 10 words of `"peeler"`) and you can combine them so you can 
+* Stored Concepts -- let's say you have an "apple" query `(macintosh "red delicious")`,
+you can call that at search time with curly brackets, e.g. `{apple}`. You can use that 
+with all the regular query operators; for example, `"{apple} peeler"~10` retrieves
+documents with one of the `apple` words 
+w/in 10 words of `"peeler"`. And, you can combine stored concepts so you can 
 have a `"fruit"` concept `({apple} {orange})` and query  that as `{fruit}`.
 * Stored Queries -- this is a combination of the main query and the filter query,
 and it allows you to get quick counts of how many documents in your set or a new
-set have hits for your queries.  Let's say I'm really interested in fruit, and 
-I have a new batch of documents. I can load the documents and see how many documents
+set have hits for your queries.  Let's say you're really interested in fruit, and 
+you have a new batch of documents. YOu can load the documents and see how many documents
 have `apples` and how many have `oranges`.
 * Report writer -- writes a table where each column represents a different stored
 query, and each row records which documents have hits for each stored query, 
