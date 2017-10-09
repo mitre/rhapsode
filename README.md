@@ -93,40 +93,40 @@ as is.
 
 Features
 --------
-* SpanQueryParser -- allows for very complex nested queries with wildcards, fuzziness and all
+* **SpanQueryParser** -- allows for very complex nested queries with wildcards, fuzziness and all
 of the features available in Apache Lucene's SpanQuery capabilities.  Note the caveat on 
 [LUCENE-7398](https://issues.apache.org/jira/browse/LUCENE-7398) below, and 
 **PLEASE** help fix LUCENE-7398.  For the history, see [LUCENE-5205](https://issues.apache.org/jira/browse/LUCENE-5205),
 for the jar in maven central see 
 [lucene-5205](https://mvnrepository.com/artifact/org.tallison.lucene/lucene-5205) and
 [solr-5410](https://mvnrepository.com/artifact/org.tallison.solr/solr-5410).
-* Basic Search -- out of the box, Lucene search with Lucene highlighted snippets.
-* Concordance -- shows _every_ time your search term appears.  Allows you to sort on words
+* **Basic Search** -- out of the box, Lucene search with Lucene highlighted snippets.
+* **Concordance** -- shows _every_ time your search term appears.  Allows you to sort on words
 before your search term (to see what's modifying your term) or words after (to see what your term is modifying).
 For the history, see [LUCENE-5317](https://issues.apache.org/jira/browse/LUCENE-5317);
 for the jar in maven central see 
 [lucene-5317](https://mvnrepository.com/artifact/org.tallison.lucene/lucene-5317).
-* Co-Occurrence Counter -- calculates tf/idf of terms within _x_ words of your search terms; very useful
+* **Co-Occurrence Counter** -- calculates tf*idf of terms within _x_ words of your search terms; very useful
 as a low-cost, search-time term recommender***.  For the history see 
 [LUCENE-5318](https://issues.apache.org/jira/browse/LUCENE-5318); included with
 [lucene-5317](https://mvnrepository.com/artifact/org.tallison.lucene/lucene-5317) in maven central.
-* Target Counter -- identify spelling variants within your corpus; use this
+* **Target Counter** -- identify spelling variants within your corpus; use this
 to experiment with slop or other fuzzy queries to craft the query for your
 document set that has a good balance of precision/recall -- `mackintosh~2`
 brings back the right spelling variants, but `mackintosh~3` brings back too
 many false positives.
-* Stored Concepts -- let's say you have an "apple" query `(macintosh "red delicious")`,
+* **Stored Concepts** -- let's say you have an "apple" query `(macintosh "red delicious")`,
 you can call that at search time with curly brackets, e.g. `{apple}`. You can use that 
 with all the regular query operators; for example, `"{apple} peeler"~10` retrieves
 documents with one of the `apple` words 
 w/in 10 words of `"peeler"`. And, you can combine stored concepts so you can 
 have a `"fruit"` concept `({apple} {orange})` and query  that as `{fruit}`.
-* Stored Queries -- this is a combination of the main query and the filter query,
+* **Stored Queries** -- this is a combination of the main query and the filter query,
 and it allows you to get quick counts of how many documents in your set or a new
 set have hits for your queries.  Let's say you're really interested in fruit, and 
 you have a new batch of documents. YOu can load the documents and see how many documents
 have `apples` and how many have `oranges`.
-* Report writer -- writes a table where each column represents a different stored
+* **Report writer** -- writes a table where each column represents a different stored
 query, and each row records which documents have hits for each stored query, 
 sorted by descending order of the number of matched stored queries in the document.
   This allows you to quickly focus on which documents have both `apples` and `oranges`.
