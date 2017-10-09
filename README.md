@@ -37,7 +37,7 @@ In exploratory search, the goal is to make sense of what is in a document set --
 be useful for a patent examiner to find the existing patents most relevant to the one 
 under consideration, s/he really does need to go through all existing patents that 
 contain related and relevant terms/concepts. Legal analysts, journalists, linguists, 
-literature scholars and many other analytical fields often require tools for this 
+literary scholars and many other analytical fields often require tools for this 
 type of search, and I list several good ones below.
 
 Another key differentiator between traditional search and exploratory search
@@ -72,6 +72,7 @@ Other exploratory types of tools might also benefit from adopting some capabilit
 available in Rhapsode:
 
 * [Open Semantic Search](https://www.opensemanticsearch.org/)
+* [ContentMine](http://contentmine.org/)
 * [Overview Documents](https://www.overviewdocs.com/)
 * [Project Blacklight](http://projectblacklight.org/)
 * [ICIJ](https://github.com/ICIJ)
@@ -146,14 +147,14 @@ See a preprint of "Collaborative Exploratory Search for Information Filtering an
 
 Other
 -----
-A [rhapsode](https://en.wikipedia.org/wiki/Rhapsode) was a bard in ancient Greece (think Homer), 
+A [rhapsode](https://en.wikipedia.org/wiki/Rhapsode) was a bard in ancient Greece, 
 who wove together elements from tradition to tell a new(ish) story.  
 Exploratory searchers weave together disparate pieces of information to carry out 
 analysis and develop new insights.
 
 Notes
 -----
-\* Advanced -- well, right, no fancy clustering, word2vec or deep learning with blockchain 
+\* Advanced -- well, right, no fancy deep learning with blockchain 
 convnets, but some tools that are useful if you're trying to do more with a collection 
 of documents than finding the best one for your need.
 
