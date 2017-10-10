@@ -145,6 +145,10 @@ See a preprint of "Collaborative Exploratory Search for Information Filtering an
 / [pdf](https://www.mitre.org/sites/default/files/publications/pr-16-1413-collaborative-exploratory-search-nformation-filtering-preprint.pdf).
 
 
+License
+-------
+Basically, [Apache Software License 2.0](https://github.com/mitre/rhapsode/blob/master/LICENSE.txt).
+
 Other
 -----
 A [rhapsode](https://en.wikipedia.org/wiki/Rhapsode) was a bard in ancient Greece, 
