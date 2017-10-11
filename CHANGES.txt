@@ -1,10 +1,13 @@
 
+Release 0.3.2 (???)
+    * Fixed NPE in report writer's static reports if user hadn't
+      selected content field to view
+
 Release 0.3.2-BETA (10/4/2017)
     * First release
 
 
 Release 0.3.1 (8/31/2017)
-
     * Move static resources into the jar
     * Make sure to highlight key terms in content field even if user doesn't
       select content field as a "viewable field".
