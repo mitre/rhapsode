@@ -234,11 +234,15 @@ public class LinkTaggerWriter {
                 " ORDER BY " + Tagger.TOTAL_SCORE_COL + " DESC, " + Tagger.FILE_ID_COL;
         ResultSet rs = statement.executeQuery(sql);
         Map<Integer, ComplexQuery> relevantQueries = new HashMap<>();
+        String defaultContentField = searcherApp.getRhapsodeCollection().getIndexSchema().getDefaultContentField();
         List<String> fieldsToDisplay = searcherApp.getSessionManager().getDynamicParameterConfig().getStringList(DynamicParameters.FILE_VIEWER_DISPLAY_FIELDS);
+        //if the user hasn't set the fields to display, yet, make sure to add the content field.
+        if (fieldsToDisplay.size() == 0) {
+            fieldsToDisplay.add(defaultContentField);
+        }
         Set<String> fieldsToRetrieve = new HashSet<>();
         fieldsToRetrieve.addAll(fieldsToDisplay);
         fieldsToRetrieve.add(searcherApp.getRhapsodeCollection().getIndexSchema().getRelPathField());
-        String defaultContentField = searcherApp.getRhapsodeCollection().getIndexSchema().getDefaultContentField();
         DocHighlighter highlighter = new DocHighlighter();
         highlighter.setTableClass(CSS.HIGHLIGHTED);
         highlighter.setTDClass(CSS.HIGHLIGHTED);

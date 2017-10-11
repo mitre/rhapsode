@@ -44,6 +44,7 @@ import org.apache.lucene.search.spans.SpanQuery;
 import org.apache.lucene.search.spans.SpanWeight;
 import org.apache.lucene.search.spans.Spans;
 import org.apache.tika.io.IOUtils;
+import org.apache.tika.sax.ToHTMLContentHandler;
 import org.apache.tika.sax.ToXMLContentHandler;
 import org.rhapsode.app.contants.H;
 import org.rhapsode.app.decorators.RhapsodeXHTMLHandler;
@@ -105,12 +106,13 @@ public class DocHighlighter {
         Files.createDirectories(p.getParent());
         AtomicBoolean anythingHighlighted = new AtomicBoolean(false);
         try (OutputStream os = Files.newOutputStream(p)) {
-            RhapsodeXHTMLHandler xhtml = new RhapsodeXHTMLHandler(new ToXMLContentHandler(os,
+            RhapsodeXHTMLHandler xhtml = new RhapsodeXHTMLHandler(new ToHTMLContentHandler(os,
                     IOUtils.UTF_8.name()));
             initHandler(xhtml, optionalStyleString);
             highlightDocs(defaultContentField, embeddedPathField, fields, docs, queries,
                     analyzer, anythingHighlighted, targetAttachmentOffset, xhtml);
             xhtml.endElement(H.BODY);
+            xhtml.endElement(H.HTML);
             xhtml.endDocument();
         } catch (SAXException e) {
             throw new IOException();
