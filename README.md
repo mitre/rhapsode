@@ -15,9 +15,9 @@ Java >= 8 needs to be installed and callable from the command line
 1) Unzip the latest [release](https://github.com/mitre/rhapsode/releases).
 2) Put documents to search in the "input" directory.
 2) Run 01_buildIndex.(bat|sh).
-3) Once that finishes, close out command window and run 02_startRhapsodeDesktop.(bat|sh).
-4) Open a browser and navigate to http://localhost:8092/rhapsode/admin/collection
-5) Select "collection1" and click open.
+3) Once that finishes, close out the command window and run 02_startRhapsodeDesktop.(bat|sh).
+4) Leave the searcher command window open, open a browser and navigate to http://localhost:8092/rhapsode/admin/collection
+5) Select "collection1" and click "Open".
 6) Click on "Search Tools".
 
 Enjoy!
@@ -124,7 +124,7 @@ have a `"fruit"` concept `({apple} {orange})` and query  that as `{fruit}`.
 * **Stored Queries** -- this is a combination of the main query and the filter query,
 and it allows you to get quick counts of how many documents in your set or a new
 set have hits for your queries.  Let's say you're really interested in fruit, and 
-you have a new batch of documents. YOu can load the documents and see how many documents
+you have a new batch of documents. You can load the documents and see how many documents
 have `apples` and how many have `oranges`.
 * **Report writer** -- writes a table where each column represents a different stored
 query, and each row records which documents have hits for each stored query, 
