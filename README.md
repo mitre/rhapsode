@@ -142,7 +142,7 @@ See an initial draft of a Users Guide under [here](https://github.com/mitre/rhap
 
 See a preprint of "Collaborative Exploratory Search for Information Filtering and Large-Scale Information Triage", our upcoming JASIST
 [article](https://www.mitre.org/publications/technical-papers/collaborative-exploratory-search-for-information-filtering-and-large)
-/ [pdf](https://www.mitre.org/sites/default/files/publications/pr-16-1413-collaborative-exploratory-search-nformation-filtering-preprint.pdf).
+/ [pdf](https://www.mitre.org/sites/default/files/publications/pr-16-1413-collaborative-exploratory-search-information-filtering-preprint.pdf).
 
 
 License
