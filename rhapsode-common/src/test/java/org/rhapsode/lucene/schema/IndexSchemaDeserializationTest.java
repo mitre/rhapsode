@@ -130,4 +130,11 @@ public class IndexSchemaDeserializationTest {
 
         IndexSchema reloaded = IndexSchema.load(tmpFile);
     }
+
+    @Test
+    public void testUpdated() throws Exception {
+        //use this to test modifications to the schema/turn this into a real test. :)
+        IndexSchema schema = IndexSchema.load(this.getClass().getResourceAsStream("/test_index_schema.json"));
+
+    }
 }

@@ -31,6 +31,7 @@ package org.rhapsode.lucene.schema;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
 import com.google.gson.JsonPrimitive;
 
 import java.util.HashMap;
@@ -79,9 +80,13 @@ public class FieldMapper {
         JsonArray mappings = root.getAsJsonArray("mappings");
         for (JsonElement mappingElement : mappings) {
             JsonObject mappingObj = mappingElement.getAsJsonObject();
-            String from = mappingObj.getAsJsonPrimitive("f").getAsString();
-            IndivFieldMapper indivFieldMapper = buildMapper(mappingObj);
-            mapper.add(from, indivFieldMapper);
+            if (mappingObj.has("f")) {
+                String from = mappingObj.getAsJsonPrimitive("f").getAsString();
+                IndivFieldMapper indivFieldMapper = buildMapper(mappingObj);
+                mapper.add(from, indivFieldMapper);
+            } else {
+                throw new IllegalArgumentException("mapping must have an 'f' (from) field");
+            }
         }
         return mapper;
     }
