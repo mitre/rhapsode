@@ -140,10 +140,11 @@ Documentation/References
 ------------------------
 See an initial draft of a Users Guide under [here](https://github.com/mitre/rhapsode/tree/master/documentation).
 
-See a preprint of "Collaborative Exploratory Search for Information Filtering and Large-Scale Information Triage", our upcoming JASIST
-[article](https://www.mitre.org/publications/technical-papers/collaborative-exploratory-search-for-information-filtering-and-large)
-/ [pre-print pdf](https://www.mitre.org/sites/default/files/publications/pr-16-1413-collaborative-exploratory-search-information-filtering-preprint.pdf)
-/ [early view edition](http://dx.doi.org/10.1002/asi.23961).
+See our upcoming JASIST article: "Collaborative Exploratory Search for Information Filtering and Large-Scale Information Triage".
+A free preprint of the article is available [here](https://www.mitre.org/publications/technical-papers/collaborative-exploratory-search-for-information-filtering-and-large) 
+and [here](https://www.mitre.org/sites/default/files/publications/pr-16-1413-collaborative-exploratory-search-information-filtering-preprint.pdf). 
+Note that the publisher’s version of the article is [here](http://dx.doi.org/10.1002/asi.23961) for those with 
+access to Wiley journals, or for those interested in viewing only the publication metadata.
 
 
 License
