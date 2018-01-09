@@ -39,6 +39,11 @@ import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.DefaultParser;
+import org.apache.commons.cli.HelpFormatter;
+import org.apache.commons.cli.Options;
+import org.apache.commons.cli.ParseException;
 import org.apache.commons.lang3.tuple.Pair;
 import org.eclipse.jetty.http.MimeTypes;
 import org.eclipse.jetty.server.Connector;
@@ -66,8 +71,19 @@ import org.rhapsode.app.handlers.viewers.ExtractViewer;
 import org.rhapsode.app.handlers.viewers.IndexedDocumentsViewer;
 import org.rhapsode.app.handlers.viewers.IndividualIndexedDocumentViewer;
 import org.rhapsode.app.utils.MyMimeTypes;
+import org.rhapsode.util.UserLogger;
 
 public class RhapsodeDesktopServlet {
+
+    private static Options OPTIONS;
+
+    static {
+        OPTIONS = new Options();
+        OPTIONS.addOption("log", "user-log", false, "log user queries (default: false")
+                .addOption("c", "config", true, "search config json file");
+
+    }
+
     private final static String LOCAL_HOST = "127.0.0.1";
     public final static int DEFAULT_PORT = 8092;
 
@@ -264,13 +280,27 @@ public class RhapsodeDesktopServlet {
     }
 
     public static void main(String[] args) {
+        DefaultParser defaultCLIParser = new DefaultParser();
+        CommandLine commandLine = null;
+        try {
+            commandLine = defaultCLIParser.parse(OPTIONS, args);
+        } catch (ParseException e) {
+            System.out.println(e.getMessage());
+            USAGE();
+            return;
+        }
+
+
         Path propsFile = null;
-        if (args.length > 0) {
-            propsFile = Paths.get(args[0]);
+        if (commandLine.hasOption("c")) {
+            propsFile = Paths.get(commandLine.getOptionValue("c"));
         } else {
             propsFile = Paths.get("resources/config/search_config.json");
         }
 
+        if (commandLine.hasOption("log")) {
+            UserLogger.setShouldLog(true);
+        }
 
         RhapsodeDesktopServlet servlet = new RhapsodeDesktopServlet();
         try {
@@ -284,5 +314,16 @@ public class RhapsodeDesktopServlet {
                 System.err.println("Wow, things are really going wrong today.");
             }
         }
+    }
+
+    private static void USAGE() {
+        HelpFormatter helpFormatter = new HelpFormatter();
+        helpFormatter.printHelp(
+                80,
+                "java -cp resources/jars/rhapsode/* org.rhapsode.search.cli.RhapsodeDesktopServlet -log (log user queries) -c my_search_config.json",
+                "starts the Rhapsode desktop servlet",
+                OPTIONS,
+                "");
+
     }
 }

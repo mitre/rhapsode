@@ -45,11 +45,13 @@ import org.rhapsode.app.decorators.CCDecorator;
 import org.rhapsode.app.decorators.IndexedDocURLBuilder;
 import org.rhapsode.app.decorators.RhapsodeDecorator;
 import org.rhapsode.app.decorators.RhapsodeXHTMLHandler;
+import org.rhapsode.app.handlers.BasicSearchUtil;
 import org.rhapsode.app.session.DynamicParameters;
 import org.rhapsode.lucene.search.BaseSearchRequest;
 import org.rhapsode.lucene.search.BaseSearchResult;
 import org.rhapsode.lucene.search.concordance.ConcordanceSearchRequest;
 import org.rhapsode.util.LanguageDirection;
+import org.rhapsode.util.UserLogger;
 import org.tallison.lucene.search.concordance.charoffsets.TargetTokenNotFoundException;
 import org.tallison.lucene.search.concordance.classic.AbstractConcordanceWindowCollector;
 import org.tallison.lucene.search.concordance.classic.ConcordanceSearcher;
@@ -78,13 +80,14 @@ import java.util.Map;
 
 public class ConcordanceSearchHandler extends AbstractSearchHandler {
 
+    private static final String TOOL_NAME = "Concordance";
+
     private final RhapsodeSearcherApp searcherApp;
     private final ConcordanceSearchRequestBuilder requestBuilder;
     private final IndexedDocURLBuilder indexedDocURLBuilder;
 
-
     public ConcordanceSearchHandler(RhapsodeSearcherApp config) {
-        super("Concordance");
+        super(TOOL_NAME);
         this.searcherApp = config;
         requestBuilder = new ConcordanceSearchRequestBuilder();
         indexedDocURLBuilder = new IndexedDocURLBuilder(searcherApp);
@@ -134,9 +137,11 @@ public class ConcordanceSearchHandler extends AbstractSearchHandler {
             requestBuilder.extract(searcherApp, httpServletRequest, searchRequest);
         } catch (ParseException e) {
             errorMsg = "Parse Exception: " + e.getMessage();
+            UserLogger.logParseException(TOOL_NAME, errorMsg, httpServletRequest);
             e.printStackTrace();
         } catch (NullPointerException e) {
             errorMsg = "Parse Exception: didn't recognize field";
+            UserLogger.logParseException(TOOL_NAME, errorMsg, httpServletRequest);
             e.printStackTrace();
         }
         ConcordanceSearcher searcher = buildSearcher(searchRequest);
@@ -158,11 +163,15 @@ public class ConcordanceSearchHandler extends AbstractSearchHandler {
                         searcherApp.getRhapsodeCollection().getIndexSchema().getOffsetAnalyzer(),
                         windowCollector);
                 elapsed = new Date().getTime() - started;
+                UserLogger.log(TOOL_NAME, searchRequest.getComplexQuery(),windowCollector.getNumDocs(), elapsed);
+
             } catch (TargetTokenNotFoundException e) {
                 e.printStackTrace();
                 errorMsg += "\n" + e.getMessage();
+                UserLogger.logParseException(TOOL_NAME, errorMsg, httpServletRequest);
             } catch (Exception e) {
                 e.printStackTrace();
+                UserLogger.logParseException(TOOL_NAME, "unknown ex "+e.getMessage(), httpServletRequest);
             }
         }
 

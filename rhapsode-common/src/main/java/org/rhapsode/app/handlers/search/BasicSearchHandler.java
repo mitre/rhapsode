@@ -41,6 +41,7 @@ import org.rhapsode.app.session.DynamicParameters;
 import org.rhapsode.lucene.search.BaseSearchRequest;
 import org.rhapsode.lucene.search.basic.BasicSearchRequest;
 import org.rhapsode.lucene.search.basic.BasicSearchResults;
+import org.rhapsode.util.UserLogger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
@@ -50,18 +51,20 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.text.DecimalFormat;
+import java.util.Date;
 import java.util.Locale;
 
 
 public class BasicSearchHandler extends AbstractSearchHandler {
 
     private static final Logger LOG = LoggerFactory.getLogger(BasicSearchHandler.class);
+    private static final String TOOL_NAME = "Basic Search";
 
     private final RhapsodeSearcherApp searcherApp;
     private final BasicSearchRequestBuilder requestBuilder;
 
     public BasicSearchHandler(RhapsodeSearcherApp searcherApp) {
-        super("Basic Search");
+        super(TOOL_NAME);
         this.searcherApp = searcherApp;
         requestBuilder = new BasicSearchRequestBuilder();
     }
@@ -97,19 +100,25 @@ public class BasicSearchHandler extends AbstractSearchHandler {
             requestBuilder.extract(searcherApp, httpServletRequest, basicSearchRequest);
         } catch (ParseException e) {
             errorMsg = "Parse Exception: " + e.getMessage();
+            UserLogger.logParseException(TOOL_NAME, errorMsg, httpServletRequest);
             e.printStackTrace();
         } catch (NullPointerException e) {
             errorMsg = "Parse Exception: didn't recognize field";
+            UserLogger.logParseException(TOOL_NAME, errorMsg, httpServletRequest);
             e.printStackTrace();
         }
-        try {
-            results = BasicSearchUtil.executeSearch(searcherApp, basicSearchRequest);
-        } catch (Exception e) {
-            e.printStackTrace();
-            errorMsg = e.getMessage();
-            LOG.error("prob w search", e);
-        } finally {
-            //release collection
+        if (errorMsg == null) {
+            try {
+                long startTime = new Date().getTime();
+                results = BasicSearchUtil.executeSearch(searcherApp, basicSearchRequest);
+                UserLogger.log(TOOL_NAME, basicSearchRequest.getComplexQuery(), results.getTotalHits(), (new Date().getTime() - startTime));
+            } catch (Exception e) {
+                e.printStackTrace();
+                errorMsg = e.getMessage();
+                LOG.error("prob w search", e);
+            } finally {
+                //release collection
+            }
         }
 
         try {
