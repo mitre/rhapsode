@@ -47,7 +47,9 @@ public class UserLogger {
         map.put(TOOL, toolName);
         map.put(QUERY, complexQuery.getStoredQuery().getMainQueryString());
         map.put(FILTER_QUERY, complexQuery.getStoredQuery().getFilterQueryString());
-        map.put(NUM_HITS, Integer.toString(totalHits));
+        if (totalHits > -1) {
+            map.put(NUM_HITS, Integer.toString(totalHits));
+        }
         map.put(MILLIS, Long.toString(elapsed));
         LOG.info(urlEncode(map));
     }
