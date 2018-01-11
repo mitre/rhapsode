@@ -45,7 +45,6 @@ import org.rhapsode.app.decorators.CCDecorator;
 import org.rhapsode.app.decorators.IndexedDocURLBuilder;
 import org.rhapsode.app.decorators.RhapsodeDecorator;
 import org.rhapsode.app.decorators.RhapsodeXHTMLHandler;
-import org.rhapsode.app.handlers.BasicSearchUtil;
 import org.rhapsode.app.session.DynamicParameters;
 import org.rhapsode.lucene.search.BaseSearchRequest;
 import org.rhapsode.lucene.search.BaseSearchResult;
@@ -137,11 +136,11 @@ public class ConcordanceSearchHandler extends AbstractSearchHandler {
             requestBuilder.extract(searcherApp, httpServletRequest, searchRequest);
         } catch (ParseException e) {
             errorMsg = "Parse Exception: " + e.getMessage();
-            UserLogger.logParseException(TOOL_NAME, errorMsg, httpServletRequest);
+            UserLogger.logException(TOOL_NAME, errorMsg, httpServletRequest);
             e.printStackTrace();
         } catch (NullPointerException e) {
             errorMsg = "Parse Exception: didn't recognize field";
-            UserLogger.logParseException(TOOL_NAME, errorMsg, httpServletRequest);
+            UserLogger.logException(TOOL_NAME, errorMsg, httpServletRequest);
             e.printStackTrace();
         }
         ConcordanceSearcher searcher = buildSearcher(searchRequest);
@@ -168,10 +167,10 @@ public class ConcordanceSearchHandler extends AbstractSearchHandler {
             } catch (TargetTokenNotFoundException e) {
                 e.printStackTrace();
                 errorMsg += "\n" + e.getMessage();
-                UserLogger.logParseException(TOOL_NAME, errorMsg, httpServletRequest);
+                UserLogger.logException(TOOL_NAME, errorMsg, httpServletRequest);
             } catch (Exception e) {
                 e.printStackTrace();
-                UserLogger.logParseException(TOOL_NAME, "unknown ex "+e.getMessage(), httpServletRequest);
+                UserLogger.logException(TOOL_NAME, "unknown ex "+e.getMessage(), httpServletRequest);
             }
         }
 

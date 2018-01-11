@@ -100,11 +100,11 @@ public class BasicSearchHandler extends AbstractSearchHandler {
             requestBuilder.extract(searcherApp, httpServletRequest, basicSearchRequest);
         } catch (ParseException e) {
             errorMsg = "Parse Exception: " + e.getMessage();
-            UserLogger.logParseException(TOOL_NAME, errorMsg, httpServletRequest);
+            UserLogger.logException(TOOL_NAME, errorMsg, httpServletRequest);
             e.printStackTrace();
         } catch (NullPointerException e) {
             errorMsg = "Parse Exception: didn't recognize field";
-            UserLogger.logParseException(TOOL_NAME, errorMsg, httpServletRequest);
+            UserLogger.logException(TOOL_NAME, errorMsg, httpServletRequest);
             e.printStackTrace();
         }
         if (errorMsg == null) {

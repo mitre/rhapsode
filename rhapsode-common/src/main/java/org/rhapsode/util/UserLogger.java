@@ -1,6 +1,7 @@
 package org.rhapsode.util;
 
 
+import org.apache.commons.lang.StringUtils;
 import org.rhapsode.app.contants.C;
 import org.rhapsode.lucene.search.ComplexQuery;
 import org.slf4j.Logger;
@@ -34,6 +35,14 @@ public class UserLogger {
         if (! SHOULD_LOG) {
             return;
         }
+        if (complexQuery.getStoredQuery() == null) {
+            return;
+        }
+        if (StringUtils.isBlank(complexQuery.getStoredQuery().getMainQueryString()) &&
+                StringUtils.isBlank(complexQuery.getStoredQuery().getFilterQueryString())) {
+            return;
+        }
+
         Map<String, String> map = new LinkedHashMap<>();
         map.put(TOOL, toolName);
         map.put(QUERY, complexQuery.getStoredQuery().getMainQueryString());
@@ -60,7 +69,7 @@ public class UserLogger {
         return sb.toString();
     }
 
-    public static void logParseException(String toolName, String msg, HttpServletRequest httpServletRequest) {
+    public static void logException(String toolName, String msg, HttpServletRequest httpServletRequest) {
         if (! SHOULD_LOG) {
             return;
         }

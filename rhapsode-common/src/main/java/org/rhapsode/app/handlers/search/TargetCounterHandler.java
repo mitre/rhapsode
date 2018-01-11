@@ -53,6 +53,7 @@ import org.rhapsode.lucene.search.variant.TargetRequest;
 import org.rhapsode.lucene.search.variant.VariantTermRequest;
 import org.rhapsode.text.StringToCodePoints;
 import org.rhapsode.text.UnicodeNormalizer;
+import org.rhapsode.util.UserLogger;
 import org.tallison.lucene.corpus.stats.IDFCalc;
 import org.tallison.lucene.corpus.stats.TermDFTF;
 import org.tallison.lucene.search.concordance.charoffsets.SimpleAnalyzerUtil;
@@ -71,12 +72,14 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 
 public class TargetCounterHandler extends AbstractSearchHandler {
+    private static final String TOOL_NAME = "Target Counter";
     private static final String COMMA_SPACE = ", ";
 
     private final NumberFormat intFormatter = new DecimalFormat("###,###,###,###,###");
@@ -85,7 +88,7 @@ public class TargetCounterHandler extends AbstractSearchHandler {
     private final RhapsodeSearcherApp searcherConfig;
 
     public TargetCounterHandler(RhapsodeSearcherApp searcherConfig) {
-        super("Target Counter");
+        super(TOOL_NAME);
         this.searcherConfig = searcherConfig;
     }
 
@@ -108,7 +111,7 @@ public class TargetCounterHandler extends AbstractSearchHandler {
             return;
         }
 
-        String errorMessage = null;
+        String errorMsg = null;
         TargetRequestBuilder requestBuilder = new TargetRequestBuilder();
         TargetRequest searchRequest = new TargetRequest();
 
@@ -117,11 +120,14 @@ public class TargetCounterHandler extends AbstractSearchHandler {
             requestBuilder.parse(searcherConfig, searchRequest, MultiTermQuery.SCORING_BOOLEAN_REWRITE);
         } catch (ParseException e) {
             e.printStackTrace();
-            errorMessage = "Parse Exception: " + e.getMessage();
+            errorMsg = "Parse Exception: " + e.getMessage();
+            UserLogger.logException(TOOL_NAME, errorMsg, httpServletRequest);
         } catch (NullPointerException e) {
-            errorMessage = "Parse Exception: didn't recognize field";
+            errorMsg = "Parse Exception: didn't recognize field";
+            UserLogger.logException(TOOL_NAME, errorMsg, httpServletRequest);
         } catch (Exception e) {
             e.printStackTrace();
+            UserLogger.logException(TOOL_NAME, errorMsg, httpServletRequest);
         }
 
         try {
@@ -131,20 +137,24 @@ public class TargetCounterHandler extends AbstractSearchHandler {
             addVariantQueryParameters(searchRequest, xhtml);
             addHiddenInputAndButtons(searchRequest, xhtml);
             VariantResults results = null;
-            if (errorMessage == null && searchRequest.hasQuery()) {
+            if (errorMsg == null && searchRequest.hasQuery()) {
                 try {
+                    long start = new Date().getTime();
                     results = advancedSearch(searchRequest, xhtml);
+                    UserLogger.log(TOOL_NAME, searchRequest.getComplexQuery(), -1, new Date().getTime()-start);
                 } catch (TargetTokenNotFoundException e) {
                     e.printStackTrace();
-                    errorMessage = e.getMessage();
+                    errorMsg = e.getMessage();
+                    UserLogger.logException(TOOL_NAME, errorMsg, httpServletRequest);
                 } catch (BooleanQuery.TooManyClauses e) {
                     e.printStackTrace();
-                    errorMessage = "max boolean clauses hit: " + e.getMessage();
+                    errorMsg = "max boolean clauses hit: " + e.getMessage();
+                    UserLogger.logException(TOOL_NAME, errorMsg, httpServletRequest);
                 }
             }
 
 
-            if (errorMessage == null) {
+            if (errorMsg == null) {
                 if (searchRequest.hasQuery()) {
                     writeCodePointRequestTable(searchRequest, xhtml);
                     if (results != null && results.results.size() > 0) {
@@ -153,7 +163,7 @@ public class TargetCounterHandler extends AbstractSearchHandler {
                 }
             } else {
                 xhtml.br();
-                RhapsodeDecorator.writeErrorMessage(errorMessage, xhtml);
+                RhapsodeDecorator.writeErrorMessage(errorMsg, xhtml);
             }
             xhtml.endElement(H.FORM);
             RhapsodeDecorator.addFooter(xhtml);

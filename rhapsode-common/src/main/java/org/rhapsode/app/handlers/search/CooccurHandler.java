@@ -41,6 +41,7 @@ import org.rhapsode.app.decorators.RhapsodeDecorator;
 import org.rhapsode.app.decorators.RhapsodeXHTMLHandler;
 import org.rhapsode.app.session.DynamicParameters;
 import org.rhapsode.lucene.search.cooccur.CooccurRequest;
+import org.rhapsode.util.UserLogger;
 import org.tallison.lucene.corpus.stats.IDFIndexCalc;
 import org.tallison.lucene.corpus.stats.TermIDF;
 import org.tallison.lucene.search.concordance.charoffsets.TargetTokenNotFoundException;
@@ -56,15 +57,17 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.util.Date;
 import java.util.List;
 
 public class CooccurHandler extends AbstractSearchHandler {
+    private static final String TOOL_NAME = "Concordance Co-Occurrence Counter";
     private final RhapsodeSearcherApp searcherApp;
     private final NumberFormat intFormatter = new DecimalFormat("###,###,###,###,###");
     private final NumberFormat doubleFormatter = new DecimalFormat("###,###,###,###,##0.0");
 
     public CooccurHandler(RhapsodeSearcherApp searcherApp) {
-        super("Concordance Co-Occurrence Counter");
+        super(TOOL_NAME);
         this.searcherApp = searcherApp;
     }
 
@@ -112,9 +115,12 @@ public class CooccurHandler extends AbstractSearchHandler {
         } catch (ParseException e) {
             errorMsg = "Parse Exception: " + e.getMessage();
             e.printStackTrace();
+            UserLogger.logException(TOOL_NAME, errorMsg, httpServletRequest);
+
         } catch (NullPointerException e) {
             errorMsg = "Parse Exception: didn't recognize field";
             e.printStackTrace();
+            UserLogger.logException(TOOL_NAME, errorMsg, httpServletRequest);
         }
         IndexReader reader = searcherApp.getRhapsodeCollection().
                 getIndexManager().getSearcher().getIndexReader();
@@ -136,9 +142,11 @@ public class CooccurHandler extends AbstractSearchHandler {
                 Math.max(cooccurRequest.getMinXGram(), cooccurRequest.getMaxXGram()) >
                         Math.max(cooccurRequest.getTokensBefore(), cooccurRequest.getTokensAfter())) {
             errorMsg = "Your context size is smaller than your maximum ngram size.";
+            UserLogger.logException(TOOL_NAME, errorMsg, httpServletRequest);
         }
         ConcordanceArrayWindowSearcher searcher = new ConcordanceArrayWindowSearcher();
         if (errorMsg == null && cooccurRequest.hasQuery()) {
+            long startTime = new Date().getTime();
             try {
                 searcher.search(searcherApp.getRhapsodeCollection().getIndexManager().getSearcher(),
                         cooccurRequest.getContentField(),
@@ -147,10 +155,12 @@ public class CooccurHandler extends AbstractSearchHandler {
                         searcherApp.getRhapsodeCollection().getIndexSchema().getOffsetAnalyzer(),
                         visitor,
                         new IndexIdDocIdBuilder());
+                UserLogger.log(TOOL_NAME, cooccurRequest.getComplexQuery(), -1, (new Date().getTime() - startTime));
 
             } catch (TargetTokenNotFoundException e) {
                 e.printStackTrace();
                 errorMsg = e.getMessage();
+                UserLogger.logException(TOOL_NAME, errorMsg, httpServletRequest);
             }
         }
         List<TermIDF> results = ((CooccurVisitor) visitor).getResults();
