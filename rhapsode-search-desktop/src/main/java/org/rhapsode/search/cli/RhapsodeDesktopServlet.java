@@ -80,7 +80,8 @@ public class RhapsodeDesktopServlet {
     static {
         OPTIONS = new Options();
         OPTIONS.addOption("log", "user-log", false, "log user queries (default: false")
-                .addOption("c", "config", true, "search config json file");
+                .addOption("c", "config", true, "search config json file")
+                .addOption("p", "port", true, "port on which to run application, default is 8092");
 
     }
 
@@ -91,12 +92,10 @@ public class RhapsodeDesktopServlet {
         return "Rhapsode Prototype, v0.3.2-SNAPSHOT";
     }
 
-    public void execute(Path propsFile) throws Exception {
+    public void execute(Path propsFile, int port) throws Exception {
         RhapsodeSearcherApp searchApp = RhapsodeSearcherApp.load(propsFile);
         System.out.println("Finished loading config file.");
         //BooleanQuery.setMaxClauseCount(searchApp.getMaxBooleanClauses());
-
-        int port = DEFAULT_PORT;//config.getSearcherPort();
 
         //configure server
         Server server = new Server();
@@ -222,7 +221,7 @@ public class RhapsodeDesktopServlet {
         server.start();
         System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
         System.out.println("The search server has been successfully started.");
-        System.out.println("Open a browser and navigate to:\nhttp://localhost:" + DEFAULT_PORT + "/rhapsode/index.html");
+        System.out.println("Open a browser and navigate to:\nhttp://localhost:" + port + "/rhapsode/index.html");
         System.out.print("\n\n\n\n\n\n\n\n\n\n\n\n\n\nWhen you have finished using the Rhapsode search server,\n" +
                 "type [Enter] to stop the application.");
         System.out.println("\n\n\n");
@@ -302,9 +301,14 @@ public class RhapsodeDesktopServlet {
             UserLogger.setShouldLog(true);
         }
 
+        int port = DEFAULT_PORT;
+        if (commandLine.hasOption("p")) {
+            port = Integer.parseInt(commandLine.getOptionValue("p"));
+        }
+
         RhapsodeDesktopServlet servlet = new RhapsodeDesktopServlet();
         try {
-            servlet.execute(propsFile);
+            servlet.execute(propsFile, port);
         } catch (Exception e) {
             System.out.println(e.toString());
             e.printStackTrace();
