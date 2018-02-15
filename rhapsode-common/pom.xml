@@ -44,8 +44,8 @@
 
     <properties>
         <tika.version>1.16</tika.version>
-        <lucene.version>6.6.0</lucene.version>
-        <lucene-addons.version>6.6-0.1</lucene-addons.version>
+        <lucene.version>7.2.1</lucene.version>
+        <lucene-addons.version>7.2-0.1</lucene-addons.version>
         <jetty.version>9.4.6.v20170531</jetty.version>
         <poi.version>3.17-beta1</poi.version>
         <carrot2.version>3.15.1</carrot2.version>
@@ -115,6 +115,11 @@
         <dependency>
             <groupId>org.tallison.lucene</groupId>
             <artifactId>lucene-5317</artifactId>
+            <version>${lucene-addons.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.tallison.lucene</groupId>
+            <artifactId>gramreaper</artifactId>
             <version>${lucene-addons.version}</version>
         </dependency>
         <dependency>

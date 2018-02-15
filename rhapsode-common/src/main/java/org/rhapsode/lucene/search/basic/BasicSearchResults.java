@@ -31,18 +31,18 @@ package org.rhapsode.lucene.search.basic;
 import java.util.List;
 
 public class BasicSearchResults {
-    private int totalHits = -1;
+    private long totalHits = -1;
     private int start = -1;
     private int end = -1;
     List<BasicSearchResult> results = null;
     private boolean hasResults = false;
-    private int totalDocs;
+    private long totalDocs;
 
     public BasicSearchResults() {
         hasResults = false;
     }
 
-    public BasicSearchResults(List<BasicSearchResult> results, int start, int end, int totalHits, int totalDocs) {
+    public BasicSearchResults(List<BasicSearchResult> results, int start, int end, long totalHits, long totalDocs) {
         this.results = results;
         this.start = start;
         this.end = end;
@@ -63,7 +63,7 @@ public class BasicSearchResults {
         return end;
     }
 
-    public int getTotalHits() {
+    public long getTotalHits() {
         return totalHits;
     }
 
@@ -71,7 +71,7 @@ public class BasicSearchResults {
         return hasResults;
     }
 
-    public int getTotalDocs() {
+    public long getTotalDocs() {
         return totalDocs;
     }
 }

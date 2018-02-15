@@ -31,7 +31,7 @@ public class UserLogger {
         SHOULD_LOG = shouldLog;
     }
 
-    public static void log(String toolName, ComplexQuery complexQuery, int totalHits, long elapsed) {
+    public static void log(String toolName, ComplexQuery complexQuery, long totalHits, long elapsed) {
         if (! SHOULD_LOG) {
             return;
         }
@@ -48,7 +48,7 @@ public class UserLogger {
         map.put(QUERY, complexQuery.getStoredQuery().getMainQueryString());
         map.put(FILTER_QUERY, complexQuery.getStoredQuery().getFilterQueryString());
         if (totalHits > -1) {
-            map.put(NUM_HITS, Integer.toString(totalHits));
+            map.put(NUM_HITS, Long.toString(totalHits));
         }
         map.put(MILLIS, Long.toString(elapsed));
         LOG.info(urlEncode(map));

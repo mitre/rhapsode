@@ -218,7 +218,8 @@ public class BasicSearchHandler extends AbstractSearchHandler {
 
     }
 
-    private static void writeNextPrev(BasicSearchRequest basicSearchRequest, int totalHits, RhapsodeXHTMLHandler xhtml) throws SAXException {
+    private static void writeNextPrev(BasicSearchRequest basicSearchRequest,
+                                      long totalHits, RhapsodeXHTMLHandler xhtml) throws SAXException {
         if (totalHits < 2) {
             return;
         }

@@ -261,7 +261,7 @@ public class TargetCounterHandler extends AbstractSearchHandler {
         int totalHits = ((TotalHitCountCollector) collector).getTotalHits();
         Set<Term> terms = new HashSet<>();
         Weight weight = q.createWeight(searcherConfig.getRhapsodeCollection().
-                getIndexManager().getSearcher(), false);
+                getIndexManager().getSearcher(), false, 1.0f);
 
         weight.extractTerms(terms);
         List<TermDFTF> results = new ArrayList<>();

@@ -35,7 +35,6 @@ import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.index.LeafReader;
 import org.apache.lucene.index.PostingsEnum;
-import org.apache.lucene.index.SlowCompositeReaderWrapper;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.index.Terms;
 import org.apache.lucene.index.TermsEnum;
@@ -49,6 +48,7 @@ import org.rhapsode.RhapsodeCollection;
 import org.rhapsode.app.handlers.search.BasicSearchHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.tallison.util.SlowCompositeReaderWrapper;
 
 import java.io.IOException;
 import java.nio.file.Path;

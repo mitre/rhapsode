@@ -72,7 +72,7 @@ public class BasicSearcher {
         IndexSearcher searcher = indexManager.getSearcher();
 
         ScoreDoc[] sds = null;
-        int totalHits = -1;
+        long totalHits = -1;
         try {
             //according to the javadocs (v4.5.1, including Sort() slightly increases overhead)
             if (sort == null) {
@@ -95,7 +95,7 @@ public class BasicSearcher {
     }
 
     private BasicSearchResults fillResults(BasicSearchRequest searchRequest,
-                                           ScoreDoc[] scoreDocs, int totalHits,
+                                           ScoreDoc[] scoreDocs, long totalHits,
                                            IndexSearcher searcher,
                                            int start, int end) throws IOException {
 
@@ -103,7 +103,8 @@ public class BasicSearcher {
 
         Set<String> selected = searchRequest.getFields();
         IndexReader reader = searcher.getIndexReader();
-        int totalDocs = reader.numDocs();
+
+        long totalDocs = reader.numDocs();
 
         for (int i = start; i <= end && i < scoreDocs.length; i++) {
             String snippetString = StringUtils.EMPTY;

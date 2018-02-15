@@ -145,7 +145,7 @@ public class SingleDocSpanQueryOffsetsGrabber {
 
         SpanQuery query = converter.convert(fieldName, pQuery.getQuery());
         query = (SpanQuery) query.rewrite(searcher.getIndexReader());
-        SpanWeight sw = query.createWeight(searcher, false);
+        SpanWeight sw = query.createWeight(searcher, false, 1.0f);
         Spans spans = sw.getSpans(ctx, SpanWeight.Postings.OFFSETS);
         int docs = 0;
         while (spans.nextDoc() != DocIdSetIterator.NO_MORE_DOCS) {

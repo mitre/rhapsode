@@ -45,7 +45,12 @@ public class ClassicQParserPlugin implements ParserPlugin {
     @Override
     public Query parse(String defaultField, String qString) throws ParseException {
         QueryParser p = new QueryParser(defaultField, indexSchema.getQueryAnalyzer());
+        p.setAllowLeadingWildcard(true);
         //TODO: set configs!
-        return p.parse(qString);
+        try {
+            return p.parse(qString);
+        } catch (IllegalStateException e) {
+            throw new ParseException("illegal state exception: "+e.getMessage()+" : for :"+qString);
+        }
     }
 }

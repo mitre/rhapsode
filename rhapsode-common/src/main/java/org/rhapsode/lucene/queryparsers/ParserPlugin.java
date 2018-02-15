@@ -34,5 +34,5 @@ import org.apache.lucene.search.Query;
 
 public interface ParserPlugin {
 
-    public Query parse(String defaultField, String qString) throws ParseException;
+    Query parse(String defaultField, String qString) throws ParseException;
 }

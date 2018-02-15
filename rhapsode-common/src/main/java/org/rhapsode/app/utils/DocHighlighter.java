@@ -276,7 +276,7 @@ public class DocHighlighter {
         SpanQuery sq = highlightingQuery.getSpanQuery();
 
         sq = (SpanQuery) sq.rewrite(reader);
-        SpanWeight weight = sq.createWeight(indexSearcher, false);
+        SpanWeight weight = sq.createWeight(indexSearcher, false, 1.0f);
         Spans spans = weight.getSpans(reader.leaves().get(0),
                 SpanWeight.Postings.OFFSETS);
 

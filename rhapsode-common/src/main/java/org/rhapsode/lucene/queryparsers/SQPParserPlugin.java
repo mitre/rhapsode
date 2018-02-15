@@ -61,6 +61,11 @@ public class SQPParserPlugin implements ParserPlugin {
         //p.setMultiTermRewriteMethod(MultiTermQuery.CONSTANT_SCORE_REWRITE);
         p.setMultiTermRewriteMethod(rewriteMethod);
 //        p.setMultiTermRewriteMethod(MultiTermQuery.SCORING_BOOLEAN_REWRITE);
-        return p.parse(qString);
+        try {
+            return p.parse(qString);
+        } catch (IllegalStateException e) {
+            throw new ParseException("illegal state exception: "+e.getMessage()+" : for :"+qString);
+        }
+
     }
 }
