@@ -36,6 +36,7 @@ import org.apache.tika.exception.TikaException;
 import org.apache.tika.metadata.Metadata;
 import org.apache.tika.metadata.serialization.JsonMetadataList;
 import org.eclipse.jetty.server.Request;
+import org.rhapsode.RhapsodeCollection;
 import org.rhapsode.app.config.RhapsodeSearcherApp;
 import org.rhapsode.app.contants.C;
 import org.rhapsode.app.contants.CSS;
@@ -253,9 +254,9 @@ public class ExtractViewer extends AbstractSearchHandler {
     }
 
     private List<Metadata> loadMetadataList(String relPath, RhapsodeXHTMLHandler xhtml) throws SAXException {
-        Path cand = searcherApp.getRhapsodeCollection().getExtractedTextRoot().resolve(relPath + ".json");
+        Path cand = getExtractPath(searcherApp.getRhapsodeCollection(), relPath);
         List<Metadata> metadataList = null;
-        if (Files.isRegularFile(cand)) {
+        if (cand != null) {
             try (Reader r = Files.newBufferedReader(cand, StandardCharsets.UTF_8)) {
                 metadataList = JsonMetadataList.fromJson(r);
             } catch (IOException | TikaException e) {
@@ -263,24 +264,19 @@ public class ExtractViewer extends AbstractSearchHandler {
                 LOG.warn(relPath, e);
             }
         }
-        if (metadataList == null) {
-            cand = searcherApp.getRhapsodeCollection().getExtractedTextRoot().resolve(relPath + ".json.bz2");
-            if (Files.isRegularFile(cand)) {
-                try (Reader r = new BufferedReader(
-                        new InputStreamReader(
-                                new BZip2CompressorInputStream(Files.newInputStream(cand)),
-                                StandardCharsets.UTF_8))) {
-                    metadataList = JsonMetadataList.fromJson(r);
-                } catch (IOException | TikaException e) {
-                    xhtml.characters("Exception trying to open: " + relPath + ".json.bz2");
-
-                    LOG.warn(relPath, e);
-                }
-            }
-        }
         return metadataList;
     }
 
+    public static Path getExtractPath(RhapsodeCollection rhapsodeCollection, String relPath) {
+        for (String suffix : new String[]{".json", ".json.bz2"}) {
+            Path cand = rhapsodeCollection.getExtractedTextRoot().resolve(relPath+suffix);
+            if (Files.isRegularFile(cand)) {
+                return cand;
+            }
+        }
+        LOG.warn("Couldn't find extract file for: " + relPath);
+        return null;
+    }
     private void writePrevNextLinks(BaseSearchRequest request, Document doc,
                                     int rank, int docId,
                                     String docKey, RhapsodeXHTMLHandler xhtml) throws IOException, SAXException {

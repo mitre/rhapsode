@@ -63,6 +63,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -160,6 +162,7 @@ public class IndividualIndexedDocumentViewer extends AbstractSearchHandler {
 
         } catch (Exception e) {
             LOG.error("problem", e);
+            e.printStackTrace();
             throw new RuntimeException(e);
         }
         response.flushBuffer();
@@ -196,9 +199,24 @@ public class IndividualIndexedDocumentViewer extends AbstractSearchHandler {
 
         String previousURL = getPrePostDocUrl(pair.getLeft(), rank - 1, request);
         String nextURL = getPrePostDocUrl(pair.getRight(), rank + 1, request);
+        String relPath = doc.get(relPathField);
+        if (relPath == null) {
+            LOG.warn("rel path is null for document with "+docId);
+        }
+        Path originalFile = searcherApp.getRhapsodeCollection().getOrigDocsRoot().resolve(relPath);
+        if (originalFile == null || ! Files.isRegularFile(originalFile)) {
+            System.err.println("couldn't find original file:"+originalFile + " from >"+
+                    searcherApp.getRhapsodeCollection().getOrigDocsRoot() +"< and >"+relPath);
+        }
+        Path extractFile = ExtractViewer.getExtractPath(searcherApp.getRhapsodeCollection(), relPath);
+        if (extractFile == null || ! Files.isRegularFile(extractFile)) {
+            System.err.println("couldn't find extract file:"+extractFile + " from >"+
+                    searcherApp.getRhapsodeCollection().getExtractedTextRoot() +"< and >"+relPath);
+        }
+
         String originalFileURL = RawFileURLBuilder.build(
                 searcherApp.getRhapsodeCollection().getOrigDocsRoot(),
-                doc.get(relPathField));
+                relPath);
         String fullTikaViewerURL = null;
         if (originalFileURL != null) {
             originalFileURL = URLDecoder.decode(originalFileURL, StandardCharsets.UTF_8.toString());
@@ -227,7 +245,7 @@ public class IndividualIndexedDocumentViewer extends AbstractSearchHandler {
         xhtml.startElement(H.TR);
 //                H.CLASS, CSS.DOC_VIEWER_LINKS);
         xhtml.element(H.TD, " ");
-        if (originalFileURL != null) {
+        if (originalFile != null && Files.isRegularFile(originalFile)) {
             xhtml.startElement(H.TD);
             xhtml.href(originalFileURL, "Original File");
             xhtml.endElement(H.TD);
@@ -265,7 +283,7 @@ public class IndividualIndexedDocumentViewer extends AbstractSearchHandler {
 
         xhtml.startElement(H.TR);
         xhtml.element(H.TD, " ");
-        if (fullTikaViewerURL != null) {
+        if (extractFile != null && Files.isRegularFile(extractFile)) {
             xhtml.startElement(H.TD);
             xhtml.href(fullTikaViewerURL, "Full Extract");
             xhtml.endElement(H.TD);

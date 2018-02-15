@@ -29,6 +29,8 @@
 
 package org.rhapsode.indexer;
 
+import org.apache.commons.compress.compressors.FileNameUtil;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.SortedNumericDocValuesField;
@@ -69,8 +71,16 @@ public class FileIndexer {
     public void writeDocument(List<Metadata> metadataList) throws IOException {
         if (metadataList == null || metadataList.size() == 0) {
             return;
-
         }
+
+        for (Metadata m : metadataList) {
+            String rel = m.get(FSProperties.FS_REL_PATH);
+            if (rel != null) {
+                rel = FilenameUtils.separatorsToUnix(rel);
+                m.set(FSProperties.FS_REL_PATH, rel);
+            }
+        }
+
         Metadata parent = metadataList.get(0);
         //insert attachment index fields and update childmd5s in parent
         for (int i = 1; i < metadataList.size(); i++) {
