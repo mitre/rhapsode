@@ -58,7 +58,7 @@ public class TableIndexerTask extends RhapsodeTask {
     private final RhapsodeCollection rc;
     private final Path inputTableFile;
     private final TableFileRequest tableFileRequest;
-    private Date started;
+    private long started;
     private final Directory luceneIndexDirectory;
     private final IndexWriter indexWriter;
     private final RowReaderIndexer perRowIndexer;
@@ -90,7 +90,7 @@ public class TableIndexerTask extends RhapsodeTask {
         if (finishedStatus != null) {
             return finishedStatus;
         }
-        long elapsed = (new Date().getTime() - started.getTime());
+        long elapsed = (System.currentTimeMillis() - started);
 
         return new RhapsodeTaskStatus(
                 Tasker.STATE.PROCESSING,
@@ -105,7 +105,7 @@ public class TableIndexerTask extends RhapsodeTask {
 
     @Override
     public RhapsodeTaskStatus call() throws Exception {
-        started = new Date();
+        started = System.currentTimeMillis();
         AbstractTableReader reader = null;
         try {
             if (inputTableFile.toString().endsWith(".xlsx")) {
@@ -125,7 +125,7 @@ public class TableIndexerTask extends RhapsodeTask {
             indexWriter.flush();
             indexWriter.close();
             luceneIndexDirectory.close();
-            long elapsed = new Date().getTime() - started.getTime();
+            long elapsed = System.currentTimeMillis() - started;
             finishedStatus = new RhapsodeTaskStatus(Tasker.STATE.COMPLETED,
                     Tasker.REASON_FOR_COMPLETION.SUCCESS,
                     new Date(),

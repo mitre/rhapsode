@@ -40,7 +40,7 @@ public class FileCounterTest {
         Tasker t = new Tasker();
         FileCounterTask c = new FileCounterTask(p);
         t.start(c);
-        long start = new Date().getTime();
+        long start = System.currentTimeMillis();
         long elapsed = -1;
         while (elapsed < 10000) {
             Thread.sleep(10);
@@ -51,7 +51,7 @@ public class FileCounterTest {
                 System.out.println(r);
                 break;
             }
-            elapsed = new Date().getTime()-start;
+            elapsed = System.currentTimeMillis()-start;
         }
         System.out.println("HERE");
         */

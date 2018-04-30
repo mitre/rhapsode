@@ -447,7 +447,7 @@ public class TableFileHandler extends AbstractSearchHandler {
     private void buildIndex(TableFileRequest tableFileRequest,
                             RhapsodeSearcherApp searcherApp,
                             RhapsodeXHTMLHandler xhtml) throws Exception {
-        long start = new Date().getTime();
+        long start = System.currentTimeMillis();
         Path inputTableFile = validateInputDirectory(searcherApp).resolve(tableFileRequest.inputFileName);
         Path collectionPath = validateCollectionDirectory(searcherApp).resolve(tableFileRequest.collectionName);
         //check p
@@ -462,7 +462,7 @@ public class TableFileHandler extends AbstractSearchHandler {
             Files.delete(tmpSchemaPath);
         }
         xhtml.element("p", "Indexer has been started.");
-/*        long elapsed = new Date().getTime()-start;
+/*        long elapsed = System.currentTimeMillis()-start;
 
         xhtml.startElement(H.P);
         xhtml.characters("Successfully indexed "+perRowIndexer.getRowsRead() + " rows");

@@ -109,9 +109,9 @@ public class BasicSearchHandler extends AbstractSearchHandler {
         }
         if (errorMsg == null) {
             try {
-                long startTime = new Date().getTime();
+                long startTime = System.currentTimeMillis();
                 results = BasicSearchUtil.executeSearch(searcherApp, basicSearchRequest);
-                UserLogger.log(TOOL_NAME, basicSearchRequest.getComplexQuery(), results.getTotalHits(), (new Date().getTime() - startTime));
+                UserLogger.log(TOOL_NAME, basicSearchRequest.getComplexQuery(), results.getTotalHits(), (System.currentTimeMillis() - startTime));
             } catch (Exception e) {
                 e.printStackTrace();
                 errorMsg = e.getMessage();

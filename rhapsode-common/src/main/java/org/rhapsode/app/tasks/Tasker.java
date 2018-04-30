@@ -77,7 +77,7 @@ public class Tasker {
         completionService =
                 new ExecutorCompletionService<>(executor);
         completionService.submit(task);
-        long start = new Date().getTime();
+        long start = System.currentTimeMillis();
         long elapsed = -1;
 
         Future<RhapsodeTaskStatus> resultFuture = null;
@@ -92,6 +92,7 @@ public class Tasker {
                 }
             } catch (InterruptedException e) {
                 reasonForCompletion = REASON_FOR_COMPLETION.INTERRUPTION_EXCEPTION;
+                e.printStackTrace();
                 break;
             } catch (Throwable t) {
                 t.printStackTrace();
@@ -102,7 +103,7 @@ public class Tasker {
                 reasonForCompletion = REASON_FOR_COMPLETION.TOO_LONG;
                 break;
             }
-            elapsed = new Date().getTime() - start;
+            elapsed = System.currentTimeMillis() - start;
         }
         //now go through the shutdown process
         if (!reasonForCompletion.equals(REASON_FOR_COMPLETION.SUCCESS)) {

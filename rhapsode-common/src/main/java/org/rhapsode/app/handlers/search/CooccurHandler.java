@@ -146,7 +146,7 @@ public class CooccurHandler extends AbstractSearchHandler {
         }
         ConcordanceArrayWindowSearcher searcher = new ConcordanceArrayWindowSearcher();
         if (errorMsg == null && cooccurRequest.hasQuery()) {
-            long startTime = new Date().getTime();
+            long startTime = System.currentTimeMillis();
             try {
                 searcher.search(searcherApp.getRhapsodeCollection().getIndexManager().getSearcher(),
                         cooccurRequest.getContentField(),
@@ -155,7 +155,7 @@ public class CooccurHandler extends AbstractSearchHandler {
                         searcherApp.getRhapsodeCollection().getIndexSchema().getOffsetAnalyzer(),
                         visitor,
                         new IndexIdDocIdBuilder());
-                UserLogger.log(TOOL_NAME, cooccurRequest.getComplexQuery(), -1, (new Date().getTime() - startTime));
+                UserLogger.log(TOOL_NAME, cooccurRequest.getComplexQuery(), -1, (System.currentTimeMillis() - startTime));
 
             } catch (TargetTokenNotFoundException e) {
                 e.printStackTrace();

@@ -151,7 +151,7 @@ public class ConcordanceSearchHandler extends AbstractSearchHandler {
         } else {
             windowCollector = new ConcordanceWindowCollector(searchRequest.getMaxStoredWindows());
         }
-        long started = new Date().getTime();
+        long started = System.currentTimeMillis();
         long elapsed = -1L;
         if (errorMsg == null && searchRequest.hasQuery()) {
             try {
@@ -161,7 +161,7 @@ public class ConcordanceSearchHandler extends AbstractSearchHandler {
                         searchRequest.getComplexQuery().getRetrievalQuery(),
                         searcherApp.getRhapsodeCollection().getIndexSchema().getOffsetAnalyzer(),
                         windowCollector);
-                elapsed = new Date().getTime() - started;
+                elapsed = System.currentTimeMillis() - started;
                 UserLogger.log(TOOL_NAME, searchRequest.getComplexQuery(),windowCollector.getNumDocs(), elapsed);
 
             } catch (TargetTokenNotFoundException e) {

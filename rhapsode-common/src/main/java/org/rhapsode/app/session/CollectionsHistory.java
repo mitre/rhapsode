@@ -90,7 +90,7 @@ public class CollectionsHistory {
         deleteRow.execute();
 
         insert.setString(1, path.toAbsolutePath().toString());
-        insert.setTimestamp(2, new Timestamp(new Date().getTime()));
+        insert.setTimestamp(2, new Timestamp(System.currentTimeMillis()));
         insert.execute();
         connection.commit();
         //now delete any that are older than 10

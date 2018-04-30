@@ -89,7 +89,7 @@ public class HitCounter {
             completionService.submit(new Counter(qq, indexSearcher));
         }
 
-        long start = new Date().getTime();
+        long start = System.currentTimeMillis();
         long elapsed = -1;
         int completed = 0;
         while (elapsed < maxSeconds && completed < numThreads) {
@@ -98,19 +98,22 @@ public class HitCounter {
                         TimeUnit.MILLISECONDS);
                 if (result != null) {
                     Map<Integer, Integer> rr = result.get(1000, TimeUnit.MILLISECONDS);
-                    completed++;
                     if (rr != null) {
+                        completed++;
                         results.putAll(rr);
                     }
                 }
             } catch (InterruptedException e) {
+                e.printStackTrace();
                 throw new IOException(e.getMessage());
             } catch (ExecutionException e) {
+                e.printStackTrace();
                 throw new IOException(e);
             } catch (TimeoutException e) {
+                e.printStackTrace();
                 throw new IOException(e);
             }
-            elapsed = new Date().getTime() - start;
+            elapsed = System.currentTimeMillis() - start;
         }
         ex.shutdownNow();
         return results;

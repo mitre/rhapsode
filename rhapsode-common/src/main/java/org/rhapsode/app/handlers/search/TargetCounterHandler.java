@@ -139,9 +139,9 @@ public class TargetCounterHandler extends AbstractSearchHandler {
             VariantResults results = null;
             if (errorMsg == null && searchRequest.hasQuery()) {
                 try {
-                    long start = new Date().getTime();
+                    long start = System.currentTimeMillis();
                     results = advancedSearch(searchRequest, xhtml);
-                    UserLogger.log(TOOL_NAME, searchRequest.getComplexQuery(), -1, new Date().getTime()-start);
+                    UserLogger.log(TOOL_NAME, searchRequest.getComplexQuery(), -1, System.currentTimeMillis()-start);
                 } catch (TargetTokenNotFoundException e) {
                     e.printStackTrace();
                     errorMsg = e.getMessage();

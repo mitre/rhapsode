@@ -117,7 +117,7 @@ public class Tagger {
         Path tmpDir = Files.createTempDirectory("tagger-tmp");
         Path dbFile = tmpDir.resolve("taggerdb");
         try (Connection conn = openConnection(dbFile)) {
-            long start = new Date().getTime();
+            long start = System.currentTimeMillis();
             try {
                 createTables(conn);
                 updateStatusMessage("created tables");
@@ -133,7 +133,7 @@ public class Tagger {
                 DBUtils.debugDumpTable(conn, NAME_PATH_TABLE);
                 DBUtils.debugDumpTable(conn, SCORES_TABLE);
                 DBUtils.debugDumpTable(conn, SCORE_SORT_TABLE);*/
-                updateStatusMessage("Calculated scores in " + (new Date().getTime() - start) + "(ms)");
+                updateStatusMessage("Calculated scores in " + (System.currentTimeMillis() - start) + "(ms)");
                 LinkTaggerWriter writer = new LinkTaggerWriter(request, searcherApp);
                 writer.write(conn);
                 updateStatusMessage("finished writing table");
