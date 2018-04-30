@@ -31,7 +31,7 @@ package org.rhapsode.app.handlers;
 
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
-import org.rhapsode.app.config.RhapsodeSearcherApp;
+import org.rhapsode.app.RhapsodeSearcherApp;
 import org.rhapsode.lucene.search.IndexManager;
 
 import javax.servlet.ServletException;

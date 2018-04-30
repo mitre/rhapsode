@@ -28,7 +28,7 @@
  */
 package org.rhapsode.app.handlers.admin;
 
-import org.rhapsode.app.config.RhapsodeSearcherApp;
+import org.rhapsode.app.RhapsodeSearcherApp;
 import org.rhapsode.app.contants.C;
 
 import javax.servlet.http.HttpServletRequest;

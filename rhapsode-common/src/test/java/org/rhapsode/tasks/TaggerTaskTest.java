@@ -31,7 +31,7 @@ package org.rhapsode.tasks;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.WildcardQuery;
-import org.rhapsode.app.config.RhapsodeSearcherApp;
+import org.rhapsode.app.RhapsodeSearcherApp;
 import org.rhapsode.app.handlers.admin.ReportRequest;
 import org.rhapsode.app.tagger.TaggerRequest;
 import org.rhapsode.app.tasks.TaggerTask;

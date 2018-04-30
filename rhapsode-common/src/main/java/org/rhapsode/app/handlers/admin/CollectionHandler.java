@@ -37,7 +37,7 @@ import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.LeafReader;
 import org.apache.lucene.index.LeafReaderContext;
 import org.eclipse.jetty.server.Request;
-import org.rhapsode.app.config.RhapsodeSearcherApp;
+import org.rhapsode.app.RhapsodeSearcherApp;
 import org.rhapsode.app.contants.C;
 import org.rhapsode.app.contants.H;
 import org.rhapsode.app.decorators.RhapsodeDecorator;

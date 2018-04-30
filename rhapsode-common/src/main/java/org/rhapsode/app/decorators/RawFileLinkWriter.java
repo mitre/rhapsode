@@ -29,7 +29,7 @@
 
 package org.rhapsode.app.decorators;
 
-import org.rhapsode.app.config.RhapsodeSearcherApp;
+import org.rhapsode.app.RhapsodeSearcherApp;
 
 public abstract class RawFileLinkWriter extends BaseLinkWriter {
 

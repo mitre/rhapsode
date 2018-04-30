@@ -30,7 +30,7 @@
 package org.rhapsode.app.handlers.indexer;
 
 import org.apache.commons.lang3.StringUtils;
-import org.rhapsode.app.config.RhapsodeSearcherApp;
+import org.rhapsode.app.RhapsodeSearcherApp;
 import org.rhapsode.app.contants.C;
 
 import javax.servlet.http.HttpServletRequest;

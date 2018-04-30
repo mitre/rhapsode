@@ -32,7 +32,7 @@ package org.rhapsode.app.handlers.search;
 
 import org.apache.tika.metadata.Metadata;
 import org.apache.tika.sax.XHTMLContentHandler;
-import org.rhapsode.app.config.RhapsodeSearcherApp;
+import org.rhapsode.app.RhapsodeSearcherApp;
 import org.rhapsode.app.contants.C;
 import org.rhapsode.app.contants.CSS;
 import org.rhapsode.app.contants.H;

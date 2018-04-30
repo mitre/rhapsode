@@ -34,7 +34,7 @@ import org.apache.lucene.queryparser.classic.ParseException;
 import org.carrot2.clustering.kmeans.BisectingKMeansClusteringAlgorithm;
 import org.carrot2.clustering.lingo.LingoClusteringAlgorithm;
 import org.carrot2.clustering.stc.STCClusteringAlgorithm;
-import org.rhapsode.app.config.RhapsodeSearcherApp;
+import org.rhapsode.app.RhapsodeSearcherApp;
 import org.rhapsode.app.contants.C;
 import org.rhapsode.app.session.DynamicParameters;
 import org.rhapsode.lucene.search.concordance.ConcordanceSearchRequest;

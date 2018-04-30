@@ -27,7 +27,7 @@
  *
  */
 
-package org.rhapsode.app.config;
+package org.rhapsode.app;
 
 
 import com.google.gson.Gson;
@@ -41,6 +41,8 @@ import org.rhapsode.app.session.StringDynamicParameter;
 import org.rhapsode.app.tasks.RhapsodeTask;
 import org.rhapsode.app.tasks.RhapsodeTaskStatus;
 import org.rhapsode.geo.GeoConfig;
+import org.rhapsode.lucene.queryparsers.ClassicQParserPlugin;
+import org.rhapsode.lucene.queryparsers.ComplexQParserPlugin;
 import org.rhapsode.lucene.queryparsers.ParserPlugin;
 import org.rhapsode.lucene.queryparsers.SQPParserPlugin;
 import org.rhapsode.lucene.search.CommonSearchConfig;
@@ -107,8 +109,15 @@ public class RhapsodeSearcherApp {
         return sessionManager;
     }
 
-    public ParserType getQueryParserType() {
-        return queryParserType;
+    public ParserPlugin getQueryParser(ParserPlugin.PARSERS parser) {
+        switch(parser) {
+            case CLASSIC:
+                return new ClassicQParserPlugin(getRhapsodeCollection().getIndexSchema());
+            case COMPLEX:
+                return new ComplexQParserPlugin(getRhapsodeCollection().getIndexSchema());
+            default:
+                return new SQPParserPlugin(getRhapsodeCollection().getIndexSchema());
+        }
     }
 
     public int getMaxBooleanClauses() {
@@ -166,11 +175,10 @@ public class RhapsodeSearcherApp {
     }
 
     public enum ParserType {
+        COMPLEX,
         CLASSIC,
         SPAN_QUERY
-    }
-
-    ;
+    };
 
 
     public static RhapsodeSearcherApp load(Path propsFile) throws IOException {

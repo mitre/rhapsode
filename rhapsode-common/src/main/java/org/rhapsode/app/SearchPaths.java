@@ -26,7 +26,7 @@
  * (C) 2013-2017 The MITRE Corporation. All Rights Reserved.
  *
  */
-package org.rhapsode.app.config;
+package org.rhapsode.app;
 
 
 public class SearchPaths {

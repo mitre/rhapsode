@@ -30,7 +30,7 @@
 package org.rhapsode.search;
 
 import org.junit.Test;
-import org.rhapsode.app.config.RhapsodeSearcherApp;
+import org.rhapsode.app.RhapsodeSearcherApp;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;

@@ -31,6 +31,7 @@ package org.rhapsode.app.tagger;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.lucene.document.Document;
+import org.apache.poi.common.usermodel.HyperlinkType;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.CreationHelper;
@@ -42,7 +43,7 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.rhapsode.app.config.RhapsodeSearcherApp;
+import org.rhapsode.app.RhapsodeSearcherApp;
 import org.rhapsode.app.contants.C;
 import org.rhapsode.app.contants.CSS;
 import org.rhapsode.app.contants.H;
@@ -373,11 +374,12 @@ public class LinkTaggerWriter {
         if (address == null) {
             //something went wrong, silently skip
         }
-        int linkType = -1;
+        HyperlinkType linkType = HyperlinkType.NONE;
+
         if (request.reportType.equals(ReportRequest.REPORT_TYPE.LIVE_LINKS)) {
-            linkType = Hyperlink.LINK_URL;
+            linkType = HyperlinkType.URL;
         } else if (request.reportType.equals(ReportRequest.REPORT_TYPE.STATIC_LINKS)) {
-            linkType = Hyperlink.LINK_FILE;
+            linkType = HyperlinkType.DOCUMENT;
             try {
                 address = URLEncoder.encode(address.replaceAll("\\\\", "/"), "UTF-8");
             } catch (UnsupportedEncodingException e) {
@@ -389,6 +391,7 @@ public class LinkTaggerWriter {
             return;
         }
         if (links < MAX_HYPERLINKS) {
+
             Hyperlink hyperlink = creationHelper.createHyperlink(linkType);
             links++;
             hyperlink.setAddress(address);

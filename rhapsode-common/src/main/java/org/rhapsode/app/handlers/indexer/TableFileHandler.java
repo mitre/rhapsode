@@ -33,7 +33,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.lucene.document.FieldType;
 import org.eclipse.jetty.server.Request;
 import org.rhapsode.RhapsodeCollection;
-import org.rhapsode.app.config.RhapsodeSearcherApp;
+import org.rhapsode.app.RhapsodeSearcherApp;
 import org.rhapsode.app.contants.C;
 import org.rhapsode.app.contants.H;
 import org.rhapsode.app.decorators.RhapsodeDecorator;

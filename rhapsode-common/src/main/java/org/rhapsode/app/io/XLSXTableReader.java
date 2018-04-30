@@ -79,7 +79,8 @@ public class XLSXTableReader implements AutoCloseable {
             Row r = iterator.next();
             List<String> cells = new LinkedList<>();
             for (short i = 0; i <= r.getLastCellNum(); i++) {
-                Cell c = r.getCell(i, Row.RETURN_BLANK_AS_NULL);
+
+                Cell c = r.getCell(i, Row.MissingCellPolicy.RETURN_BLANK_AS_NULL);
                 if (c == null) {
                     cells.add(StringUtils.EMPTY);
                 } else {

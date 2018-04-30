@@ -30,7 +30,7 @@
 package org.rhapsode.app.handlers.search;
 
 import org.apache.lucene.queryparser.classic.ParseException;
-import org.rhapsode.app.config.RhapsodeSearcherApp;
+import org.rhapsode.app.RhapsodeSearcherApp;
 import org.rhapsode.app.contants.C;
 import org.rhapsode.app.session.DynamicParameters;
 import org.rhapsode.lucene.search.BaseSearchRequest;

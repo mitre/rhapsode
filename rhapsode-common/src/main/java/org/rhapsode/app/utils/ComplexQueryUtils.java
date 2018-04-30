@@ -30,7 +30,7 @@
 package org.rhapsode.app.utils;
 
 import org.apache.lucene.queryparser.classic.ParseException;
-import org.rhapsode.app.config.RhapsodeSearcherApp;
+import org.rhapsode.app.RhapsodeSearcherApp;
 import org.rhapsode.lucene.search.ComplexQuery;
 import org.rhapsode.lucene.search.ComplexQueryBuilder;
 import org.rhapsode.lucene.search.StoredQuery;

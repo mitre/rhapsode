@@ -37,7 +37,7 @@ import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TopDocs;
 import org.rhapsode.app.HitCounter;
-import org.rhapsode.app.config.RhapsodeSearcherApp;
+import org.rhapsode.app.RhapsodeSearcherApp;
 import org.rhapsode.lucene.search.MaxResultsQuery;
 import org.rhapsode.util.PathUtils;
 import org.slf4j.Logger;

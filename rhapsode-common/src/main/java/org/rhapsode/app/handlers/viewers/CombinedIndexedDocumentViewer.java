@@ -30,7 +30,7 @@
 package org.rhapsode.app.handlers.viewers;
 
 import org.eclipse.jetty.server.Request;
-import org.rhapsode.app.config.RhapsodeSearcherApp;
+import org.rhapsode.app.RhapsodeSearcherApp;
 import org.rhapsode.app.decorators.IndexedDocURLBuilder;
 import org.rhapsode.app.handlers.search.AbstractSearchHandler;
 import org.slf4j.Logger;

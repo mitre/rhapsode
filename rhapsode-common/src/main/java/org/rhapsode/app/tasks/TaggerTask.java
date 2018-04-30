@@ -30,7 +30,7 @@
 package org.rhapsode.app.tasks;
 
 
-import org.rhapsode.app.config.RhapsodeSearcherApp;
+import org.rhapsode.app.RhapsodeSearcherApp;
 import org.rhapsode.app.tagger.Tagger;
 import org.rhapsode.app.tagger.TaggerRequest;
 

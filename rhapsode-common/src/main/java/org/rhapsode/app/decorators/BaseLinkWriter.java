@@ -32,16 +32,13 @@ package org.rhapsode.app.decorators;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.tika.io.IOUtils;
-import org.rhapsode.app.config.RhapsodeSearcherApp;
+import org.rhapsode.app.RhapsodeSearcherApp;
 import org.rhapsode.lucene.search.BaseSearchRequest;
 import org.xml.sax.SAXException;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 public abstract class BaseLinkWriter {
 

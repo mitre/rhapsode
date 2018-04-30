@@ -32,7 +32,7 @@ package org.rhapsode.app.handlers;
 import org.apache.commons.lang.StringUtils;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.rhapsode.RhapsodeCollection;
-import org.rhapsode.app.config.RhapsodeSearcherApp;
+import org.rhapsode.app.RhapsodeSearcherApp;
 import org.rhapsode.app.contants.H;
 import org.rhapsode.app.decorators.IndexedDocURLBuilder;
 import org.rhapsode.app.decorators.RhapsodeDecorator;

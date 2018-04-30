@@ -29,6 +29,7 @@
 package org.rhapsode.lucene.queryparsers;
 
 import org.apache.lucene.queryparser.classic.ParseException;
+import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.MultiTermQuery;
 import org.apache.lucene.search.Query;
 import org.rhapsode.lucene.schema.IndexSchema;
@@ -49,6 +50,10 @@ public class SQPParserPlugin implements ParserPlugin {
 
     }
 
+    @Override
+    public String getName() {
+        return "span";
+    }
 
     @Override
     public Query parse(String defaultField, String qString) throws ParseException {
@@ -57,6 +62,7 @@ public class SQPParserPlugin implements ParserPlugin {
                 indexSchema.getMTQueryAnalyzer());
         //TODO: set configs!
         p.setAllowLeadingWildcard(true);
+        p.setMaxExpansions(BooleanQuery.getMaxClauseCount());
 //        p.setMultiTermRewriteMethod(MultiTermQuery.CONSTANT_SCORE_BOOLEAN_REWRITE);
         //p.setMultiTermRewriteMethod(MultiTermQuery.CONSTANT_SCORE_REWRITE);
         p.setMultiTermRewriteMethod(rewriteMethod);

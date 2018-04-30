@@ -53,7 +53,7 @@ import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.server.handler.AbstractHandler;
 import org.eclipse.jetty.server.handler.HandlerList;
 import org.eclipse.jetty.server.handler.ResourceHandler;
-import org.rhapsode.app.config.RhapsodeSearcherApp;
+import org.rhapsode.app.RhapsodeSearcherApp;
 import org.rhapsode.app.handlers.admin.CollectionHandler;
 import org.rhapsode.app.handlers.admin.ConceptHandler;
 import org.rhapsode.app.handlers.admin.ReportHandler;

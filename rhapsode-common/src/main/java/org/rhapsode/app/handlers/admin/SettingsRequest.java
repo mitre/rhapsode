@@ -30,7 +30,7 @@
 package org.rhapsode.app.handlers.admin;
 
 import org.apache.commons.lang3.StringUtils;
-import org.rhapsode.app.config.RhapsodeSearcherApp;
+import org.rhapsode.app.RhapsodeSearcherApp;
 import org.rhapsode.app.contants.C;
 import org.rhapsode.app.session.BooleanDynamicParameter;
 import org.rhapsode.app.session.DynamicParameter;

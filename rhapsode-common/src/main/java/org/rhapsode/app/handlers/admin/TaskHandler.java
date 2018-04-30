@@ -30,7 +30,7 @@
 package org.rhapsode.app.handlers.admin;
 
 import org.eclipse.jetty.server.Request;
-import org.rhapsode.app.config.RhapsodeSearcherApp;
+import org.rhapsode.app.RhapsodeSearcherApp;
 import org.rhapsode.app.decorators.RhapsodeXHTMLHandler;
 import org.rhapsode.app.tasks.RhapsodeTaskStatus;
 import org.slf4j.Logger;
