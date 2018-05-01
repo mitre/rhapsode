@@ -192,13 +192,18 @@ public class RhapsodeDecorator {
     }
 
 
+
+
     public static String[] getLangDirAttrs(BaseSearchRequest request) {
-        if (request.getLanguageDirection() == LanguageDirection.RTL) {
+        return getLangDirAttrs(request.getLanguageDirection());
+    }
+
+    public static String[] getLangDirAttrs(LanguageDirection languageDirection) {
+        if (languageDirection == LanguageDirection.RTL) {
             return RTL_ATTRS;
         }
         return EMPTY_STRING_ARRAY;
     }
-
     public static void writeNoCollection(RhapsodeXHTMLHandler xhtml)
             throws SAXException {
         xhtml.characters("No collection is loaded.");

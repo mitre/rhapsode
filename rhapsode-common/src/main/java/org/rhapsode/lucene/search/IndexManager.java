@@ -67,7 +67,7 @@ public class IndexManager {
         }
 
         try {
-            indexManager.loadNewIndex(collection.getIndexSchemaPath(), collection.getLuceneIndexPath());
+            indexManager.loadNewIndex(collection.getLuceneIndexPath());
         } catch (IndexNotFoundException e) {
             LOG.warn("haven't found an index yet");
             //nope, no index yet
@@ -94,7 +94,7 @@ public class IndexManager {
         searcherManager.release(searcher);
     }
 
-    public void loadNewIndex(Path indexSchemaPath, Path luceneIndexPath) throws IOException {
+    public void loadNewIndex(Path luceneIndexPath) throws IOException {
         if (searcherManager != null) {
             searcherManager.close();
         }

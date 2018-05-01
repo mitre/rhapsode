@@ -272,8 +272,7 @@ public abstract class AbstractSearchHandler extends AbstractRhapsodeHandler {
 
     }
 
-    static void addHiddenInputAndButtons(BaseSearchRequest baseSearchRequest,
-                                         RhapsodeXHTMLHandler xhtml) throws SAXException {
+    static void addHiddenInputAndButtons(RhapsodeXHTMLHandler xhtml) throws SAXException {
         xhtml.startElement(H.INPUT,
                 H.TYPE, H.SUBMIT,
                 H.NAME, C.SEARCH,

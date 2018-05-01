@@ -186,7 +186,7 @@ public class CooccurHandler extends AbstractSearchHandler {
                                     DynamicParameters.SHOW_LANGUAGE_DIRECTION),
                     cooccurRequest.getLanguageDirection(), xhtml);
             xhtml.br();
-            addHiddenInputAndButtons(cooccurRequest, xhtml);
+            addHiddenInputAndButtons(xhtml);
 
             if (errorMsg == null && cooccurRequest.hasQuery() && results.size() > 0) {
                 CCDecorator.writeHitMax(visitor.getHitMax(), visitor.getNumWindowsVisited(), xhtml);

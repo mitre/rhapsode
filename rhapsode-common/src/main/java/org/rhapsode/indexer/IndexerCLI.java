@@ -36,8 +36,13 @@ import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.document.Document;
+import org.apache.lucene.index.IndexReader;
 import org.apache.tika.batch.BatchProcessDriverCLI;
+import org.deeplearning4j.models.word2vec.Word2Vec;
 import org.rhapsode.RhapsodeCollection;
+import org.rhapsode.lucene.search.IndexManager;
 import org.rhapsode.util.ParamUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,7 +52,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class IndexerCLI {
 
@@ -75,6 +82,8 @@ public class IndexerCLI {
                 "'Xmx4g;Xss512m'");
         opts.addOption("lArgs", true, "jvm args for the Lucene indexing process; no dash, semicolon delimited, e.g. " +
                 "'Xmx4g;Xss512m'");
+        opts.addOption("w2v", "word2vec", false, "Optionally, build a vectors for the w2v handler");
+        opts.addOption("w2vOnly", "word2vecOnly", false, "Run word2vec only");
         return opts;
     }
 
@@ -86,8 +95,9 @@ public class IndexerCLI {
         if (cl.hasOption('e') && cl.hasOption('l')) {
             usage("Can't specify both extract only and index only");
         }
-        boolean shouldExtract = cl.hasOption('e') || (!cl.hasOption('l') && !cl.hasOption('m'));
-        boolean shouldIndex = cl.hasOption('l') || (!cl.hasOption('e') && !cl.hasOption('m'));
+        boolean shouldExtract = cl.hasOption('e') || (!cl.hasOption('l') && !cl.hasOption('m') && !cl.hasOption("w2vOnly"));
+        boolean shouldIndex = cl.hasOption('l') || (!cl.hasOption('e') && !cl.hasOption('m') && !cl.hasOption("w2vOnly"));
+        boolean shouldW2V = cl.hasOption("w2v") || cl.hasOption("w2vOnly");
         boolean shouldDeleteDupes = cl.hasOption("df");
         boolean shouldMerge = cl.hasOption('m') || cl.hasOption("merge");
 
@@ -147,6 +157,9 @@ public class IndexerCLI {
         }
         if (shouldDeleteDupes) {
             System.out.println("deleting duplicates");
+            if (rc.getIndexManager() == null) {
+                IndexManager.load(rc);
+            }
             try {
                 rc.getIndexManager().deleteDuplicates(rc, cl.getOptionValue("df"));
             } catch (IOException e) {
@@ -156,9 +169,27 @@ public class IndexerCLI {
 
         if (shouldMerge) {
             int segs = Integer.parseInt(cl.getOptionValue("merge"));
+            if (rc.getIndexManager() == null) {
+                IndexManager.load(rc);
+            }
             rc.getIndexManager().merge(rc, segs);
         }
 
+        if (shouldW2V) {
+            if (rc.getIndexManager() == null) {
+                IndexManager.load(rc);
+            }
+            buildW2V(rc);
+        }
+
+    }
+
+    private void buildW2V(RhapsodeCollection rc) throws IOException {
+        IndexReader reader = rc.getIndexManager().getSearcher().getIndexReader();
+        String contentField = rc.getIndexSchema().getDefaultContentField();
+        Analyzer analyzer = rc.getIndexSchema().getIndexAnalyzer();
+        W2VModelBuilder builder = new W2VModelBuilder();
+        builder.build(reader, contentField, analyzer, rc.getWord2VecPath());
     }
 
     private static void usage(String msg) {

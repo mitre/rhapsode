@@ -130,7 +130,7 @@ public class VariantTermHandler extends AbstractSearchHandler {
 
             addMainQueryWindow(searcherConfig, searchRequest, xhtml);
             addVariantQueryParameters(searchRequest, xhtml);
-            addHiddenInputAndButtons(searchRequest, xhtml);
+            addHiddenInputAndButtons(xhtml);
             VariantResults results = null;
             if (errorMsg == null && searchRequest.hasQuery()) {
                 try {

@@ -67,6 +67,7 @@ import org.rhapsode.app.handlers.search.ConcordanceSearchHandler;
 import org.rhapsode.app.handlers.search.CooccurHandler;
 import org.rhapsode.app.handlers.search.TargetCounterHandler;
 import org.rhapsode.app.handlers.search.VariantTermHandler;
+import org.rhapsode.app.handlers.search.Word2VecHandler;
 import org.rhapsode.app.handlers.viewers.ExtractViewer;
 import org.rhapsode.app.handlers.viewers.IndexedDocumentsViewer;
 import org.rhapsode.app.handlers.viewers.IndividualIndexedDocumentViewer;
@@ -192,6 +193,8 @@ public class RhapsodeDesktopServlet {
         AbstractHandler wrappedTaskHandler = handlerWrapper.wrap(new TaskHandler(searchApp),
                 "/rhapsode/tasks", LOCAL_HOST);
 
+        AbstractHandler wrappedW2VHandler = handlerWrapper.wrap(new Word2VecHandler(searchApp),
+                "/rhapsode/w2v", LOCAL_HOST);
         HandlerList handlers = new HandlerList();
         handlers.setHandlers(new Handler[] {
                 indexHandler,
@@ -213,7 +216,8 @@ public class RhapsodeDesktopServlet {
                 selectedHandler,
                 wrappedReportsHandler,
                 wrappedTableFileHandler,
-                wrappedTaskHandler
+                wrappedTaskHandler,
+                wrappedW2VHandler
         });
 
         server.setHandler(handlers);

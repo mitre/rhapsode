@@ -203,7 +203,7 @@ public class ConcordanceSearchHandler extends AbstractSearchHandler {
                 }
             }
             xhtml.br();
-            addHiddenInputAndButtons(searchRequest, xhtml);
+            addHiddenInputAndButtons(xhtml);
 
             if (errorMsg == null && searchRequest.hasQuery() && windowCollector.size() > 0) {
                 RhapsodeDecorator.writeElapsed(elapsed, xhtml);
