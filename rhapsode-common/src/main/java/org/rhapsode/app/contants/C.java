@@ -203,6 +203,4 @@ public class C {
     public static final String START_INDEXER = "sind";
     public static final String SELECT_ENCODING_DELIMITER_WORKSHEET = "sedw";
     public static final String TABLE_HAS_HEADERS = "thh";
-    public static final String W2V_POSITIVE = "w2vp";
-    public static final String W2V_NEGATIVE = "w2vn";
 }

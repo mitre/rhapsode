@@ -58,7 +58,6 @@ public class RhapsodeCollection {
     public static final String TIKA_EXTRACT_SUBDIR = "extracted_text";
     public static final String COLLECTION_TRASH_SUBDIR = "trash";
     public static final String COLLECTION_STORED_EXPORT_SUBDIR = "exports";
-    public static final String WORD_2_VEC_FILE = "w2v.zip";
 
     //constant name of collection's schema
     public static final String INDEX_SCHEMA_FILE_NAME = "index_schema.json";
@@ -70,7 +69,6 @@ public class RhapsodeCollection {
     Path collectionPath;
     IndexSchema schema;
     CollectionSchema collectionSchema;
-    private org.deeplearning4j.models.word2vec.Word2Vec word2Vec;
     private boolean loaded = false;
     private IndexManager indexManager;
     private Query favoritesQuery = null;
@@ -147,9 +145,6 @@ public class RhapsodeCollection {
         }
         rc.collectionSchema.setDocIdField(rc.schema.getUniqueDocField());
         IndexManager.load(rc);
-        if (Files.isRegularFile(collectionRoot.resolve(WORD_2_VEC_FILE))) {
-            rc.getWord2Vec();
-        }
         rc.loaded = true;
         return rc;
     }
@@ -335,30 +330,4 @@ public class RhapsodeCollection {
 
     }
 
-    public boolean hasWord2Vec() {
-        if (Files.isReadable(getWord2VecPath())) {
-            return true;
-        }
-        return false;
-    }
-
-    public org.deeplearning4j.models.word2vec.Word2Vec getWord2Vec() throws IOException {
-        if (!hasWord2Vec()) {
-            throw new IOException("word2vec model doesn't exist: " + getWord2VecPath());
-        }
-        if (word2Vec == null) {
-            try {
-                Class.forName("org.deeplearning4j.models.embeddings.loader.WordVectorSerializer");
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
-            }
-            word2Vec = org.deeplearning4j.models.embeddings.loader.WordVectorSerializer
-                    .readWord2VecModel(getWord2VecPath().toFile());
-        }
-        return word2Vec;
-    }
-
-    public Path getWord2VecPath() {
-        return collectionPath.resolve(WORD_2_VEC_FILE);
-    }
 }

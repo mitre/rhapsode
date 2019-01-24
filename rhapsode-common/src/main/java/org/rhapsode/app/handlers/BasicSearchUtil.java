@@ -31,7 +31,7 @@ package org.rhapsode.app.handlers;
 
 import java.io.IOException;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.rhapsode.RhapsodeCollection;
 import org.rhapsode.app.RhapsodeSearcherApp;

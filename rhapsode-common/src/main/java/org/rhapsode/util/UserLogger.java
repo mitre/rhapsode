@@ -9,7 +9,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.rhapsode.app.contants.C;
 import org.rhapsode.lucene.search.ComplexQuery;
 import org.slf4j.Logger;

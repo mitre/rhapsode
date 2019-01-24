@@ -78,8 +78,6 @@ public class IndexerCLI {
                 "'Xmx4g;Xss512m'");
         opts.addOption("lArgs", true, "jvm args for the Lucene indexing process; no dash, semicolon delimited, e.g. " +
                 "'Xmx4g;Xss512m'");
-        opts.addOption("w2v", "word2vec", false, "Optionally, build a vectors for the w2v handler");
-        opts.addOption("w2vOnly", "word2vecOnly", false, "Run word2vec only");
         return opts;
     }
 
@@ -103,9 +101,8 @@ public class IndexerCLI {
         if (cl.hasOption('e') && cl.hasOption('l')) {
             usage("Can't specify both extract only and index only");
         }
-        boolean shouldExtract = cl.hasOption('e') || (!cl.hasOption('l') && !cl.hasOption('m') && !cl.hasOption("w2vOnly"));
-        boolean shouldIndex = cl.hasOption('l') || (!cl.hasOption('e') && !cl.hasOption('m') && !cl.hasOption("w2vOnly"));
-        boolean shouldW2V = cl.hasOption("w2v") || cl.hasOption("w2vOnly");
+        boolean shouldExtract = cl.hasOption('e') || (!cl.hasOption('l') && !cl.hasOption('m'));
+        boolean shouldIndex = cl.hasOption('l') || (!cl.hasOption('e') && !cl.hasOption('m'));
         boolean shouldDeleteDupes = cl.hasOption("df");
         boolean shouldMerge = cl.hasOption('m') || cl.hasOption("merge");
 
@@ -183,22 +180,8 @@ public class IndexerCLI {
             rc.getIndexManager().merge(rc, segs);
         }
 
-        if (shouldW2V) {
-            if (rc.getIndexManager() == null) {
-                IndexManager.load(rc);
-            }
-            buildW2V(rc);
-        }
-
     }
 
-    private void buildW2V(RhapsodeCollection rc) throws IOException {
-        IndexReader reader = rc.getIndexManager().getSearcher().getIndexReader();
-        String contentField = rc.getIndexSchema().getDefaultContentField();
-        Analyzer analyzer = rc.getIndexSchema().getIndexAnalyzer();
-        W2VModelBuilder builder = new W2VModelBuilder();
-        builder.build(reader, contentField, analyzer, rc.getWord2VecPath());
-    }
 
     private void runIndexer(RhapsodeCollection rc, CommandLine cl, int numConsumers) throws Exception {
         List<String> args = new ArrayList<>();
