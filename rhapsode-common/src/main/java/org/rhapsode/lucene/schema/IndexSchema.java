@@ -29,14 +29,6 @@
 
 package org.rhapsode.lucene.schema;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import org.apache.lucene.analysis.Analyzer;
-import org.apache.lucene.analysis.miscellaneous.PerFieldAnalyzerWrapper;
-import org.rhapsode.lucene.search.IndexManager;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -51,6 +43,13 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.analysis.miscellaneous.PerFieldAnalyzerWrapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class IndexSchema {
 

@@ -29,11 +29,7 @@
 
 package org.rhapsode.app.io;
 
-import org.junit.Test;
-import org.rhapsode.app.io.HeaderReader;
-import org.rhapsode.app.io.RowReader;
-import org.rhapsode.app.io.XLSTableReader;
-import org.rhapsode.app.io.XLSXStreamingTableReader;
+import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -43,7 +39,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
+import org.junit.Test;
 
 
 public class TableReaderTest {
@@ -56,8 +52,8 @@ public class TableReaderTest {
         List<String> headers = headerReader.getHeaders();
         assertEquals(headers.size(), 46);
         for (int i = 1; i < 47; i++) {
-            String h = headers.get(i-1);
-            assertEquals("Column"+i, h);
+            String h = headers.get(i - 1);
+            assertEquals("Column" + i, h);
         }
     }
 
@@ -70,8 +66,8 @@ public class TableReaderTest {
         List<String> headers = headerReader.getHeaders();
         assertEquals(headers.size(), 46);
         for (int i = 1; i < 47; i++) {
-            String h = headers.get(i-1);
-            assertEquals("Column"+i, h);
+            String h = headers.get(i - 1);
+            assertEquals("Column" + i, h);
         }
     }
 
@@ -111,7 +107,7 @@ public class TableReaderTest {
         @Override
         public boolean process(Map<String, String> data) {
             for (Map.Entry<String, String> e : data.entrySet()) {
-                System.out.println("D: >"+e.getKey() + "< : " + e.getValue());
+                System.out.println("D: >" + e.getKey() + "< : " + e.getValue());
             }
             System.out.println("");
             return true;
@@ -121,6 +117,7 @@ public class TableReaderTest {
     private class TruthHandler extends RowReader {
 
         private List<Map<String, String>> truth = new ArrayList<>();
+
         TruthHandler() {
             addTruth(truth, "Column1", "the");
             addTruth(truth, "Column2", "quick");
@@ -132,16 +129,16 @@ public class TableReaderTest {
                     "Column25", "lazy",
                     "Column30", "brown",
                     "Column40", "dog"
-                    );
+            );
             addTruth(truth, "Column1", "1");
             addTruth(truth, "Column1", "1.00001");
             addTruth(truth, "Column1", "10/21/16");
         }
 
-        private void addTruth(List<Map<String, String>> truth, String ... data) {
+        private void addTruth(List<Map<String, String>> truth, String... data) {
             Map<String, String> m = new HashMap<>();
-            for (int i = 0; i < data.length-1; i += 2) {
-                m.put(data[i], data[i+1]);
+            for (int i = 0; i < data.length - 1; i += 2) {
+                m.put(data[i], data[i + 1]);
             }
             truth.add(m);
         }

@@ -29,16 +29,16 @@
 
 package org.rhapsode.search;
 
-import org.junit.Test;
-import org.rhapsode.app.contants.C;
-import org.rhapsode.app.contants.CSS;
-import org.rhapsode.app.contants.H;
+import static org.junit.Assert.fail;
 
 import java.lang.reflect.Field;
 import java.util.HashSet;
 import java.util.Set;
 
-import static org.junit.Assert.fail;
+import org.junit.Test;
+import org.rhapsode.app.contants.C;
+import org.rhapsode.app.contants.CSS;
+import org.rhapsode.app.contants.H;
 
 public class ConstantsTest {
     @Test
@@ -46,26 +46,26 @@ public class ConstantsTest {
         Set<String> values = new HashSet<>();
         for (Field f : C.class.getFields()) {
 
-            String v = (String)f.get(null);
+            String v = (String) f.get(null);
             if (values.contains(v)) {
-                fail("More than one occurrence of: "+v +" in C");
+                fail("More than one occurrence of: " + v + " in C");
             }
             values.add(v);
         }
         values.clear();
 
         for (Field f : H.class.getFields()) {
-            String v = (String)f.get(null);
+            String v = (String) f.get(null);
             if (values.contains(v)) {
-                fail("More than one occurrence of: "+v +" in H");
+                fail("More than one occurrence of: " + v + " in H");
             }
             values.add(v);
         }
 
         for (Field f : CSS.class.getFields()) {
-            String v = (String)f.get(null);
+            String v = (String) f.get(null);
             if (values.contains(v)) {
-                fail("More than one occurrence of: "+v +" in CSS");
+                fail("More than one occurrence of: " + v + " in CSS");
             }
             values.add(v);
         }

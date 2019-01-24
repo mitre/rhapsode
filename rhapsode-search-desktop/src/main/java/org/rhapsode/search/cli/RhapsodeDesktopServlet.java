@@ -76,6 +76,8 @@ import org.rhapsode.util.UserLogger;
 
 public class RhapsodeDesktopServlet {
 
+    public final static int DEFAULT_PORT = 8092;
+    private final static String LOCAL_HOST = "127.0.0.1";
     private static Options OPTIONS;
 
     static {
@@ -86,11 +88,61 @@ public class RhapsodeDesktopServlet {
 
     }
 
-    private final static String LOCAL_HOST = "127.0.0.1";
-    public final static int DEFAULT_PORT = 8092;
-
     public static String getVersion() {
         return "Rhapsode Prototype, v0.4.0-SNAPSHOT";
+    }
+
+    public static void main(String[] args) {
+        DefaultParser defaultCLIParser = new DefaultParser();
+        CommandLine commandLine = null;
+        try {
+            commandLine = defaultCLIParser.parse(OPTIONS, args);
+        } catch (ParseException e) {
+            System.out.println(e.getMessage());
+            USAGE();
+            return;
+        }
+
+
+        Path propsFile = null;
+        if (commandLine.hasOption("c")) {
+            propsFile = Paths.get(commandLine.getOptionValue("c"));
+        } else {
+            propsFile = Paths.get("resources/config/search_config.json");
+        }
+
+        if (commandLine.hasOption("log")) {
+            UserLogger.setShouldLog(true);
+        }
+
+        int port = DEFAULT_PORT;
+        if (commandLine.hasOption("p")) {
+            port = Integer.parseInt(commandLine.getOptionValue("p"));
+        }
+
+        RhapsodeDesktopServlet servlet = new RhapsodeDesktopServlet();
+        try {
+            servlet.execute(propsFile, port);
+        } catch (Exception e) {
+            System.out.println(e.toString());
+            e.printStackTrace();
+            try {
+                Thread.sleep(120000);
+            } catch (InterruptedException e2) {
+                System.err.println("Wow, things are really going wrong today.");
+            }
+        }
+    }
+
+    private static void USAGE() {
+        HelpFormatter helpFormatter = new HelpFormatter();
+        helpFormatter.printHelp(
+                80,
+                "java -cp resources/jars/rhapsode/* org.rhapsode.search.cli.RhapsodeDesktopServlet -log (log user queries) -c my_search_config.json",
+                "starts the Rhapsode desktop servlet",
+                OPTIONS,
+                "");
+
     }
 
     public void execute(Path propsFile, int port) throws Exception {
@@ -110,7 +162,7 @@ public class RhapsodeDesktopServlet {
         //Step 1 to lockdown jetty to only LOCAL_HOST
         connector.setHost(LOCAL_HOST);
 
-        server.setConnectors(new Connector[]{ connector});
+        server.setConnectors(new Connector[]{connector});
 
         LocalHostOnlyContextHostWrapper handlerWrapper = new LocalHostOnlyContextHostWrapper();
 
@@ -196,7 +248,7 @@ public class RhapsodeDesktopServlet {
         AbstractHandler wrappedW2VHandler = handlerWrapper.wrap(new Word2VecHandler(searchApp),
                 "/rhapsode/w2v", LOCAL_HOST);
         HandlerList handlers = new HandlerList();
-        handlers.setHandlers(new Handler[] {
+        handlers.setHandlers(new Handler[]{
                 indexHandler,
                 conceptHandler,
                 storedQueryHandler,
@@ -253,7 +305,7 @@ public class RhapsodeDesktopServlet {
             e.printStackTrace();
         }
         if (searchApp.getRhapsodeCollection() != null &&
-            searchApp.getRhapsodeCollection().getIndexManager() != null) {
+                searchApp.getRhapsodeCollection().getIndexManager() != null) {
             searchApp.getRhapsodeCollection().getIndexManager().close();
         }
         System.out.println("The search app has closed the index.");
@@ -273,65 +325,12 @@ public class RhapsodeDesktopServlet {
             Path lastCollectionPath = collections.get(0).getKey();
             try {
                 searchConfig.tryToLoadRhapsodeCollection(lastCollectionPath);
-                System.out.println("Successfully loaded collection at: "+lastCollectionPath);
+                System.out.println("Successfully loaded collection at: " + lastCollectionPath);
             } catch (IOException e) {
-                System.err.println("tried to load collection at path: "+lastCollectionPath);
+                System.err.println("tried to load collection at path: " + lastCollectionPath);
                 e.printStackTrace();
             }
         }
-
-    }
-
-    public static void main(String[] args) {
-        DefaultParser defaultCLIParser = new DefaultParser();
-        CommandLine commandLine = null;
-        try {
-            commandLine = defaultCLIParser.parse(OPTIONS, args);
-        } catch (ParseException e) {
-            System.out.println(e.getMessage());
-            USAGE();
-            return;
-        }
-
-
-        Path propsFile = null;
-        if (commandLine.hasOption("c")) {
-            propsFile = Paths.get(commandLine.getOptionValue("c"));
-        } else {
-            propsFile = Paths.get("resources/config/search_config.json");
-        }
-
-        if (commandLine.hasOption("log")) {
-            UserLogger.setShouldLog(true);
-        }
-
-        int port = DEFAULT_PORT;
-        if (commandLine.hasOption("p")) {
-            port = Integer.parseInt(commandLine.getOptionValue("p"));
-        }
-
-        RhapsodeDesktopServlet servlet = new RhapsodeDesktopServlet();
-        try {
-            servlet.execute(propsFile, port);
-        } catch (Exception e) {
-            System.out.println(e.toString());
-            e.printStackTrace();
-            try {
-                Thread.sleep(120000);
-            } catch (InterruptedException e2) {
-                System.err.println("Wow, things are really going wrong today.");
-            }
-        }
-    }
-
-    private static void USAGE() {
-        HelpFormatter helpFormatter = new HelpFormatter();
-        helpFormatter.printHelp(
-                80,
-                "java -cp resources/jars/rhapsode/* org.rhapsode.search.cli.RhapsodeDesktopServlet -log (log user queries) -c my_search_config.json",
-                "starts the Rhapsode desktop servlet",
-                OPTIONS,
-                "");
 
     }
 }

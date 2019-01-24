@@ -30,11 +30,11 @@
 package org.rhapsode.app.tasks;
 
 
+import java.util.Date;
+
 import org.rhapsode.app.RhapsodeSearcherApp;
 import org.rhapsode.app.tagger.Tagger;
 import org.rhapsode.app.tagger.TaggerRequest;
-
-import java.util.Date;
 
 public class TaggerTask extends RhapsodeTask {
 

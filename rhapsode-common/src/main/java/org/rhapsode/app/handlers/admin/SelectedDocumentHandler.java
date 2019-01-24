@@ -29,6 +29,14 @@
 
 package org.rhapsode.app.handlers.admin;
 
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.lucene.search.Query;
 import org.eclipse.jetty.server.Request;
@@ -52,18 +60,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.util.HashSet;
-import java.util.Set;
-
 
 public class SelectedDocumentHandler extends AdminHandler {
 
-    private final RhapsodeSearcherApp searcherApp;
     private static final Logger LOG = LoggerFactory.getLogger(SelectedDocumentHandler.class);
+    private final RhapsodeSearcherApp searcherApp;
     private final BasicSearchConfig bsc;
 
     public SelectedDocumentHandler(RhapsodeSearcherApp searcherApp) {

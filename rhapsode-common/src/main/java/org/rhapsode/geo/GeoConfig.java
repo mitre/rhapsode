@@ -35,9 +35,8 @@ public class GeoConfig {
     public final static String GEOHASHES_FIELD_NAME = "_geohashes";
     public final static String GEOOFFSETS_FIELD_NAME = "_geooffsets";
     public final static String GEOCOORDS_FIELD_NAME = "_geocoords";
-
-    private SpatialContext spatialContext = MyGeoUtil.getDefaultSpatialContext();
     private final int geohashPrecision = 9;
+    private SpatialContext spatialContext = MyGeoUtil.getDefaultSpatialContext();
 
     public SpatialContext getSpatialContext() {
         return spatialContext;

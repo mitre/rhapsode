@@ -29,17 +29,18 @@
 
 package org.rhapsode.app.handlers.viewers;
 
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import java.io.IOException;
+
 import org.eclipse.jetty.server.Request;
 import org.rhapsode.app.RhapsodeSearcherApp;
 import org.rhapsode.app.decorators.IndexedDocURLBuilder;
 import org.rhapsode.app.handlers.search.AbstractSearchHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
 
 public class CombinedIndexedDocumentViewer extends AbstractSearchHandler {

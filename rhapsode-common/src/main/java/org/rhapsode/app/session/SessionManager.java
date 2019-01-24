@@ -29,12 +29,12 @@
 
 package org.rhapsode.app.session;
 
-import com.google.gson.JsonObject;
-
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+
+import com.google.gson.JsonObject;
 
 public class SessionManager {
     final static String CONNECTION_STRING_KEY = "connection_string";
@@ -46,6 +46,10 @@ public class SessionManager {
     private DBStoredQueryManager storedQueryManager;
     private DynamicParameterConfig dynamicParameterConfig;
 
+    private SessionManager(Connection connection) {
+        this.connection = connection;
+    }
+
     public static SessionManager load(JsonObject session_manager) throws SQLException, IOException {
         String connectionString = session_manager.get(CONNECTION_STRING_KEY).getAsString().toString();
         Connection connection = DriverManager.getConnection(connectionString);
@@ -56,10 +60,6 @@ public class SessionManager {
         sm.dynamicParameterConfig = DynamicParameterConfig.load(connection);
         sm.inputTableManager = InputTableManager.load(connection);
         return sm;
-    }
-
-    private SessionManager(Connection connection) {
-        this.connection = connection;
     }
 
     public DBStoredConceptManager getStoredConceptManager() {

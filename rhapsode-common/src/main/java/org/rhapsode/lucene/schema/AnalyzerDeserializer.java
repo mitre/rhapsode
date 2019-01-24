@@ -29,6 +29,13 @@
 package org.rhapsode.lucene.schema;
 
 
+import java.io.IOException;
+import java.lang.reflect.Type;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
 import com.google.gson.JsonArray;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
@@ -42,13 +49,6 @@ import org.apache.lucene.analysis.util.ClasspathResourceLoader;
 import org.apache.lucene.analysis.util.TokenFilterFactory;
 import org.apache.lucene.analysis.util.TokenizerFactory;
 
-import java.io.IOException;
-import java.lang.reflect.Type;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-
 class AnalyzerDeserializer implements JsonDeserializer<Map<String, Analyzer>> {
 
 
@@ -58,25 +58,6 @@ class AnalyzerDeserializer implements JsonDeserializer<Map<String, Analyzer>> {
     private static String TOKENIZER = "tokenizer";
     private static String FACTORY = "factory";
     private static String PARAMS = "params";
-
-    @Override
-    public Map<String, Analyzer> deserialize(JsonElement element, Type type,
-                                             JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
-        if (!element.isJsonObject()) {
-            throw new IllegalArgumentException("Expecting top level 'analyzers:{}'");
-        }
-
-        JsonElement root = element.getAsJsonObject().get("analyzers");
-        if (root == null) {
-            throw new IllegalArgumentException("Expecting top level 'analyzers:{}");
-        }
-        try {
-            return buildAnalyzers(root);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-    }
 
     public static Map<String, Analyzer> buildAnalyzers(JsonElement value) throws IOException {
         if (!value.isJsonObject()) {
@@ -117,7 +98,7 @@ class AnalyzerDeserializer implements JsonDeserializer<Map<String, Analyzer>> {
                         ". I don't recognize: " + k);
             }
         }
-        if (! foundTokenizer) {
+        if (!foundTokenizer) {
             throw new IllegalArgumentException("Must specify at least a tokenizer factory for an analyzer!");
         }
 
@@ -125,7 +106,7 @@ class AnalyzerDeserializer implements JsonDeserializer<Map<String, Analyzer>> {
     }
 
     private static void buildTokenizerFactory(JsonElement map, String analyzerName,
-                                                          CustomAnalyzer.Builder builder) throws IOException {
+                                              CustomAnalyzer.Builder builder) throws IOException {
         if (!(map instanceof JsonObject)) {
             throw new IllegalArgumentException("Expecting a map with \"factory\" string and " +
                     "\"params\" map in tokenizer factory;" +
@@ -154,7 +135,7 @@ class AnalyzerDeserializer implements JsonDeserializer<Map<String, Analyzer>> {
             //TODO: test that we don't actually need to do this
             //TokenizerFactory tokenizerFactory = TokenizerFactory.forName(spiName, params);
             //if (tokenizerFactory instanceof ResourceLoaderAware) {
-              //  ((ResourceLoaderAware) tokenizerFactory).inform(new ClasspathResourceLoader(AnalyzerDeserializer.class));
+            //  ((ResourceLoaderAware) tokenizerFactory).inform(new ClasspathResourceLoader(AnalyzerDeserializer.class));
             //}
             builder.withTokenizer(spiName, params);
         } catch (RuntimeException e) {
@@ -197,7 +178,7 @@ class AnalyzerDeserializer implements JsonDeserializer<Map<String, Analyzer>> {
             try {
 //                CharFilterFactory charFilterFactory = CharFilterFactory.forName(spiName, params);
                 //if (charFilterFactory instanceof ResourceLoaderAware) {
-                  //  ((ResourceLoaderAware) charFilterFactory).inform(new ClasspathResourceLoader(AnalyzerDeserializer.class));
+                //  ((ResourceLoaderAware) charFilterFactory).inform(new ClasspathResourceLoader(AnalyzerDeserializer.class));
                 //}
                 builder.addCharFilter(spiName, params);
             } catch (IllegalArgumentException e) {
@@ -208,7 +189,7 @@ class AnalyzerDeserializer implements JsonDeserializer<Map<String, Analyzer>> {
     }
 
     private static void buildTokenFilterFactories(JsonElement el,
-                                                                  String analyzerName, CustomAnalyzer.Builder builder) throws IOException {
+                                                  String analyzerName, CustomAnalyzer.Builder builder) throws IOException {
         if (el == null || el.isJsonNull()) {
             return;
         }
@@ -268,6 +249,25 @@ class AnalyzerDeserializer implements JsonDeserializer<Map<String, Analyzer>> {
             params.put(e.getKey(), v);
         }
         return params;
+    }
+
+    @Override
+    public Map<String, Analyzer> deserialize(JsonElement element, Type type,
+                                             JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
+        if (!element.isJsonObject()) {
+            throw new IllegalArgumentException("Expecting top level 'analyzers:{}'");
+        }
+
+        JsonElement root = element.getAsJsonObject().get("analyzers");
+        if (root == null) {
+            throw new IllegalArgumentException("Expecting top level 'analyzers:{}");
+        }
+        try {
+            return buildAnalyzers(root);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 
 }

@@ -29,10 +29,10 @@
 
 package org.rhapsode.lucene.search;
 
-import org.rhapsode.lucene.utils.SqlUtil;
-
 import java.lang.reflect.Field;
 import java.sql.Types;
+
+import org.rhapsode.lucene.utils.SqlUtil;
 
 public class StoredConceptBuilder {
 

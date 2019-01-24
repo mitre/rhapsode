@@ -29,6 +29,18 @@
 
 package org.rhapsode.app.io;
 
+import java.io.BufferedInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.openxml4j.exceptions.OpenXML4JException;
@@ -51,27 +63,14 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 
-import java.io.BufferedInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
-
 public class XLSXStreamingTableReader extends AbstractWorkbookTableReader {
 
     private static final Logger LOG = LoggerFactory.getLogger(XLSXStreamingTableReader.class);
-
-    InputStream sheetInputStream;
     final RowReader rowReader;
     final OPCPackage opcPackage;
     final String worksheetName;
     final XSSFReader xssfReader;
+    InputStream sheetInputStream;
 
     public XLSXStreamingTableReader(Path path, String worksheetName, RowReader rowReader, boolean hasHeaders)
             throws TableReaderException {
@@ -183,10 +182,10 @@ public class XLSXStreamingTableReader extends AbstractWorkbookTableReader {
 
     private class RowWrapper implements XSSFSheetXMLHandler.SheetContentsHandler {
 
-        int rowsProcessed = 0;
-        List<String> headers = new ArrayList<>();
         final RowReader rowReader;
         final Map<String, String> buffer = new TreeMap<>();
+        int rowsProcessed = 0;
+        List<String> headers = new ArrayList<>();
         boolean collectHeaders = false;
 
         public RowWrapper(RowReader reader) {

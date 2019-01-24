@@ -1,6 +1,4 @@
 {
-
-
   "field_mapper": {
     "_comment": "map fields from Tika to Lucene fields",
     "_comment": "f = from (Tika); t = to (Lucene)",
@@ -24,7 +22,7 @@
         "capture": {
           "find": "([^\/\\.]{4})\\.",
           "replace": "$1",
-          "fail_policy":"skip"
+          "fail_policy": "skip"
         }
       },
       {
@@ -42,103 +40,89 @@
       {
         "f": "X-TIKA:content",
         "t": "lang",
-        "lang_id":{
-          "min_chars" : -1,
-          "max_chars" : 10000,
-          "lang_only" : false
+        "lang_id": {
+          "min_chars": -1,
+          "max_chars": 10000,
+          "lang_only": false
         }
       },
       {
         "f": "X-TIKA:content",
         "t": "langs",
-        "lang_ids":{
-          "min_chars" : -1,
-          "max_chars" : 10000,
-          "lang_only" : false,
-          "min_confidence" : 0.5
+        "lang_ids": {
+          "min_chars": -1,
+          "max_chars": 10000,
+          "lang_only": false,
+          "min_confidence": 0.5
         }
       }
     ]
   },
-
-  "system_fields" :{
-    "unique_doc_key_field" : "_did",
-    "unique_file_key_field" : "_fid",
-    "default_content_field" : "content",
-    "attachment_offset_field" : "_ao",
-    "attachment_offset_sort_field" : "_aos"
+  "system_fields": {
+    "unique_doc_key_field": "_did",
+    "unique_file_key_field": "_fid",
+    "default_content_field": "content",
+    "attachment_offset_field": "_ao",
+    "attachment_offset_sort_field": "_aos"
   },
-
-
-  "fields":{
-    "_fid":{
-      "type":"string",
-      "multivalued":"false"
+  "fields": {
+    "_fid": {
+      "type": "string",
+      "multivalued": "false"
     },
-    "_did":{
-      "type":"string",
-      "multivalued":"false"
+    "_did": {
+      "type": "string",
+      "multivalued": "false"
     },
-    "_ao":{
-      "type":"string",
-      "multivalued":false
+    "_ao": {
+      "type": "string",
+      "multivalued": false
     },
-    "content":{
-      "type":"text",
-      "multivalued":"true",
-      "index_analyzer":"persian_icu"
+    "content": {
+      "type": "text",
+      "multivalued": "true",
+      "index_analyzer": "persian_icu"
     },
-
-    "title":{
-      "type":"text",
-      "multivalued":"true",
-      "index_analyzer":"persian_icu"
+    "title": {
+      "type": "text",
+      "multivalued": "true",
+      "index_analyzer": "persian_icu"
     },
-
     "rel_path": {
-      "type":"text",
-      "index_analyzer":"persian_icu",
-      "multivalued":"false"
+      "type": "text",
+      "index_analyzer": "persian_icu",
+      "multivalued": "false"
     },
-
     "file_name": {
-      "type":"text",
-      "index_analyzer":"persian_icu",
-      "multivalued":"false"
+      "type": "text",
+      "index_analyzer": "persian_icu",
+      "multivalued": "false"
     },
-
     "md5": {
-      "type":"text",
-      "index_analyzer":"persian_icu",
-      "multivalued":"false"
+      "type": "text",
+      "index_analyzer": "persian_icu",
+      "multivalued": "false"
     },
-
     "mime": {
-      "type":"text",
-      "index_analyzer":"persian_icu",
-      "multivalued":"false"
+      "type": "text",
+      "index_analyzer": "persian_icu",
+      "multivalued": "false"
     },
-
-
     "display_name": {
       "type": "string",
       "multivalued": "false"
     },
-
     "lang": {
-      "type":"text",
-      "index_analyzer":"persian_icu",
-      "multivalued":"false"
+      "type": "text",
+      "index_analyzer": "persian_icu",
+      "multivalued": "false"
     },
-
     "langs": {
-      "type":"text",
-      "index_analyzer":"persian_icu",
-      "multivalued":"true"
+      "type": "text",
+      "index_analyzer": "persian_icu",
+      "multivalued": "true"
     }
-
   },
-
   "analyzers": {
     "persian_icu": {
       "charfilters": [

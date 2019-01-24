@@ -33,8 +33,8 @@ import java.util.concurrent.Callable;
 
 
 public abstract class RhapsodeTask implements Callable<RhapsodeTaskStatus> {
-    volatile boolean pleaseStop = false;
     private final String name;
+    volatile boolean pleaseStop = false;
 
     public RhapsodeTask(String name) {
         this.name = name;

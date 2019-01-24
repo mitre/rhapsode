@@ -28,18 +28,27 @@
  */
 package org.rhapsode.app.handlers.indexer;
 
-import org.apache.commons.lang.StringUtils;
-
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Locale;
 import java.util.Map;
+
+import org.apache.commons.lang.StringUtils;
 
 
 public class TableFileRequest {
     public static final String IS_CONTENT_PREFIX = "is_content:";
     public static final String IS_LINK_PREFIX = "is_link:";
     public static final String COL_HEADER_PREFIX = "col_name:";
+    ActionType actionType;
+    String inputDirectoryPath;
+    String inputFileName;
+    String collectionName;
+    String worksheetName;
+    Map<String, FieldTypePair> fields;
+    boolean tableHasHeaders;
+    private Charset encoding;
+    private String delimiterString;
 
     public Map<String, FieldTypePair> getFields() {
         return fields;
@@ -105,21 +114,6 @@ public class TableFileRequest {
         START_INDEXING,
         LOAD_COLLECTION;
     }
-
-    ActionType actionType;
-    String inputDirectoryPath;
-    String inputFileName;
-    String collectionName;
-
-    String worksheetName;
-
-    private Charset encoding;
-    private String delimiterString;
-
-
-    Map<String, FieldTypePair> fields;
-
-    boolean tableHasHeaders;
 
 
 }

@@ -29,6 +29,21 @@
 
 package org.rhapsode.app.handlers.viewers;
 
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import java.io.IOException;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
+
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.queryparser.classic.ParseException;
@@ -56,20 +71,6 @@ import org.rhapsode.util.ParamUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.net.URLDecoder;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 
 public class IndividualIndexedDocumentViewer extends AbstractSearchHandler {
@@ -201,17 +202,17 @@ public class IndividualIndexedDocumentViewer extends AbstractSearchHandler {
         String nextURL = getPrePostDocUrl(pair.getRight(), rank + 1, request);
         String relPath = doc.get(relPathField);
         if (relPath == null) {
-            LOG.warn("rel path is null for document with "+docId);
+            LOG.warn("rel path is null for document with " + docId);
         }
         Path originalFile = searcherApp.getRhapsodeCollection().getOrigDocsRoot().resolve(relPath);
-        if (originalFile == null || ! Files.isRegularFile(originalFile)) {
-            System.err.println("couldn't find original file:"+originalFile + " from >"+
-                    searcherApp.getRhapsodeCollection().getOrigDocsRoot() +"< and >"+relPath);
+        if (originalFile == null || !Files.isRegularFile(originalFile)) {
+            System.err.println("couldn't find original file:" + originalFile + " from >" +
+                    searcherApp.getRhapsodeCollection().getOrigDocsRoot() + "< and >" + relPath);
         }
         Path extractFile = ExtractViewer.getExtractPath(searcherApp.getRhapsodeCollection(), relPath);
-        if (extractFile == null || ! Files.isRegularFile(extractFile)) {
-            System.err.println("couldn't find extract file:"+extractFile + " from >"+
-                    searcherApp.getRhapsodeCollection().getExtractedTextRoot() +"< and >"+relPath);
+        if (extractFile == null || !Files.isRegularFile(extractFile)) {
+            System.err.println("couldn't find extract file:" + extractFile + " from >" +
+                    searcherApp.getRhapsodeCollection().getExtractedTextRoot() + "< and >" + relPath);
         }
 
         String originalFileURL = RawFileURLBuilder.build(

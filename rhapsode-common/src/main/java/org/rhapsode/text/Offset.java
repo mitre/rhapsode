@@ -47,6 +47,11 @@ public class Offset {
         this.end = end;
     }
 
+    public static void main(String[] args) {
+        // TODO Auto-generated method stub
+
+    }
+
     public int startOffset() {
         return start;
     }
@@ -85,11 +90,6 @@ public class Offset {
 
     public String toString() {
         return start + "->" + end;
-    }
-
-    public static void main(String[] args) {
-        // TODO Auto-generated method stub
-
     }
 
 }

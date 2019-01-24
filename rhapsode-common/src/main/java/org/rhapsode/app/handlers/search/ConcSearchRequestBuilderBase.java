@@ -29,6 +29,10 @@
 
 package org.rhapsode.app.handlers.search;
 
+import javax.servlet.http.HttpServletRequest;
+
+import java.io.IOException;
+
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.rhapsode.app.RhapsodeSearcherApp;
 import org.rhapsode.app.contants.C;
@@ -36,9 +40,6 @@ import org.rhapsode.app.session.DynamicParameterConfig;
 import org.rhapsode.app.session.DynamicParameters;
 import org.rhapsode.lucene.search.concordance.ConcordanceSearchRequest;
 import org.rhapsode.util.ParamUtil;
-
-import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
 
 
 public class ConcSearchRequestBuilderBase extends BaseRequestBuilder {

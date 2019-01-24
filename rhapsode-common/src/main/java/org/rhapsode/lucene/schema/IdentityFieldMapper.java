@@ -28,10 +28,10 @@
  */
 package org.rhapsode.lucene.schema;
 
-import org.rhapsode.util.StringUtil;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import org.rhapsode.util.StringUtil;
 
 public class IdentityFieldMapper extends IndivFieldMapper {
     private static boolean trim = true;

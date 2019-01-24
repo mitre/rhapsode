@@ -29,6 +29,11 @@
 
 package org.rhapsode.lucene.schema;
 
+import java.io.IOException;
+import java.lang.reflect.Type;
+import java.util.Locale;
+import java.util.Map;
+
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
@@ -39,11 +44,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.document.FieldType;
 import org.apache.lucene.index.IndexOptions;
-
-import java.io.IOException;
-import java.lang.reflect.Type;
-import java.util.Locale;
-import java.util.Map;
 
 class IndexSchemaDeserializer implements JsonDeserializer<org.rhapsode.lucene.schema.IndexSchema> {
 

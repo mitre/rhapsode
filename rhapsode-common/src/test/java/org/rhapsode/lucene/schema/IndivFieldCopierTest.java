@@ -57,7 +57,7 @@ public class IndivFieldCopierTest {
     public void testCapture() {
         IndivFieldMapper c = new CaptureFieldMapper("toField", "(\\d+)", "a $1 b",
                 CaptureFieldMapper.FAIL_POLICY.EXCEPTION);
-        String[] args = new String[] {
+        String[] args = new String[]{
                 "q w 123 x yz",
                 "456"
         };
@@ -107,7 +107,7 @@ public class IndivFieldCopierTest {
     @Test
     public void testIdentityMapper() {
         IdentityFieldMapper mapper = new IdentityFieldMapper("toField");
-        String [] args = new String[] {
+        String[] args = new String[]{
                 "   the quick    \r\n\r\n\r\n",
                 null,
                 "brown \r\n\r\n   \r  \n   \r  \n \r\n fox jumped    "
@@ -144,7 +144,7 @@ public class IndivFieldCopierTest {
         sb.append("b");
 
         IdentityFieldMapper mapper = new IdentityFieldMapper("toField");
-        String [] args = new String[] {
+        String[] args = new String[]{
                 "   the quick    \r\n\r\n\r\n",
                 null,
                 sb.toString(),

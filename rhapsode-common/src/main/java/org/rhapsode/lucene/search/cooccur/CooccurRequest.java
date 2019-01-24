@@ -45,28 +45,28 @@ public class CooccurRequest extends ConcordanceSearchRequest {
         return minXGram;
     }
 
-    public int getMaxXGram() {
-        return maxXGram;
-    }
-
-    public int getMinTermFreq() {
-        return minTermFreq;
-    }
-
-    public int getMaxNumResults() {
-        return maxNumResults;
-    }
-
     public void setMinXGram(int minXGram) {
         this.minXGram = minXGram;
+    }
+
+    public int getMaxXGram() {
+        return maxXGram;
     }
 
     public void setMaxXGram(int maxXGram) {
         this.maxXGram = maxXGram;
     }
 
+    public int getMinTermFreq() {
+        return minTermFreq;
+    }
+
     public void setMinTermFreq(int minTermFreq) {
         this.minTermFreq = minTermFreq;
+    }
+
+    public int getMaxNumResults() {
+        return maxNumResults;
     }
 
     public void setMaxNumResults(int maxNumResults) {

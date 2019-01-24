@@ -29,14 +29,15 @@
 package org.rhapsode.app.handlers.search;
 
 
+import javax.servlet.http.HttpServletRequest;
+
+import java.io.IOException;
+
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.rhapsode.app.RhapsodeSearcherApp;
 import org.rhapsode.app.contants.C;
 import org.rhapsode.lucene.search.variant.VariantTermRequest;
 import org.rhapsode.util.ParamUtil;
-
-import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
 
 public class VariantTermRequestBuilder extends BaseRequestBuilder {
 

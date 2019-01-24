@@ -29,6 +29,13 @@
 package org.rhapsode.app.handlers.search;
 
 
+import javax.servlet.http.HttpServletRequest;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
@@ -36,12 +43,6 @@ import org.apache.lucene.queryparser.classic.ParseException;
 import org.rhapsode.app.RhapsodeSearcherApp;
 import org.rhapsode.app.contants.C;
 import org.rhapsode.util.ParamUtil;
-
-import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 public class Word2VecRequestBuilder extends BaseRequestBuilder {
 
@@ -89,10 +90,10 @@ public class Word2VecRequestBuilder extends BaseRequestBuilder {
         }
         ts.close();
         ts.end();
-        if ( i == 0) {
-            throw new ParseException("Couldn't get a term in: "+s);
+        if (i == 0) {
+            throw new ParseException("Couldn't get a term in: " + s);
         } else if (i > 1) {
-            throw new ParseException("Single term analyzed into several: "+s);
+            throw new ParseException("Single term analyzed into several: " + s);
         }
         return t;
     }

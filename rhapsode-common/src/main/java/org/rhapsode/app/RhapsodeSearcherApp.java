@@ -30,6 +30,19 @@
 package org.rhapsode.app;
 
 
+import java.io.IOException;
+import java.io.Reader;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorCompletionService;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.apache.lucene.search.MultiTermQuery;
@@ -52,24 +65,12 @@ import org.rhapsode.lucene.search.cooccur.CooccurConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
-import java.io.Reader;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorCompletionService;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
-
 public class RhapsodeSearcherApp {
 
 
+    public static final Path CWD = Paths.get("").toAbsolutePath();
     private static final Logger LOG = LoggerFactory.getLogger(RhapsodeSearcherApp.class);
-
+    private final Object lock = new Object();
     GeoConfig geoConfig;
     CommonSearchConfig commonSearchConfig;
     BasicSearchConfig basicSearchConfig;
@@ -81,21 +82,25 @@ public class RhapsodeSearcherApp {
     SessionManager sessionManager;
     //need this to update the doc base if the collection changes
     ResourceHandler resourceHandler;
-
     RhapsodeTask task;
     ExecutorService executorService;
     ExecutorCompletionService executorCompletionService;
-
-    private final Object lock = new Object();
-
-
     //TODO: refactor these into child managers
     int maxBooleanClauses;
     boolean treatStoredQueryLineAsPhrase;
     ParserType queryParserType;
     private RhapsodeTaskStatus lastTaskStatus;
 
-    public static final Path CWD = Paths.get("").toAbsolutePath();
+    public static RhapsodeSearcherApp load(Path propsFile) throws IOException {
+        GsonBuilder builder = new GsonBuilder();
+        builder.registerTypeHierarchyAdapter(RhapsodeSearcherApp.class, new RhapsodeSearcherAppDeserializer());
+        Gson gson = builder.create();
+        RhapsodeSearcherApp config = null;
+        try (Reader r = Files.newBufferedReader(propsFile, StandardCharsets.UTF_8)) {
+            config = gson.fromJson(r, RhapsodeSearcherApp.class);
+        }
+        return config;
+    }
 
     public void tryToLoadRhapsodeCollection(Path p) throws IOException {
         //add locking!
@@ -110,7 +115,7 @@ public class RhapsodeSearcherApp {
     }
 
     public ParserPlugin getQueryParser(ParserPlugin.PARSERS parser) {
-        switch(parser) {
+        switch (parser) {
             case CLASSIC:
                 return new ClassicQParserPlugin(getRhapsodeCollection().getIndexSchema());
             case COMPLEX:
@@ -128,7 +133,6 @@ public class RhapsodeSearcherApp {
         return serverIdleTimeoutMillis;
     }
 
-
     public boolean getTreatStoredQueryLineAsPhrase() {
         return treatStoredQueryLineAsPhrase;
     }
@@ -136,7 +140,6 @@ public class RhapsodeSearcherApp {
     public CommonSearchConfig getCommonSearchConfig() {
         return commonSearchConfig;
     }
-
 
     public ConcordanceSearchConfig getConcordanceSearchConfig() {
         return concordanceSearchConfig;
@@ -174,24 +177,7 @@ public class RhapsodeSearcherApp {
         return Paths.get("reports");
     }
 
-    public enum ParserType {
-        COMPLEX,
-        CLASSIC,
-        SPAN_QUERY
-    };
-
-
-    public static RhapsodeSearcherApp load(Path propsFile) throws IOException {
-        GsonBuilder builder = new GsonBuilder();
-        builder.registerTypeHierarchyAdapter(RhapsodeSearcherApp.class, new RhapsodeSearcherAppDeserializer());
-        Gson gson = builder.create();
-        RhapsodeSearcherApp config = null;
-        try (Reader r = Files.newBufferedReader(propsFile, StandardCharsets.UTF_8)) {
-            config = gson.fromJson(r, RhapsodeSearcherApp.class);
-        }
-        return config;
-    }
-
+    ;
 
     public RhapsodeCollection getRhapsodeCollection() {
         return rhapsodeCollection;
@@ -212,7 +198,6 @@ public class RhapsodeSearcherApp {
     public boolean getBooleanParameter(BooleanDynamicParameter parameter) {
         return getSessionManager().getDynamicParameterConfig().getBoolean(parameter);
     }
-
 
     public RhapsodeTaskStatus getLastTaskStatus() {
         return lastTaskStatus;
@@ -268,5 +253,11 @@ public class RhapsodeSearcherApp {
         executorCompletionService = null;
         executorService = null;
         return;
+    }
+
+    public enum ParserType {
+        COMPLEX,
+        CLASSIC,
+        SPAN_QUERY
     }
 }

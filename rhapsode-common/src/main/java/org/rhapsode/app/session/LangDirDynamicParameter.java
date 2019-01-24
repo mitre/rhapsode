@@ -29,9 +29,9 @@
 
 package org.rhapsode.app.session;
 
-import org.rhapsode.util.LanguageDirection;
-
 import java.util.Locale;
+
+import org.rhapsode.util.LanguageDirection;
 
 
 public class LangDirDynamicParameter extends DynamicParameter<LanguageDirection> {

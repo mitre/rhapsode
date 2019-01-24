@@ -29,6 +29,10 @@
 
 package org.rhapsode.lucene.utils;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
+
 import com.google.common.base.Optional;
 import com.optimaize.langdetect.DetectedLanguage;
 import com.optimaize.langdetect.LanguageDetector;
@@ -39,10 +43,6 @@ import com.optimaize.langdetect.profiles.LanguageProfile;
 import com.optimaize.langdetect.profiles.LanguageProfileReader;
 import com.optimaize.langdetect.text.CommonTextObjectFactories;
 import com.optimaize.langdetect.text.TextObjectFactory;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.List;
 
 public class LanguageIDWrapper {
     static List<LanguageProfile> languageProfiles;

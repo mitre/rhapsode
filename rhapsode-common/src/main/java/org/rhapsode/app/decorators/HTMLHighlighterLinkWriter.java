@@ -29,6 +29,9 @@
 
 package org.rhapsode.app.decorators;
 
+import java.util.Locale;
+import java.util.Map;
+
 import org.rhapsode.app.RhapsodeSearcherApp;
 import org.rhapsode.app.contants.C;
 import org.rhapsode.app.contants.CSS;
@@ -36,9 +39,6 @@ import org.rhapsode.app.contants.H;
 import org.rhapsode.lucene.search.BaseSearchRequest;
 import org.rhapsode.lucene.search.StoredQuery;
 import org.xml.sax.SAXException;
-
-import java.util.Locale;
-import java.util.Map;
 
 public class HTMLHighlighterLinkWriter extends BaseLinkWriter {
 

@@ -29,6 +29,19 @@
 
 package org.rhapsode.app.handlers.search;
 
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import java.io.IOException;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.index.IndexReader;
@@ -63,19 +76,6 @@ import org.tallison.lucene.search.concordance.windowvisitor.ConcordanceArrayWind
 import org.tallison.lucene.search.concordance.windowvisitor.TargetVisitor;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 
 public class TargetCounterHandler extends AbstractSearchHandler {
@@ -141,7 +141,7 @@ public class TargetCounterHandler extends AbstractSearchHandler {
                 try {
                     long start = System.currentTimeMillis();
                     results = advancedSearch(searchRequest, xhtml);
-                    UserLogger.log(TOOL_NAME, searchRequest.getComplexQuery(), -1, System.currentTimeMillis()-start);
+                    UserLogger.log(TOOL_NAME, searchRequest.getComplexQuery(), -1, System.currentTimeMillis() - start);
                 } catch (TargetTokenNotFoundException e) {
                     e.printStackTrace();
                     errorMsg = e.getMessage();

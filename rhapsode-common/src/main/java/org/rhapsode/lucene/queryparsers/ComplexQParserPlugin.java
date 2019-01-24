@@ -29,7 +29,6 @@
 package org.rhapsode.lucene.queryparsers;
 
 import org.apache.lucene.queryparser.classic.ParseException;
-import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.queryparser.complexPhrase.ComplexPhraseQueryParser;
 import org.apache.lucene.search.MultiTermQuery;
 import org.apache.lucene.search.Query;
@@ -38,19 +37,20 @@ import org.rhapsode.lucene.schema.IndexSchema;
 
 public class ComplexQParserPlugin implements ParserPlugin {
 
-    public String getName() {
-        return "complex";
-    }
-
     final IndexSchema indexSchema;
     private final MultiTermQuery.RewriteMethod rewriteMethod;
     public ComplexQParserPlugin(IndexSchema indexSchema) {
         this(indexSchema, MultiTermQuery.CONSTANT_SCORE_REWRITE);
     }
+
     public ComplexQParserPlugin(IndexSchema indexSchema, MultiTermQuery.RewriteMethod rewriteMethod) {
         this.indexSchema = indexSchema;
         this.rewriteMethod = rewriteMethod;
 
+    }
+
+    public String getName() {
+        return "complex";
     }
 
     @Override
@@ -63,7 +63,7 @@ public class ComplexQParserPlugin implements ParserPlugin {
         try {
             return p.parse(qString);
         } catch (IllegalStateException e) {
-            throw new ParseException("illegal state exception: "+e.getMessage()+" : for :"+qString);
+            throw new ParseException("illegal state exception: " + e.getMessage() + " : for :" + qString);
         }
     }
 }

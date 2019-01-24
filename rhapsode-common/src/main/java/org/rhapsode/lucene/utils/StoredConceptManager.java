@@ -30,10 +30,10 @@
 package org.rhapsode.lucene.utils;
 
 
+import java.util.Map;
+
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.rhapsode.lucene.search.StoredConcept;
-
-import java.util.Map;
 
 public interface StoredConceptManager {
 

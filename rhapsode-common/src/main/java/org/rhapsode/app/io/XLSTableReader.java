@@ -29,16 +29,6 @@
 
 package org.rhapsode.app.io;
 
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.DataFormatter;
-import org.apache.poi.ss.usermodel.FormulaEvaluator;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -50,16 +40,27 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.usermodel.DataFormatter;
+import org.apache.poi.ss.usermodel.FormulaEvaluator;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class XLSTableReader extends AbstractWorkbookTableReader {
     private static final Logger LOG = LoggerFactory.getLogger(XLSTableReader.class);
 
     final InputStream is;
     final Workbook wb;
-    Sheet sheet;
     final String sheetName;
-    RowReader rowReader;
     final DataFormatter dataFormatter = new DataFormatter(true);
     final FormulaEvaluator formulaEvaluator;
+    Sheet sheet;
+    RowReader rowReader;
 
     public XLSTableReader(Path path, String worksheetName, RowReader rowReader, boolean hasHeaders)
             throws TableReaderException {
@@ -108,7 +109,7 @@ public class XLSTableReader extends AbstractWorkbookTableReader {
                 int col = cell.getColumnIndex();
                 if (col < headers.size()) {
                     String val = "";
-                    if (cell.getCellType() != Cell.CELL_TYPE_FORMULA) {
+                    if (cell.getCellType() != CellType.FORMULA) {
                         val = dataFormatter.formatCellValue(cell);
                     } else {
                         val = dataFormatter.formatCellValue(cell, formulaEvaluator);

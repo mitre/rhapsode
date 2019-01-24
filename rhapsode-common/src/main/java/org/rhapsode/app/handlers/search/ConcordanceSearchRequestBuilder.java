@@ -29,6 +29,14 @@
 
 package org.rhapsode.app.handlers.search;
 
+import javax.servlet.http.HttpServletRequest;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.carrot2.clustering.kmeans.BisectingKMeansClusteringAlgorithm;
@@ -39,13 +47,6 @@ import org.rhapsode.app.contants.C;
 import org.rhapsode.app.session.DynamicParameters;
 import org.rhapsode.lucene.search.concordance.ConcordanceSearchRequest;
 import org.tallison.lucene.search.concordance.classic.ConcordanceSortOrder;
-
-import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
 
 public class ConcordanceSearchRequestBuilder extends ConcSearchRequestBuilderBase {
 

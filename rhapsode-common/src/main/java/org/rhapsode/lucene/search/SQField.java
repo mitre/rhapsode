@@ -29,10 +29,10 @@
 package org.rhapsode.lucene.search;
 
 
-import org.apache.commons.lang3.StringUtils;
-
 import java.sql.Types;
 import java.util.Locale;
+
+import org.apache.commons.lang3.StringUtils;
 
 public enum SQField {
 

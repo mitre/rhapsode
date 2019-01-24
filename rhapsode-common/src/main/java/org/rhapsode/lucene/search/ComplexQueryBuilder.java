@@ -28,6 +28,9 @@
  */
 package org.rhapsode.lucene.search;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.search.BooleanClause;
@@ -40,9 +43,6 @@ import org.rhapsode.geo.GeoConfig;
 import org.rhapsode.geo.GeoQueryBuilder;
 import org.rhapsode.lucene.queryparsers.ParserPlugin;
 import org.rhapsode.lucene.utils.StoredConceptManager;
-
-import java.util.LinkedList;
-import java.util.List;
 
 
 public class ComplexQueryBuilder {

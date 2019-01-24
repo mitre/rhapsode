@@ -28,6 +28,11 @@
  */
 package org.rhapsode.tasks;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.apache.lucene.index.Term;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.WildcardQuery;
@@ -37,11 +42,6 @@ import org.rhapsode.app.tagger.TaggerRequest;
 import org.rhapsode.app.tasks.TaggerTask;
 import org.rhapsode.app.tasks.Tasker;
 import org.rhapsode.lucene.search.MaxResultsQuery;
-
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.HashMap;
-import java.util.Map;
 
 public class TaggerTaskTest {
 
@@ -55,7 +55,7 @@ public class TaggerTaskTest {
         Map<Integer, MaxResultsQuery> queries = new HashMap<>();
         queries.put(0, new MaxResultsQuery("fox1", new WildcardQuery(new Term("content", "f*")), -1, -1));
         queries.put(1, new MaxResultsQuery("d_words", new WildcardQuery(new Term("content", "d*")), -1, -1));
-        IndexSearcher searcher =  searcherApp.getRhapsodeCollection().getIndexManager().getSearcher();
+        IndexSearcher searcher = searcherApp.getRhapsodeCollection().getIndexManager().getSearcher();
         Path outputPath = Paths.get("C:/data/tmp/");
         TaggerRequest request = new TaggerRequest(queries, searcher, "", outputPath, "test_out",
                 ReportRequest.REPORT_TYPE.NO_LINKS, 100, TaggerRequest.NORM_TYPE.ONE);

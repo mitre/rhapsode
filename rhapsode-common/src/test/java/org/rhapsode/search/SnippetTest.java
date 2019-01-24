@@ -29,12 +29,18 @@
 
 package org.rhapsode.search;
 
+import static org.junit.Assert.assertTrue;
+
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.core.WhitespaceAnalyzer;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.WildcardQuery;
-import org.apache.lucene.search.highlight.*;
+import org.apache.lucene.search.highlight.Fragmenter;
+import org.apache.lucene.search.highlight.Highlighter;
+import org.apache.lucene.search.highlight.QueryScorer;
+import org.apache.lucene.search.highlight.SimpleFragmenter;
+import org.apache.lucene.search.highlight.SpanGradientFormatter;
 import org.apache.tika.metadata.Metadata;
 import org.apache.tika.sax.ToHTMLContentHandler;
 import org.junit.Before;
@@ -42,8 +48,6 @@ import org.junit.Test;
 import org.rhapsode.app.decorators.RhapsodeXHTMLHandler;
 import org.rhapsode.app.decorators.SnippetWriter;
 import org.rhapsode.lucene.search.basic.LTGTEncoder;
-
-import static org.junit.Assert.assertTrue;
 
 public class SnippetTest {
 
@@ -86,7 +90,7 @@ public class SnippetTest {
         xhtml.endDocument();
 
         assertTrue(xhtml.toString().contains(
-                        "&amp;the; &amp;amp; quick &amp;lt; <span style=\"background: #F2FA06; \">fo&lt;&amp;x</span> &amp;gt;")
+                "&amp;the; &amp;amp; quick &amp;lt; <span style=\"background: #F2FA06; \">fo&lt;&amp;x</span> &amp;gt;")
         );
     }
 

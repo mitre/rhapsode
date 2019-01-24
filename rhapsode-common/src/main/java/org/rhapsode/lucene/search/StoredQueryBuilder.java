@@ -29,11 +29,11 @@
 
 package org.rhapsode.lucene.search;
 
-import org.apache.commons.lang3.StringUtils;
-import org.rhapsode.lucene.utils.SqlUtil;
-
 import java.lang.reflect.Field;
 import java.sql.Types;
+
+import org.apache.commons.lang3.StringUtils;
+import org.rhapsode.lucene.utils.SqlUtil;
 
 public class StoredQueryBuilder {
 

@@ -29,15 +29,15 @@
 
 package org.rhapsode.app.io;
 
-import org.apache.commons.lang.StringUtils;
-import org.apache.tika.metadata.Metadata;
-import org.rhapsode.app.handlers.indexer.FieldTypePair;
-import org.rhapsode.indexer.FileIndexer;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import org.apache.commons.lang.StringUtils;
+import org.apache.tika.metadata.Metadata;
+import org.rhapsode.app.handlers.indexer.FieldTypePair;
+import org.rhapsode.indexer.FileIndexer;
 
 public class RowReaderIndexer extends RowReader {
     private final Map<String, FieldTypePair> colMappings;

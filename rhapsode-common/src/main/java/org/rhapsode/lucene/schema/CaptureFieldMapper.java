@@ -28,30 +28,21 @@
  */
 package org.rhapsode.lucene.schema;
 
-import org.apache.commons.lang3.StringUtils;
-
 import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang3.StringUtils;
+
 public class CaptureFieldMapper extends IndivFieldMapper {
 
 
-    public enum FAIL_POLICY {
-        SKIP_FIELD,
-        STORE_AS_IS,
-        EXCEPTION
-    }
-
     static Pattern GROUP_PATTERN = Pattern.compile("\\$(\\d+)");
-
-
     private final String captureString;
     private final Pattern capturePattern;
     private final String replace;
     private final FAIL_POLICY failPolicy;
-
     public CaptureFieldMapper(String toField, String captureString, String replace,
                               FAIL_POLICY failPolicy) {
         super(toField);
@@ -109,5 +100,11 @@ public class CaptureFieldMapper extends IndivFieldMapper {
                     capturePattern.toString() + " in " + val);
         }
         throw new RuntimeException("Ran out of elses in CaptureFieldMapper ?!");
+    }
+
+    public enum FAIL_POLICY {
+        SKIP_FIELD,
+        STORE_AS_IS,
+        EXCEPTION
     }
 }

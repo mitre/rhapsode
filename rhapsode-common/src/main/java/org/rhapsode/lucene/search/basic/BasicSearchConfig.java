@@ -46,6 +46,9 @@ public class BasicSearchConfig {
     private int snippetsPerResult = 3;
     private LanguageDirection defaultLanguageDirection = LanguageDirection.LTR;
 
+    protected BasicSearchConfig() {
+    }
+
     public static BasicSearchConfig build(JsonElement el) {
         BasicSearchConfig config = new BasicSearchConfig();
         config.fragmentSize = JsonUtil.getInt(el, "fragmentSize");
@@ -62,10 +65,6 @@ public class BasicSearchConfig {
         }
 
         return config;
-    }
-
-
-    protected BasicSearchConfig() {
     }
 
     ;

@@ -30,8 +30,8 @@
 
 
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <groupId>org.rhapsode</groupId>
@@ -78,18 +78,20 @@
                             </filters>
 
                             <transformers>
-<!--                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>org.apache.tika.cli.TikaCLI</mainClass>
-                                </transformer> -->
-                                <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
-                                <transformer implementation="org.apache.maven.plugins.shade.resource.IncludeResourceTransformer">
+                                <!--                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                                                    <mainClass>org.apache.tika.cli.TikaCLI</mainClass>
+                                                                </transformer> -->
+                                <transformer
+                                        implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
+                                <transformer
+                                        implementation="org.apache.maven.plugins.shade.resource.IncludeResourceTransformer">
                                     <resource>META-INF/LICENSE</resource>
                                     <file>target/classes/META-INF/LICENSE</file>
                                 </transformer>
-<!--                                <transformer implementation="org.apache.maven.plugins.shade.resource.IncludeResourceTransformer">
-                                    <resource>META-INF/NOTICE</resource>
-                                    <file>target/classes/META-INF/NOTICE</file>
-                                </transformer> -->
+                                <!--                                <transformer implementation="org.apache.maven.plugins.shade.resource.IncludeResourceTransformer">
+                                                                    <resource>META-INF/NOTICE</resource>
+                                                                    <file>target/classes/META-INF/NOTICE</file>
+                                                                </transformer> -->
                             </transformers>
                         </configuration>
                     </execution>

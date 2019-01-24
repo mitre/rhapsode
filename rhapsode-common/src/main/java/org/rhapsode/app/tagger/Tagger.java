@@ -30,19 +30,6 @@
 package org.rhapsode.app.tagger;
 
 
-import org.apache.commons.lang3.tuple.Pair;
-import org.apache.lucene.document.Document;
-import org.apache.lucene.search.IndexSearcher;
-import org.apache.lucene.search.Query;
-import org.apache.lucene.search.ScoreDoc;
-import org.apache.lucene.search.TopDocs;
-import org.rhapsode.app.HitCounter;
-import org.rhapsode.app.RhapsodeSearcherApp;
-import org.rhapsode.lucene.search.MaxResultsQuery;
-import org.rhapsode.util.PathUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -51,7 +38,6 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -65,16 +51,25 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
-public class Tagger {
+import org.apache.commons.lang3.tuple.Pair;
+import org.apache.lucene.document.Document;
+import org.apache.lucene.search.IndexSearcher;
+import org.apache.lucene.search.Query;
+import org.apache.lucene.search.ScoreDoc;
+import org.apache.lucene.search.TopDocs;
+import org.rhapsode.app.HitCounter;
+import org.rhapsode.app.RhapsodeSearcherApp;
+import org.rhapsode.lucene.search.MaxResultsQuery;
+import org.rhapsode.util.PathUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-    private static final Logger LOG = LoggerFactory.getLogger(Tagger.class);
+public class Tagger {
 
     static final String QUERY_NAME_TABLE = "QNAMES";
     static final String SCORES_TABLE = "SCORES";
     static final String SCORE_SORT_TABLE = "OVERALL_DOC_SCORES";
     static final String NAME_PATH_TABLE = "NAME_PATH";//display name and path
-
-
     static final String TOTAL_SCORE_COL = "SUMMED_SCORE";
     static final String Q_NAME_COL = "NAME";
     static final String FILE_ID_COL = "F_ID";//file id
@@ -83,7 +78,7 @@ public class Tagger {
     static final String SCORES_COL = "SCORES";
     static final String DISPLAY_NAME_COL = "DISPLAY";
     static final String ORIG_REL_PATH = "REL_PATH";
-
+    private static final Logger LOG = LoggerFactory.getLogger(Tagger.class);
     private static final int POISON_KEY = -1;
 
     private static final int NUM_THREADS = 10;
@@ -92,14 +87,11 @@ public class Tagger {
     private static final int FILE_ID_MAX_LEN = 512;
     private static final int DISPLAY_NAME_MAX_LEN = 512;
     private static final int ORIG_REL_PATH_MAX_LEN = 2048;
-
-    private Object lock = new Object();
-
-    boolean alreadyRun = false;
     final TaggerRequest request;
     final RhapsodeSearcherApp searcherApp;
+    boolean alreadyRun = false;
     Map<Integer, Integer> maxHits;
-
+    private Object lock = new Object();
     private String statusMessage = "";
 
     public Tagger(TaggerRequest request, RhapsodeSearcherApp searcherApp) {

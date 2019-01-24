@@ -29,6 +29,10 @@
 
 package org.rhapsode.lucene.analysis.charoffsets;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.tokenattributes.OffsetAttribute;
@@ -49,10 +53,6 @@ import org.tallison.lucene.search.concordance.charoffsets.RandomAccessCharOffset
 import org.tallison.lucene.search.concordance.charoffsets.ReanalyzingTokenCharOffsetsReader;
 import org.tallison.lucene.search.concordance.charoffsets.TokenCharOffsetRequests;
 import org.tallison.lucene.search.spans.SimpleSpanQueryConverter;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 
 public class SingleDocSpanQueryOffsetsGrabber {

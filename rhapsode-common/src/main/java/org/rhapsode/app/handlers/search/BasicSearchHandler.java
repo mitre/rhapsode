@@ -29,6 +29,14 @@
 
 package org.rhapsode.app.handlers.search;
 
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import java.io.IOException;
+import java.text.DecimalFormat;
+import java.util.Locale;
+
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.eclipse.jetty.server.Request;
 import org.rhapsode.app.RhapsodeSearcherApp;
@@ -46,14 +54,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.text.DecimalFormat;
-import java.util.Date;
-import java.util.Locale;
-
 
 public class BasicSearchHandler extends AbstractSearchHandler {
 
@@ -67,6 +67,39 @@ public class BasicSearchHandler extends AbstractSearchHandler {
         super(TOOL_NAME);
         this.searcherApp = searcherApp;
         requestBuilder = new BasicSearchRequestBuilder();
+    }
+
+    private static void writeNextPrev(BasicSearchRequest basicSearchRequest,
+                                      long totalHits, RhapsodeXHTMLHandler xhtml) throws SAXException {
+        if (totalHits < 2) {
+            return;
+        }
+        xhtml.startElement(H.TABLE);
+        xhtml.startElement(H.TR);
+        //previous
+        xhtml.startElement(H.TD, H.ALIGN, "left");
+        if (basicSearchRequest.getLastStart() > 0) {
+            xhtml.startElement(H.INPUT,
+                    H.TYPE, H.SUBMIT,
+                    H.VALUE, "Previous",
+                    H.NAME, C.PREVIOUS);
+            xhtml.endElement(H.INPUT);
+        }
+        xhtml.endElement(H.TD);
+
+        //next
+        xhtml.startElement(H.TD, H.ALIGN, "right");
+        if (basicSearchRequest.getLastEnd() < totalHits - 1) {
+            xhtml.startElement(H.INPUT,
+                    H.TYPE, H.SUBMIT,
+                    H.VALUE, "Next",
+                    H.NAME, C.NEXT);
+            xhtml.endElement(H.INPUT);
+        }
+        xhtml.endElement(H.TD);
+
+        xhtml.endElement(H.TR);
+        xhtml.endElement(H.TABLE);
     }
 
     @Override
@@ -135,7 +168,6 @@ public class BasicSearchHandler extends AbstractSearchHandler {
 
         response.getOutputStream().flush();
     }
-
 
     private void writeFormAndResults(BasicSearchRequest basicSearchRequest,
                                      BasicSearchResults results, String errorMessage,
@@ -216,39 +248,6 @@ public class BasicSearchHandler extends AbstractSearchHandler {
         }
         xhtml.br();
 
-    }
-
-    private static void writeNextPrev(BasicSearchRequest basicSearchRequest,
-                                      long totalHits, RhapsodeXHTMLHandler xhtml) throws SAXException {
-        if (totalHits < 2) {
-            return;
-        }
-        xhtml.startElement(H.TABLE);
-        xhtml.startElement(H.TR);
-        //previous
-        xhtml.startElement(H.TD, H.ALIGN, "left");
-        if (basicSearchRequest.getLastStart() > 0) {
-            xhtml.startElement(H.INPUT,
-                    H.TYPE, H.SUBMIT,
-                    H.VALUE, "Previous",
-                    H.NAME, C.PREVIOUS);
-            xhtml.endElement(H.INPUT);
-        }
-        xhtml.endElement(H.TD);
-
-        //next
-        xhtml.startElement(H.TD, H.ALIGN, "right");
-        if (basicSearchRequest.getLastEnd() < totalHits - 1) {
-            xhtml.startElement(H.INPUT,
-                    H.TYPE, H.SUBMIT,
-                    H.VALUE, "Next",
-                    H.NAME, C.NEXT);
-            xhtml.endElement(H.INPUT);
-        }
-        xhtml.endElement(H.TD);
-
-        xhtml.endElement(H.TR);
-        xhtml.endElement(H.TABLE);
     }
 
     private void addHiddenInputAndButtons(BasicSearchRequest basicSearchRequest, BasicSearchResults results,

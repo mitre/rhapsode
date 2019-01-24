@@ -28,10 +28,10 @@
  */
 package org.rhapsode.lucene.search.basic;
 
+import java.util.regex.Pattern;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.lucene.search.highlight.Encoder;
-
-import java.util.regex.Pattern;
 
 
 public class LTGTEncoder implements Encoder {

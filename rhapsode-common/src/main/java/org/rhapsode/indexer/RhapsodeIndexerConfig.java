@@ -29,15 +29,15 @@
 
 package org.rhapsode.indexer;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import org.rhapsode.RhapsodeCollection;
-
 import java.io.IOException;
 import java.io.Reader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import org.rhapsode.RhapsodeCollection;
 
 public class RhapsodeIndexerConfig {
     RhapsodeCollection rc;
@@ -60,11 +60,11 @@ public class RhapsodeIndexerConfig {
         return rc;
     }
 
-    public void setNumDocsBetweenCommits(int numDocsBetweenCommits) {
-        this.numDocsBetweenCommits = numDocsBetweenCommits;
-    }
-
     public int getNumDocsBetweenCommits() {
         return numDocsBetweenCommits;
+    }
+
+    public void setNumDocsBetweenCommits(int numDocsBetweenCommits) {
+        this.numDocsBetweenCommits = numDocsBetweenCommits;
     }
 }

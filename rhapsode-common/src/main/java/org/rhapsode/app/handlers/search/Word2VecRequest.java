@@ -28,16 +28,15 @@
  */
 package org.rhapsode.app.handlers.search;
 
-import org.apache.commons.lang3.StringUtils;
-
-import java.util.Collection;
 import java.util.List;
+
+import org.apache.commons.lang3.StringUtils;
 
 public class Word2VecRequest {
 
-    private int numResults = 10;
     private final List<String> positives;
     private final List<String> negatives;
+    private int numResults = 10;
 
     public Word2VecRequest(List<String> positives, List<String> negatives) {
         this.positives = positives;
@@ -45,7 +44,7 @@ public class Word2VecRequest {
     }
 
     public boolean hasQuery() {
-        return positives.size()+negatives.size() > 0;
+        return positives.size() + negatives.size() > 0;
     }
 
     public int getNumResults() {

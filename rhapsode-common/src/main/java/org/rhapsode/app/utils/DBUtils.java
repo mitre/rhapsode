@@ -29,11 +29,6 @@
 
 package org.rhapsode.app.utils;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-
 public class DBUtils {
 
     public static String escapeSQL(String s) {

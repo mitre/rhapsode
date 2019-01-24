@@ -29,11 +29,11 @@
 
 package org.rhapsode.lucene.schema;
 
-import com.optimaize.langdetect.DetectedLanguage;
-import org.rhapsode.lucene.utils.LanguageIDWrapper;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import com.optimaize.langdetect.DetectedLanguage;
+import org.rhapsode.lucene.utils.LanguageIDWrapper;
 
 
 public class LangIdsMapper extends LangIdMapper {

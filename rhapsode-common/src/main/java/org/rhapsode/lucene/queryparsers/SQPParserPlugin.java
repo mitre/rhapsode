@@ -70,7 +70,7 @@ public class SQPParserPlugin implements ParserPlugin {
         try {
             return p.parse(qString);
         } catch (IllegalStateException e) {
-            throw new ParseException("illegal state exception: "+e.getMessage()+" : for :"+qString);
+            throw new ParseException("illegal state exception: " + e.getMessage() + " : for :" + qString);
         }
 
     }

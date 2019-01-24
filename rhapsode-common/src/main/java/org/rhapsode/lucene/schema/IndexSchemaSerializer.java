@@ -29,6 +29,11 @@
 
 package org.rhapsode.lucene.schema;
 
+import java.lang.reflect.Type;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -41,24 +46,17 @@ import org.apache.lucene.analysis.util.CharFilterFactory;
 import org.apache.lucene.analysis.util.TokenFilterFactory;
 import org.apache.lucene.document.FieldType;
 
-import java.lang.reflect.Type;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-
 class IndexSchemaSerializer implements JsonSerializer<IndexSchema> {
 
+    public static final String MIN_CONFIDENCE = "min_confidence";
     static final String FIELD_MAPPER = "field_mapper";
     static final String FIELDS = "fields";
     static final String ANALYZERS = "analyzers";
-
     static final String MIN_CHARS = "min_chars";
     static final String MAX_CHARS = "max_chars";
     static final String LANG_ONLY = "lang_only";
     static final String LANG_ID = "lang_id";
     static final String LANG_IDS = "lang_ids";
-    public static final String MIN_CONFIDENCE = "min_confidence";
-
     static String SYSTEM_FIELDS = "system_fields";
     static String MULTIVALUED = "multivalued";
     static String TEXT = "text";

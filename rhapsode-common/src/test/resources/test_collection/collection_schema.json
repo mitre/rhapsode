@@ -1,1 +1,8 @@
-{"docIdField":"_did","origDocsRoot":{"path":"C:\\data"},"ignoreds":[],"favorites":[]}
+{
+  "docIdField": "_did",
+  "origDocsRoot": {
+    "path": "C:\\data"
+  },
+  "ignoreds": [],
+  "favorites": []
+}

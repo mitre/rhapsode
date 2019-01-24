@@ -29,6 +29,23 @@
 
 package org.rhapsode.app.handlers.viewers;
 
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import java.io.IOException;
+import java.io.Reader;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import org.apache.lucene.document.Document;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.tika.exception.TikaException;
@@ -57,22 +74,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.Reader;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 
 public class ExtractViewer extends AbstractSearchHandler {
 
@@ -90,6 +91,17 @@ public class ExtractViewer extends AbstractSearchHandler {
         super("Extract Viewer");
         this.searcherApp = searchConfig;
         indexedDocURLBuilder = new IndexedDocURLBuilder(searchConfig);
+    }
+
+    public static Path getExtractPath(RhapsodeCollection rhapsodeCollection, String relPath) {
+        for (String suffix : new String[]{".json", ".json.bz2"}) {
+            Path cand = rhapsodeCollection.getExtractedTextRoot().resolve(relPath + suffix);
+            if (Files.isRegularFile(cand)) {
+                return cand;
+            }
+        }
+        LOG.warn("Couldn't find extract file for: " + relPath);
+        return null;
     }
 
     @Override
@@ -264,16 +276,6 @@ public class ExtractViewer extends AbstractSearchHandler {
         return metadataList;
     }
 
-    public static Path getExtractPath(RhapsodeCollection rhapsodeCollection, String relPath) {
-        for (String suffix : new String[]{".json", ".json.bz2"}) {
-            Path cand = rhapsodeCollection.getExtractedTextRoot().resolve(relPath+suffix);
-            if (Files.isRegularFile(cand)) {
-                return cand;
-            }
-        }
-        LOG.warn("Couldn't find extract file for: " + relPath);
-        return null;
-    }
     private void writePrevNextLinks(BaseSearchRequest request, Document doc,
                                     int rank, int docId,
                                     String docKey, RhapsodeXHTMLHandler xhtml) throws IOException, SAXException {

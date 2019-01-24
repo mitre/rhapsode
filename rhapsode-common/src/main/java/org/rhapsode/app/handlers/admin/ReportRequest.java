@@ -29,30 +29,18 @@
 
 package org.rhapsode.app.handlers.admin;
 
+import javax.servlet.http.HttpServletRequest;
+
+import java.util.LinkedHashSet;
+import java.util.Set;
+
 import org.rhapsode.app.contants.C;
 import org.rhapsode.app.tagger.TaggerRequest;
 import org.rhapsode.lucene.search.StoredQuery;
 import org.rhapsode.util.ParamUtil;
 
-import javax.servlet.http.HttpServletRequest;
-import java.util.LinkedHashSet;
-import java.util.Set;
-
 public class ReportRequest {
 
-
-    enum ACTION_TYPE {
-        SELECT_ALL,
-        DESELECT_ALL,
-        WRITE_REPORT,
-        REPORT_DIALOGUE
-    }
-
-    public enum REPORT_TYPE {
-        STATIC_LINKS,
-        LIVE_LINKS,
-        NO_LINKS
-    }
 
     private String reportName;
     private int absMaxHitsPerQuery = StoredQuery.RETRIEVE_ALL_HITS;
@@ -156,6 +144,19 @@ public class ReportRequest {
 
     public boolean getIncludeFavorites() {
         return includeFavorites;
+    }
+
+    enum ACTION_TYPE {
+        SELECT_ALL,
+        DESELECT_ALL,
+        WRITE_REPORT,
+        REPORT_DIALOGUE
+    }
+
+    public enum REPORT_TYPE {
+        STATIC_LINKS,
+        LIVE_LINKS,
+        NO_LINKS
     }
 
 }

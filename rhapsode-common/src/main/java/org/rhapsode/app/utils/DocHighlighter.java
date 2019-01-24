@@ -29,6 +29,21 @@
 
 package org.rhapsode.app.utils;
 
+import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.tokenattributes.OffsetAttributeImpl;
@@ -57,21 +72,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
 
-import java.io.IOException;
-import java.io.OutputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 
 public class DocHighlighter {
 
@@ -81,6 +81,53 @@ public class DocHighlighter {
     private String tableClass = null;
     private String thClass = null;
     private String tdClass = null;
+
+    private static void initHandler(RhapsodeXHTMLHandler xhtml, String optionalStyleString) throws SAXException {
+        xhtml.startDocument();
+        xhtml.startElement(xhtml.XHTML, H.HTML, H.HTML, xhtml.EMPTY_ATTRIBUTES);
+        xhtml.newline();
+        xhtml.startElement(xhtml.XHTML, H.HEAD, H.HEAD, xhtml.EMPTY_ATTRIBUTES);
+        xhtml.newline();
+        xhtml.startElement(H.META,
+                H.HTTP_EQUIV, "Content-Type",
+                H.CONTENT, "text/html; charset=UTF-8");
+        xhtml.endElement(H.META);
+        if (optionalStyleString != null) {
+            xhtml.startElement(H.STYLE);
+            xhtml.characters(optionalStyleString);
+            xhtml.endElement(H.STYLE);
+        }
+        xhtml.endElement(xhtml.XHTML, H.HEAD, H.HEAD);
+        xhtml.newline();
+        //start body
+        xhtml.startElement(xhtml.XHTML, H.BODY, H.BODY, xhtml.EMPTY_ATTRIBUTES);
+    }
+
+    private static Map<String, Set<HighlightingQuery>> getPerFieldHighlightingQueries(List<String> fields, Collection<ComplexQuery> queries) throws IOException {
+
+        Map<String, Set<HighlightingQuery>> tmp = new HashMap<>();
+        int maxPriority = -1;
+        for (ComplexQuery cq : queries) {
+            int p = cq.getStoredQuery().getPriority();
+            if (p > maxPriority) {
+                maxPriority = p;
+            }
+        }
+
+        for (ComplexQuery cq : queries) {
+            for (String f : fields) {
+                HighlightingQuery q = cq.getHighlightingQuery(f, maxPriority + 1);
+
+                Set<HighlightingQuery> qs = tmp.get(f);
+                if (qs == null) {
+                    qs = new HashSet<>();
+                }
+                qs.add(q);
+                tmp.put(f, qs);
+            }
+        }
+        return tmp;
+    }
 
     /**
      * @param p
@@ -183,7 +230,7 @@ public class DocHighlighter {
                              RhapsodeXHTMLHandler xhtml) throws IOException, SAXException {
 
         List<String> fieldsToHighlight = new ArrayList<>(fields);
-        if (hasContent(contentField, doc) && ! fields.contains(contentField)) {
+        if (hasContent(contentField, doc) && !fields.contains(contentField)) {
             fieldsToHighlight.add(contentField);
         }
         Map<String, Set<HighlightingQuery>> highlightingQueries = getPerFieldHighlightingQueries(fieldsToHighlight, queries);
@@ -347,7 +394,6 @@ public class DocHighlighter {
         this.tdClass = tdClass;
     }
 
-
     private class OffsetSpanCollector implements SpanCollector {
         Map<Integer, Offset> charOffsets = new HashMap<>();
 
@@ -363,53 +409,5 @@ public class DocHighlighter {
         public Map<Integer, Offset> getOffsets() {
             return charOffsets;
         }
-    }
-
-    private static void initHandler(RhapsodeXHTMLHandler xhtml, String optionalStyleString) throws SAXException {
-        xhtml.startDocument();
-        xhtml.startElement(xhtml.XHTML, H.HTML, H.HTML, xhtml.EMPTY_ATTRIBUTES);
-        xhtml.newline();
-        xhtml.startElement(xhtml.XHTML, H.HEAD, H.HEAD, xhtml.EMPTY_ATTRIBUTES);
-        xhtml.newline();
-        xhtml.startElement(H.META,
-                H.HTTP_EQUIV, "Content-Type",
-                H.CONTENT, "text/html; charset=UTF-8");
-        xhtml.endElement(H.META);
-        if (optionalStyleString != null) {
-            xhtml.startElement(H.STYLE);
-            xhtml.characters(optionalStyleString);
-            xhtml.endElement(H.STYLE);
-        }
-        xhtml.endElement(xhtml.XHTML, H.HEAD, H.HEAD);
-        xhtml.newline();
-        //start body
-        xhtml.startElement(xhtml.XHTML, H.BODY, H.BODY, xhtml.EMPTY_ATTRIBUTES);
-    }
-
-
-    private static Map<String, Set<HighlightingQuery>> getPerFieldHighlightingQueries(List<String> fields, Collection<ComplexQuery> queries) throws IOException {
-
-        Map<String, Set<HighlightingQuery>> tmp = new HashMap<>();
-        int maxPriority = -1;
-        for (ComplexQuery cq : queries) {
-            int p = cq.getStoredQuery().getPriority();
-            if (p > maxPriority) {
-                maxPriority = p;
-            }
-        }
-
-        for (ComplexQuery cq : queries) {
-            for (String f : fields) {
-                HighlightingQuery q = cq.getHighlightingQuery(f, maxPriority + 1);
-
-                Set<HighlightingQuery> qs = tmp.get(f);
-                if (qs == null) {
-                    qs = new HashSet<>();
-                }
-                qs.add(q);
-                tmp.put(f, qs);
-            }
-        }
-        return tmp;
     }
 }

@@ -29,6 +29,24 @@
 
 package org.rhapsode.app.handlers.admin;
 
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.search.Query;
@@ -57,23 +75,6 @@ import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.sql.SQLException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-
 
 public class StoredQueryHandler extends AdminHandler {
     private static final Logger LOG = LoggerFactory.getLogger(StoredQueryHandler.class);
@@ -86,6 +87,44 @@ public class StoredQueryHandler extends AdminHandler {
         this.searcherApp = searcherApp;
     }
 
+    public static void writeDefaultStoredQuery(LanguageDirection ltr, RhapsodeXHTMLHandler xhtml) throws SAXException {
+        xhtml.startElement(H.INPUT,
+                H.TYPE, H.SUBMIT,
+                H.NAME, C.ADD_STORED_QUERY_DIALOGUE,
+                H.VALUE, "Add Query");
+        xhtml.endElement(H.INPUT);
+
+        xhtml.startElement(H.INPUT,
+                H.TYPE, H.SUBMIT,
+                H.NAME, C.SELECT_QUERIES_FOR_UPDATE,
+                H.VALUE, "Edit Queries");
+        xhtml.endElement(H.INPUT);
+
+        xhtml.startElement(H.INPUT,
+                H.TYPE, H.SUBMIT,
+                H.NAME, C.LOAD_STORED_QUERIES_DIALOGUE,
+                H.VALUE, "Load Queries");
+        xhtml.endElement(H.INPUT);
+
+        xhtml.startElement(H.INPUT,
+                H.TYPE, H.SUBMIT,
+                H.NAME, C.SAVE_STORED_QUERIES_DIALOGUE,
+                H.VALUE, "Save Queries");
+        xhtml.endElement(H.INPUT);
+
+        xhtml.startElement(H.INPUT,
+                H.TYPE, H.SUBMIT,
+                H.NAME, C.DELETE_ALL_STORED_QUERIES,
+                H.VALUE, "Delete All Queries");
+        xhtml.endElement(H.INPUT);
+
+        xhtml.startElement(H.INPUT,
+                H.TYPE, H.SUBMIT,
+                H.NAME, C.UPDATE_DOCUMENT_COUNTS,
+                H.VALUE, "Update Document Counts");
+        xhtml.endElement(H.INPUT);
+
+    }
 
     @Override
     public void handle(String s, Request request, HttpServletRequest httpServletRequest,
@@ -348,7 +387,6 @@ public class StoredQueryHandler extends AdminHandler {
         }
     }
 
-
     private String loadStoredQueries(StoredQueryRequest sqr) throws SQLException {
         searcherApp.getSessionManager().getStoredConceptManager().deleteConcepts();
         searcherApp.getSessionManager().getStoredQueryManager().deleteAllQueries();
@@ -393,7 +431,6 @@ public class StoredQueryHandler extends AdminHandler {
         return hc.count(queries, searcherApp.getRhapsodeCollection().getIndexManager().getSearcher(),
                 searcherApp.getCommonSearchConfig().getNumThreadsForConcurrentSearches(), MAX_WAIT_FOR_COUNTS);
     }
-
 
     private void deleteStoredQueries() throws Exception {
         Path trashDir = Paths.get("resources/trash");
@@ -570,47 +607,6 @@ public class StoredQueryHandler extends AdminHandler {
             }
         }
     }
-
-
-    public static void writeDefaultStoredQuery(LanguageDirection ltr, RhapsodeXHTMLHandler xhtml) throws SAXException {
-        xhtml.startElement(H.INPUT,
-                H.TYPE, H.SUBMIT,
-                H.NAME, C.ADD_STORED_QUERY_DIALOGUE,
-                H.VALUE, "Add Query");
-        xhtml.endElement(H.INPUT);
-
-        xhtml.startElement(H.INPUT,
-                H.TYPE, H.SUBMIT,
-                H.NAME, C.SELECT_QUERIES_FOR_UPDATE,
-                H.VALUE, "Edit Queries");
-        xhtml.endElement(H.INPUT);
-
-        xhtml.startElement(H.INPUT,
-                H.TYPE, H.SUBMIT,
-                H.NAME, C.LOAD_STORED_QUERIES_DIALOGUE,
-                H.VALUE, "Load Queries");
-        xhtml.endElement(H.INPUT);
-
-        xhtml.startElement(H.INPUT,
-                H.TYPE, H.SUBMIT,
-                H.NAME, C.SAVE_STORED_QUERIES_DIALOGUE,
-                H.VALUE, "Save Queries");
-        xhtml.endElement(H.INPUT);
-
-        xhtml.startElement(H.INPUT,
-                H.TYPE, H.SUBMIT,
-                H.NAME, C.DELETE_ALL_STORED_QUERIES,
-                H.VALUE, "Delete All Queries");
-        xhtml.endElement(H.INPUT);
-
-        xhtml.startElement(H.INPUT,
-                H.TYPE, H.SUBMIT,
-                H.NAME, C.UPDATE_DOCUMENT_COUNTS,
-                H.VALUE, "Update Document Counts");
-        xhtml.endElement(H.INPUT);
-
-    }
-
 
     public void addOrUpdateStoredQueryDialogue(LanguageDirection direction,
                                                RhapsodeXHTMLHandler xhtml, String errorMessage,

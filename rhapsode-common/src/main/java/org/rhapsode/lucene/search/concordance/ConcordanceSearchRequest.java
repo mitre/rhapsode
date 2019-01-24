@@ -28,10 +28,10 @@
  */
 package org.rhapsode.lucene.search.concordance;
 
+import java.util.Map;
+
 import org.rhapsode.lucene.search.BaseSearchRequest;
 import org.tallison.lucene.search.concordance.classic.ConcordanceSortOrder;
-
-import java.util.Map;
 
 public class ConcordanceSearchRequest extends BaseSearchRequest {
     final ConcordanceSearchConfig config;
@@ -52,55 +52,55 @@ public class ConcordanceSearchRequest extends BaseSearchRequest {
         return ignoreDuplicateWindows;
     }
 
+    public void setIgnoreDuplicateWindows(boolean ignoreDuplicateWindows) {
+        this.ignoreDuplicateWindows = ignoreDuplicateWindows;
+    }
+
     public int getMaxStoredWindows() {
         return maxStoredWindows;
-    }
-
-    public int getTokensBefore() {
-        return tokensBefore;
-    }
-
-    public int getTokensAfter() {
-        return tokensAfter;
-    }
-
-    public ConcordanceSortOrder getSortOrder() {
-        return sortOrder;
-    }
-
-    public void setTokensBefore(int tokensBefore) {
-        this.tokensBefore = tokensBefore;
-    }
-
-    public void setTokensAfter(int tokensAfter) {
-        this.tokensAfter = tokensAfter;
     }
 
     public void setMaxStoredWindows(int maxStoredWindows) {
         this.maxStoredWindows = maxStoredWindows;
     }
 
-    public void setIgnoreDuplicateWindows(boolean ignoreDuplicateWindows) {
-        this.ignoreDuplicateWindows = ignoreDuplicateWindows;
+    public int getTokensBefore() {
+        return tokensBefore;
+    }
+
+    public void setTokensBefore(int tokensBefore) {
+        this.tokensBefore = tokensBefore;
+    }
+
+    public int getTokensAfter() {
+        return tokensAfter;
+    }
+
+    public void setTokensAfter(int tokensAfter) {
+        this.tokensAfter = tokensAfter;
+    }
+
+    public ConcordanceSortOrder getSortOrder() {
+        return sortOrder;
     }
 
     public void setSortOrder(ConcordanceSortOrder sortOrder) {
         this.sortOrder = sortOrder;
     }
 
-    public void setClusteringAlgo(Class clusteringAlgo) {
-        this.clusteringAlgo = clusteringAlgo;
-    }
-
-    public void setClusteringAttrs(Map<String, Object> clusteringAttrs) {
-        this.clusteringAttrs = clusteringAttrs;
-    }
-
     public Class getClusteringAlgo() {
         return clusteringAlgo;
     }
 
+    public void setClusteringAlgo(Class clusteringAlgo) {
+        this.clusteringAlgo = clusteringAlgo;
+    }
+
     public Map<String, Object> getClusteringAttrs() {
         return clusteringAttrs;
+    }
+
+    public void setClusteringAttrs(Map<String, Object> clusteringAttrs) {
+        this.clusteringAttrs = clusteringAttrs;
     }
 }

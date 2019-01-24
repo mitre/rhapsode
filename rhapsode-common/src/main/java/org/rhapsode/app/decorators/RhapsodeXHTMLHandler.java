@@ -28,6 +28,11 @@
  */
 package org.rhapsode.app.decorators;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.tika.sax.SafeContentHandler;
 import org.rhapsode.app.contants.H;
@@ -36,52 +41,14 @@ import org.xml.sax.ContentHandler;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
-
 /**
  * Horrific copy paste of Tika's XHTMLContentHandler.
  */
 public class RhapsodeXHTMLHandler extends SafeContentHandler {
-    private final static String A = "a";
-    private final static String HREF = "href";
-
     /**
      * The XHTML namespace URI
      */
     public static final String XHTML = "http://www.w3.org/1999/xhtml";
-
-    /**
-     * The newline character that gets inserted after block elements.
-     */
-    private static final char[] NL = new char[]{'\n'};
-
-    /**
-     * The tab character gets inserted before table cells and list items.
-     */
-    private static final char[] TAB = new char[]{'\t'};
-
-    /**
-     * The elements that are in the <head> section.
-     */
-    private static final Set<String> HEAD =
-            unmodifiableSet("title", "link", "base", "meta");
-
-    /**
-     * The elements that are automatically emitted by lazyStartHead, so
-     * skip them if they get sent to startElement/endElement by mistake.
-     */
-    private static final Set<String> AUTO =
-            unmodifiableSet("html", "frameset");
-
-    /**
-     * The elements that get prepended with the {@link #TAB} character.
-     */
-    private static final Set<String> INDENT =
-            unmodifiableSet("li", "dd", "dt", "td", "th", "frame");
-
     /**
      * The elements that get appended with the {@link #NL} character.
      */
@@ -89,28 +56,65 @@ public class RhapsodeXHTMLHandler extends SafeContentHandler {
             "p", "h1", "h2", "h3", "h4", "h5", "h6", "div", "ul", "ol", "dl",
             "pre", "hr", "blockquote", "address", "fieldset", "table", "form",
             "noscript", "li", "dt", "dd", "noframes", "br", "tr", "select", "option");
-
     public static final Attributes EMPTY_ATTRIBUTES = new AttributesImpl();
+    private final static String A = "a";
+    private final static String HREF = "href";
+    /**
+     * The newline character that gets inserted after block elements.
+     */
+    private static final char[] NL = new char[]{'\n'};
+    /**
+     * The tab character gets inserted before table cells and list items.
+     */
+    private static final char[] TAB = new char[]{'\t'};
+    /**
+     * The elements that are in the <head> section.
+     */
+    private static final Set<String> HEAD =
+            unmodifiableSet("title", "link", "base", "meta");
+    /**
+     * The elements that are automatically emitted by lazyStartHead, so
+     * skip them if they get sent to startElement/endElement by mistake.
+     */
+    private static final Set<String> AUTO =
+            unmodifiableSet("html", "frameset");
+    /**
+     * The elements that get prepended with the {@link #TAB} character.
+     */
+    private static final Set<String> INDENT =
+            unmodifiableSet("li", "dd", "dt", "td", "th", "frame");
+    /**
+     * Flag to indicate whether the document has been started.
+     */
+    private boolean documentStarted = false;
+    /**
+     * Flags to indicate whether the document head element has been started/ended.
+     */
+    private boolean headStarted = false;
+    private boolean headEnded = false;
+    public RhapsodeXHTMLHandler(ContentHandler handler) {
+        super(handler);
+    }
 
     private static Set<String> unmodifiableSet(String... elements) {
         return Collections.unmodifiableSet(
                 new HashSet<String>(Arrays.asList(elements)));
     }
 
-
-    /**
-     * Flag to indicate whether the document has been started.
-     */
-    private boolean documentStarted = false;
-
-    /**
-     * Flags to indicate whether the document head element has been started/ended.
-     */
-    private boolean headStarted = false;
-    private boolean headEnded = false;
-
-    public RhapsodeXHTMLHandler(ContentHandler handler) {
-        super(handler);
+    public static void simpleInit(RhapsodeXHTMLHandler xhtml) throws SAXException {
+        xhtml.startDocument();
+        xhtml.startElement(xhtml.XHTML, H.HTML, H.HTML, xhtml.EMPTY_ATTRIBUTES);
+        xhtml.newline();
+        xhtml.startElement(xhtml.XHTML, H.HEAD, H.HEAD, xhtml.EMPTY_ATTRIBUTES);
+        xhtml.newline();
+        xhtml.startElement(H.META,
+                H.HTTP_EQUIV, "Content-Type",
+                H.CONTENT, "text/html; charset=UTF-8");
+        xhtml.endElement(H.META);
+        xhtml.endElement(xhtml.XHTML, H.HEAD, H.HEAD);
+        xhtml.newline();
+        //start body
+        xhtml.startElement(xhtml.XHTML, H.BODY, H.BODY, xhtml.EMPTY_ATTRIBUTES);
     }
 
     /**
@@ -132,7 +136,6 @@ public class RhapsodeXHTMLHandler extends SafeContentHandler {
         hrefRoot = (hrefRoot == null) ? StringUtils.EMPTY : hrefRoot;
 
     }
-
 
     /**
      * Ends the XHTML document by writing the following footer and
@@ -182,12 +185,12 @@ public class RhapsodeXHTMLHandler extends SafeContentHandler {
         }
     }
 
+    //------------------------------------------< public convenience methods >
+
     @Override
     public void characters(char[] ch, int start, int length) throws SAXException {
         super.characters(ch, start, length);
     }
-
-    //------------------------------------------< public convenience methods >
 
     public void startElement(String name) throws SAXException {
         startElement(XHTML, name, name, EMPTY_ATTRIBUTES);
@@ -260,22 +263,6 @@ public class RhapsodeXHTMLHandler extends SafeContentHandler {
             characters(value);
             endElement(name);
         }
-    }
-
-    public static void simpleInit(RhapsodeXHTMLHandler xhtml) throws SAXException {
-        xhtml.startDocument();
-        xhtml.startElement(xhtml.XHTML, H.HTML, H.HTML, xhtml.EMPTY_ATTRIBUTES);
-        xhtml.newline();
-        xhtml.startElement(xhtml.XHTML, H.HEAD, H.HEAD, xhtml.EMPTY_ATTRIBUTES);
-        xhtml.newline();
-        xhtml.startElement(H.META,
-                H.HTTP_EQUIV, "Content-Type",
-                H.CONTENT, "text/html; charset=UTF-8");
-        xhtml.endElement(H.META);
-        xhtml.endElement(xhtml.XHTML, H.HEAD, H.HEAD);
-        xhtml.newline();
-        //start body
-        xhtml.startElement(xhtml.XHTML, H.BODY, H.BODY, xhtml.EMPTY_ATTRIBUTES);
     }
 
     public void href(String url, String label) throws SAXException {

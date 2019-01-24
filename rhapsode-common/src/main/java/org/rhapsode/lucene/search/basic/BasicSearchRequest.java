@@ -28,12 +28,12 @@
  */
 package org.rhapsode.lucene.search.basic;
 
-import org.apache.lucene.search.Sort;
-import org.rhapsode.lucene.search.BaseSearchRequest;
-
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
+
+import org.apache.lucene.search.Sort;
+import org.rhapsode.lucene.search.BaseSearchRequest;
 
 public class BasicSearchRequest extends BaseSearchRequest {
     private final BasicSearchConfig config;
@@ -52,6 +52,10 @@ public class BasicSearchRequest extends BaseSearchRequest {
         return resultsPerPage;
     }
 
+    public void setResultsPerPage(int resultsPerPage) {
+        this.resultsPerPage = resultsPerPage;
+    }
+
     public int getLastEnd() {
         return lastEnd;
     }
@@ -62,6 +66,10 @@ public class BasicSearchRequest extends BaseSearchRequest {
 
     public PagingDirection getPagingDirection() {
         return pagingDirection;
+    }
+
+    public void setPagingDirection(PagingDirection pagingDirection) {
+        this.pagingDirection = pagingDirection;
     }
 
     public int getSnippetsPerResult() {
@@ -97,17 +105,9 @@ public class BasicSearchRequest extends BaseSearchRequest {
         return Collections.unmodifiableSet(fields);
     }
 
-    public void setPagingDirection(PagingDirection pagingDirection) {
-        this.pagingDirection = pagingDirection;
-    }
-
     public void setStartAndEndResult(int start, int end) {
         lastStart = start;
         lastEnd = end;
-    }
-
-    public void setResultsPerPage(int resultsPerPage) {
-        this.resultsPerPage = resultsPerPage;
     }
 
 

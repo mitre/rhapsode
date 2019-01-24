@@ -68,7 +68,7 @@ public class IndexSchemaDeserializationTest {
         assertTrue(tokenFilterFactories.get(0) instanceof ICUFoldingFilterFactory);
         assertTrue(tokenFilterFactories.get(1) instanceof CJKBigramFilterFactory);
 
-        assertTrue(((CustomAnalyzer)persian).getTokenizerFactory() instanceof StandardTokenizerFactory);
+        assertTrue(((CustomAnalyzer) persian).getTokenizerFactory() instanceof StandardTokenizerFactory);
 
         assertTrue(((CustomAnalyzer) persian).getCharFilterFactories().get(0)
                 instanceof PersianCharFilterFactory);
@@ -82,14 +82,14 @@ public class IndexSchemaDeserializationTest {
         assertEquals("rel_path", m0.getToField());
         assertEquals("display_name", m1.getToField());
         String[] tst = m0.map(
-                new String[]{ "the/quick/brown/fox1234.txt", "jumped/over.doc"}
+                new String[]{"the/quick/brown/fox1234.txt", "jumped/over.doc"}
         );
         assertArrayEquals(new String[]{
                 "the/quick/brown/fox1234.txt", "jumped/over.doc"
         }, tst);
 
         tst = m1.map(
-                new String[]{ "the/quick/brown/fox1234.txt", "jumped/over.doc"}
+                new String[]{"the/quick/brown/fox1234.txt", "jumped/over.doc"}
         );
         assertArrayEquals(new String[]{
                 "1234", "over"
@@ -112,6 +112,7 @@ public class IndexSchemaDeserializationTest {
             Files.delete(tmpFile);
         }
     }
+
     @Test
     public void testUpdating() throws Exception {
         IndexSchema schema = IndexSchema.load(this.getClass().getResourceAsStream("/default_table_index_schema.json"));

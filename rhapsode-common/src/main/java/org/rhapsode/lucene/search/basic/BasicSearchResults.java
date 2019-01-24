@@ -31,10 +31,10 @@ package org.rhapsode.lucene.search.basic;
 import java.util.List;
 
 public class BasicSearchResults {
+    List<BasicSearchResult> results = null;
     private long totalHits = -1;
     private int start = -1;
     private int end = -1;
-    List<BasicSearchResult> results = null;
     private boolean hasResults = false;
     private long totalDocs;
 

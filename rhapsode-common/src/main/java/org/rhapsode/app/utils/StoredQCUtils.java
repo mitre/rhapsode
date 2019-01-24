@@ -29,6 +29,11 @@
 
 package org.rhapsode.app.utils;
 
+import javax.servlet.http.HttpServletRequest;
+
+import java.util.HashMap;
+import java.util.Map;
+
 import org.apache.commons.lang3.StringUtils;
 import org.rhapsode.app.contants.C;
 import org.rhapsode.lucene.search.SCField;
@@ -37,10 +42,6 @@ import org.rhapsode.lucene.search.StoredConcept;
 import org.rhapsode.lucene.search.StoredConceptBuilder;
 import org.rhapsode.lucene.search.StoredQuery;
 import org.rhapsode.lucene.search.StoredQueryBuilder;
-
-import javax.servlet.http.HttpServletRequest;
-import java.util.HashMap;
-import java.util.Map;
 
 //StoredQueryConceptUtils
 public class StoredQCUtils {

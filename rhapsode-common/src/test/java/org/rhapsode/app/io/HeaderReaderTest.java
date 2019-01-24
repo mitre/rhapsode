@@ -28,18 +28,14 @@
  */
 package org.rhapsode.app.io;
 
-import org.junit.Test;
-import org.rhapsode.app.io.CSVTableReader;
-import org.rhapsode.app.io.HeaderReader;
-import org.rhapsode.app.io.XLSTableReader;
-import org.rhapsode.app.io.XLSXStreamingTableReader;
+import static org.junit.Assert.assertEquals;
 
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
+import org.junit.Test;
 
 
 public class HeaderReaderTest {

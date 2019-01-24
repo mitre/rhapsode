@@ -29,6 +29,8 @@
 
 package org.rhapsode.app.handlers;
 
+import java.io.IOException;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.rhapsode.RhapsodeCollection;
@@ -46,8 +48,6 @@ import org.rhapsode.lucene.search.basic.BasicSearchResult;
 import org.rhapsode.lucene.search.basic.BasicSearchResults;
 import org.rhapsode.lucene.search.basic.BasicSearcher;
 import org.xml.sax.SAXException;
-
-import java.io.IOException;
 
 public class BasicSearchUtil {
 

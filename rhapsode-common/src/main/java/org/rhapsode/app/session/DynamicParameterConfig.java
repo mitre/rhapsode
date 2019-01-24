@@ -29,11 +29,6 @@
 
 package org.rhapsode.app.session;
 
-import org.apache.lucene.search.BooleanQuery;
-import org.rhapsode.util.LanguageDirection;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -44,28 +39,25 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.lucene.search.BooleanQuery;
+import org.rhapsode.util.LanguageDirection;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class DynamicParameterConfig {
 
-    private static final Logger LOG = LoggerFactory.getLogger(DynamicParameter.class);
     final static String PARAM_TABLE = "params";
-
     final static ColInfo PARAM_NAME =
             new ColInfo("NAME", Types.VARCHAR, 32, "PRIMARY KEY");
-
     final static ColInfo PARAM_VALUE =
             new ColInfo("VALUE", Types.VARCHAR, 10000);
-
-
+    private static final Logger LOG = LoggerFactory.getLogger(DynamicParameter.class);
     private Connection connection;
     private TableDef paramTable;
     private PreparedStatement preparedLookup;
     private PreparedStatement preparedMerge;
     private PreparedStatement preparedCopy;
 
-
-    public static DynamicParameterConfig load(Connection connection) throws IOException, SQLException {
-        return new DynamicParameterConfig(connection);
-    }
 
     private DynamicParameterConfig(Connection connection) throws SQLException {
         this.connection = connection;
@@ -102,6 +94,10 @@ public class DynamicParameterConfig {
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
         }
+    }
+
+    public static DynamicParameterConfig load(Connection connection) throws IOException, SQLException {
+        return new DynamicParameterConfig(connection);
     }
 
     public Map<DynamicParameter, String> getParamCopy() {

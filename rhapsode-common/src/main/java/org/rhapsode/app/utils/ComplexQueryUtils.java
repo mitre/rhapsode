@@ -29,6 +29,12 @@
 
 package org.rhapsode.app.utils;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.rhapsode.app.RhapsodeSearcherApp;
 import org.rhapsode.lucene.search.ComplexQuery;
@@ -36,12 +42,6 @@ import org.rhapsode.lucene.search.ComplexQueryBuilder;
 import org.rhapsode.lucene.search.StoredQuery;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 public class ComplexQueryUtils {
 

@@ -37,35 +37,17 @@ import java.util.concurrent.TimeUnit;
 
 public class Tasker {
 
+    final static Object lock = new Object();
     private static final long SLEEP_AFTER_EXCEPTION_MILLIS = 500;
-
-
-    public enum STATE {
-        NOT_STARTED,
-        PROCESSING,
-        COMPLETED
-    }
-
-    public enum REASON_FOR_COMPLETION {
-        TOO_LONG,
-        INTERRUPTION_EXCEPTION,
-        EXCEPTION,
-        USER_INTERRUPTION,
-        SUCCESS,
-        NA;
-    }
-
+    final long maxMillis;
+    final RhapsodeTask task;
     STATE currentState = STATE.NOT_STARTED;
     REASON_FOR_COMPLETION reasonForCompletion = null;
     Date completed = null;
     volatile boolean pleaseStop = false;
     ExecutorService executor = null;
     ExecutorCompletionService<RhapsodeTaskStatus> completionService;
-    final long maxMillis;
-    final static Object lock = new Object();
-    final RhapsodeTask task;
     RhapsodeTaskStatus result = null;
-
     public Tasker(RhapsodeTask task, long maxMillis) {
         this.task = task;
         this.maxMillis = maxMillis;
@@ -124,11 +106,9 @@ public class Tasker {
         //thread leak can happen...executor might not be terminated yet!!!
     }
 
-
     public STATE getState() {
         return currentState;
     }
-
 
     public RhapsodeTaskStatus getResult() {
         synchronized (lock) {
@@ -151,6 +131,21 @@ public class Tasker {
 
     public REASON_FOR_COMPLETION getReasonForCompletion() {
         return reasonForCompletion;
+    }
+
+    public enum STATE {
+        NOT_STARTED,
+        PROCESSING,
+        COMPLETED
+    }
+
+    public enum REASON_FOR_COMPLETION {
+        TOO_LONG,
+        INTERRUPTION_EXCEPTION,
+        EXCEPTION,
+        USER_INTERRUPTION,
+        SUCCESS,
+        NA;
     }
 
 

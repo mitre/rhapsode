@@ -29,29 +29,24 @@
 
 package org.rhapsode.app.io;
 
-import org.apache.commons.lang3.StringUtils;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellType;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
 public class XLSXTableReader implements AutoCloseable {
 
-    InputStream is;
     final XSSFWorkbook wb;
+    InputStream is;
     XSSFSheet sheet;
     Iterator<Row> iterator;
-
-    public static XSSFWorkbook loadWorkbook(InputStream is) throws IOException {
-        return new XSSFWorkbook(is);
-    }
 
     public XLSXTableReader(InputStream is) throws IOException {
         this(is, null);
@@ -72,6 +67,10 @@ public class XLSXTableReader implements AutoCloseable {
             throw new IOException("Couldn't find sheet: " + worksheetName);
         }
         iterator = sheet.iterator();
+    }
+
+    public static XSSFWorkbook loadWorkbook(InputStream is) throws IOException {
+        return new XSSFWorkbook(is);
     }
 
     public String[] readNext() throws IOException {

@@ -29,22 +29,22 @@
 
 package org.rhapsode;
 
+import java.io.File;
+import java.nio.file.Path;
+import java.util.HashSet;
+import java.util.Set;
+
 import org.apache.lucene.index.Term;
 import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.TermQuery;
 
-import java.io.File;
-import java.nio.file.Path;
-import java.util.HashSet;
-import java.util.Set;
-
 class CollectionSchema {
-    private String docIdField;
     File origDocsRoot;
     Set<String> ignoreds = new HashSet<>();
     Set<String> favorites = new HashSet<>();
+    private String docIdField;
 
 
     CollectionSchema(String docIdField, Path origDocsRoot) {

@@ -28,14 +28,6 @@
  */
 package org.rhapsode.app.session;
 
-import org.apache.lucene.queryparser.classic.ParseException;
-import org.rhapsode.app.utils.DBUtils;
-import org.rhapsode.lucene.search.SCField;
-import org.rhapsode.lucene.search.StoredConcept;
-import org.rhapsode.lucene.search.StoredConceptBuilder;
-import org.rhapsode.lucene.utils.SqlUtil;
-import org.rhapsode.lucene.utils.StoredConceptManager;
-
 import java.io.Closeable;
 import java.io.IOException;
 import java.sql.Connection;
@@ -50,6 +42,14 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.lucene.queryparser.classic.ParseException;
+import org.rhapsode.app.utils.DBUtils;
+import org.rhapsode.lucene.search.SCField;
+import org.rhapsode.lucene.search.StoredConcept;
+import org.rhapsode.lucene.search.StoredConceptBuilder;
+import org.rhapsode.lucene.utils.SqlUtil;
+import org.rhapsode.lucene.utils.StoredConceptManager;
+
 public class DBStoredConceptManager implements StoredConceptManager, Closeable {
 
     final static String STORED_CONCEPT_TABLE = "stored_concepts";
@@ -60,6 +60,7 @@ public class DBStoredConceptManager implements StoredConceptManager, Closeable {
     //5 exception message
 
     final static ColInfo[] COL_INFO_LIST = new ColInfo[SCField.values().length];
+    private final static int MAX_REWRITES = 20;
 
     static {
         int i = 0;
@@ -73,25 +74,6 @@ public class DBStoredConceptManager implements StoredConceptManager, Closeable {
         }
     }
 
-    static ColInfo build(SCField scField) {
-        return new ColInfo(
-                scField.getDbName(),
-                scField.getType(),
-                scField.getMaxLength()
-        );
-    }
-
-    public static ColInfo build(SCField scField, String constraints) {
-        return new ColInfo(
-                scField.getDbName(),
-                scField.getType(),
-                scField.getMaxLength(),
-                constraints
-        );
-    }
-
-    private final static int MAX_REWRITES = 20;
-
     private final Matcher regexRangeMatcher = Pattern.compile("(?:^\\s*\\d+\\s*(,\\s*\\d*)?$)|(?:^\\s*,\\d+$)").matcher("");
     private final Matcher storedMatcher = Pattern.compile("\\{\\s*([^{}]+)\\s*\\}").matcher("");
     //private final Matcher priorityNameMatcher = Pattern.compile("^(?:(\\d+)_)?(.*?)\\.txt$").matcher("");
@@ -103,12 +85,6 @@ public class DBStoredConceptManager implements StoredConceptManager, Closeable {
     private final PreparedStatement preparedCopy;
     private final PreparedStatement preparedUpdateException;
     private final TableDef conceptTable;
-
-    public static DBStoredConceptManager load(Connection connection) throws IOException, SQLException {
-        return new DBStoredConceptManager(connection);
-    }
-
-
     private DBStoredConceptManager(Connection connection) throws SQLException {
         this.connection = connection;
         this.conceptTable = new TableDef(STORED_CONCEPT_TABLE,
@@ -148,6 +124,27 @@ public class DBStoredConceptManager implements StoredConceptManager, Closeable {
                                 SCField.CONCEPT_EXCEPTION_MSG.getDbName() +
                                 " from " + STORED_CONCEPT_TABLE
                 );
+    }
+
+    static ColInfo build(SCField scField) {
+        return new ColInfo(
+                scField.getDbName(),
+                scField.getType(),
+                scField.getMaxLength()
+        );
+    }
+
+    public static ColInfo build(SCField scField, String constraints) {
+        return new ColInfo(
+                scField.getDbName(),
+                scField.getType(),
+                scField.getMaxLength(),
+                constraints
+        );
+    }
+
+    public static DBStoredConceptManager load(Connection connection) throws IOException, SQLException {
+        return new DBStoredConceptManager(connection);
     }
 
     public void close() throws IOException {

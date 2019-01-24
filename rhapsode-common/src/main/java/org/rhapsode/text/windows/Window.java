@@ -45,6 +45,11 @@ public class Window {
 
     }
 
+    public static void main(String[] args) {
+        // TODO Auto-generated method stub
+
+    }
+
     public String toString() {
         //this assumes left to right language
         //use WindowDecorator to present proper order
@@ -75,11 +80,6 @@ public class Window {
             size += post.length();
         }
         return size;
-    }
-
-    public static void main(String[] args) {
-        // TODO Auto-generated method stub
-
     }
 
 }

@@ -50,19 +50,12 @@ public class InputTableManager {
         COL_INFO_LIST[1] = new ColInfo(VALUE, Types.VARCHAR, 10000);
     }
 
-
-    public static InputTableManager load(Connection connection) throws IOException, SQLException {
-        return new InputTableManager(connection);
-    }
-
     private final String TABLE_NAME = "input_table";
     private final String INPUT_DIR_KEY = "input_dir";
     private final Connection connection;
     private final TableDef inputTableTable;
-
     private final PreparedStatement getInputDirectory;
     private final PreparedStatement setInputDirectory;
-
     private InputTableManager(Connection connection) throws SQLException {
         this.connection = connection;
         this.inputTableTable = new TableDef(TABLE_NAME, COL_INFO_LIST);
@@ -72,6 +65,10 @@ public class InputTableManager {
 
         getInputDirectory = connection.prepareStatement("select " + VALUE + " from " + TABLE_NAME + " where " + KEY + "='" + INPUT_DIR_KEY + "'");
         setInputDirectory = connection.prepareStatement("update " + TABLE_NAME + " set " + VALUE + "= ? where " + KEY + "='" + INPUT_DIR_KEY + "'");
+    }
+
+    public static InputTableManager load(Connection connection) throws IOException, SQLException {
+        return new InputTableManager(connection);
     }
 
     public Path getInputDirectory() {

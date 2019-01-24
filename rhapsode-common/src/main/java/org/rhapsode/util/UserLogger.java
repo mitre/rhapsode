@@ -1,19 +1,19 @@
 package org.rhapsode.util;
 
 
+import javax.servlet.http.HttpServletRequest;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 import org.apache.commons.lang.StringUtils;
 import org.rhapsode.app.contants.C;
 import org.rhapsode.lucene.search.ComplexQuery;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import javax.servlet.http.HttpServletRequest;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 public class UserLogger {
     private static final String TOOL = "t";
@@ -32,7 +32,7 @@ public class UserLogger {
     }
 
     public static void log(String toolName, ComplexQuery complexQuery, long totalHits, long elapsed) {
-        if (! SHOULD_LOG) {
+        if (!SHOULD_LOG) {
             return;
         }
         if (complexQuery.getStoredQuery() == null) {
@@ -72,7 +72,7 @@ public class UserLogger {
     }
 
     public static void logException(String toolName, String msg, HttpServletRequest httpServletRequest) {
-        if (! SHOULD_LOG) {
+        if (!SHOULD_LOG) {
             return;
         }
         String mainQuery = httpServletRequest.getParameter(C.MAIN_QUERY);

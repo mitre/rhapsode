@@ -29,6 +29,9 @@
 
 package org.rhapsode.lucene.search;
 
+import java.io.IOException;
+import java.util.Random;
+
 import org.apache.lucene.index.LeafReaderContext;
 import org.apache.lucene.search.FieldComparator;
 import org.apache.lucene.search.FieldComparatorSource;
@@ -36,9 +39,6 @@ import org.apache.lucene.search.LeafFieldComparator;
 import org.apache.lucene.search.Scorer;
 import org.apache.lucene.search.Sort;
 import org.apache.lucene.search.SortField;
-
-import java.io.IOException;
-import java.util.Random;
 
 /**
  * modified from http://stackoverflow.com/questions/7201638/lucene-2-9-2-how-to-show-results-in-random-order
@@ -51,6 +51,35 @@ public class RandomSort {
                 new SortField("",
                         new RandomFieldComparatorSource())
         );
+    }
+
+    private static class RandomLeafFieldComparator implements LeafFieldComparator {
+        Random r = new Random();
+
+        @Override
+        public void setBottom(int i) {
+
+        }
+
+        @Override
+        public int compareBottom(int i) throws IOException {
+            return r.nextInt();
+        }
+
+        @Override
+        public int compareTop(int i) throws IOException {
+            return r.nextInt();
+        }
+
+        @Override
+        public void copy(int i, int i1) throws IOException {
+            //noop
+        }
+
+        @Override
+        public void setScorer(Scorer scorer) {
+            //noop
+        }
     }
 
     private class RandomFieldComparatorSource extends FieldComparatorSource {
@@ -83,35 +112,6 @@ public class RandomSort {
         @Override
         public void setTopValue(Integer arg0) {
 
-        }
-    }
-
-    private static class RandomLeafFieldComparator implements LeafFieldComparator {
-        Random r = new Random();
-
-        @Override
-        public void setBottom(int i) {
-
-        }
-
-        @Override
-        public int compareBottom(int i) throws IOException {
-            return r.nextInt();
-        }
-
-        @Override
-        public int compareTop(int i) throws IOException {
-            return r.nextInt();
-        }
-
-        @Override
-        public void copy(int i, int i1) throws IOException {
-            //noop
-        }
-
-        @Override
-        public void setScorer(Scorer scorer) {
-            //noop
         }
     }
 }

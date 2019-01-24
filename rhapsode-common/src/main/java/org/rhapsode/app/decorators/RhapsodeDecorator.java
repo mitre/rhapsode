@@ -29,6 +29,13 @@
 
 package org.rhapsode.app.decorators;
 
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.lucene.document.FieldType;
 import org.apache.lucene.queryparser.classic.ParseException;
@@ -44,13 +51,6 @@ import org.rhapsode.lucene.search.basic.BasicSearchRequest;
 import org.rhapsode.util.LanguageDirection;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
-
-import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
 
 
 public class RhapsodeDecorator {
@@ -192,8 +192,6 @@ public class RhapsodeDecorator {
     }
 
 
-
-
     public static String[] getLangDirAttrs(BaseSearchRequest request) {
         return getLangDirAttrs(request.getLanguageDirection());
     }
@@ -204,6 +202,7 @@ public class RhapsodeDecorator {
         }
         return EMPTY_STRING_ARRAY;
     }
+
     public static void writeNoCollection(RhapsodeXHTMLHandler xhtml)
             throws SAXException {
         xhtml.characters("No collection is loaded.");

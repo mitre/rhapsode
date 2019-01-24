@@ -28,6 +28,11 @@
  */
 package org.rhapsode.lucene.search.basic;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.IndexReader;
@@ -48,11 +53,6 @@ import org.apache.lucene.search.highlight.SpanGradientFormatter;
 import org.rhapsode.lucene.schema.IndexSchema;
 import org.rhapsode.lucene.search.IndexManager;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-
 public class BasicSearcher {
     protected final static String ELLIPSE = "...";
     private final IndexManager indexManager;
@@ -61,6 +61,14 @@ public class BasicSearcher {
     public BasicSearcher(IndexManager indexManager, IndexSchema indexSchema) {
         this.indexManager = indexManager;
         this.indexSchema = indexSchema;
+    }
+
+    protected static int calcHowMany(BasicSearchRequest request) {
+        if (request.getPagingDirection() == PagingDirection.NEXT) {
+            return request.getResultsPerPage() + request.getLastEnd() + 1;
+        } else {
+            return request.getResultsPerPage() + request.getLastStart() + 1;
+        }
     }
 
     public BasicSearchResults search(BasicSearchRequest searchRequest) throws ParseException, IOException {
@@ -195,14 +203,6 @@ public class BasicSearcher {
             }
         }
         return bits;
-    }
-
-    protected static int calcHowMany(BasicSearchRequest request) {
-        if (request.getPagingDirection() == PagingDirection.NEXT) {
-            return request.getResultsPerPage() + request.getLastEnd() + 1;
-        } else {
-            return request.getResultsPerPage() + request.getLastStart() + 1;
-        }
     }
 
 }

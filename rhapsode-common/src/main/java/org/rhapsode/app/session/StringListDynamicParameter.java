@@ -29,13 +29,13 @@
 
 package org.rhapsode.app.session;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
-
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 
 
 public class StringListDynamicParameter extends DynamicParameter<List<String>> {
@@ -57,6 +57,9 @@ public class StringListDynamicParameter extends DynamicParameter<List<String>> {
         return GSON.fromJson(val, typeOfList);
     }
 
+    public static String valueToString(List<String> strings) {
+        return GSON.toJson(strings);
+    }
 
     @Override
     public String getDefaultValueAsString() {
@@ -66,9 +69,5 @@ public class StringListDynamicParameter extends DynamicParameter<List<String>> {
     @Override
     public List<String> getValueFromString(String s) {
         return parseStringToValue(s);
-    }
-
-    public static String valueToString(List<String> strings) {
-        return GSON.toJson(strings);
     }
 }

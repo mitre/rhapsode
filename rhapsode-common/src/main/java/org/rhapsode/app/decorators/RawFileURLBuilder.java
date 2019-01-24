@@ -42,7 +42,7 @@ public class RawFileURLBuilder {
      * @return null if raw file path or rel path is null or if actual file doesn't exist
      */
     public static String build(Path rawFilePath, String relPath) {
-        System.err.println("about to build link >"+rawFilePath + "< : >"+relPath+"<");
+        System.err.println("about to build link >" + rawFilePath + "< : >" + relPath + "<");
         if (rawFilePath == null || relPath == null) {
             return null;
         }
@@ -55,7 +55,7 @@ public class RawFileURLBuilder {
                 return null;
             }
         } else {
-            System.err.println("Not a regular file>"+fullPath+"<\n>"+fullPath.toAbsolutePath()+"<");
+            System.err.println("Not a regular file>" + fullPath + "<\n>" + fullPath.toAbsolutePath() + "<");
             return null;
         }
     }

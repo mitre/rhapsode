@@ -34,13 +34,13 @@ import org.eclipse.jetty.server.handler.ContextHandler;
 import org.eclipse.jetty.server.handler.IPAccessHandler;
 
 class LocalHostOnlyContextHostWrapper {
-	public AbstractHandler wrap(AbstractHandler handler, String context, String ip){
-	    ContextHandler cHandler = new ContextHandler();
-	    cHandler.setContextPath(context);
-	    cHandler.setHandler(handler);
-	    IPAccessHandler ipAccessHandler = new IPAccessHandler();
-	    ipAccessHandler.setWhite(new String[]{ip});
-	    ipAccessHandler.setHandler(cHandler);
-	    return ipAccessHandler;
-	}
+    public AbstractHandler wrap(AbstractHandler handler, String context, String ip) {
+        ContextHandler cHandler = new ContextHandler();
+        cHandler.setContextPath(context);
+        cHandler.setHandler(handler);
+        IPAccessHandler ipAccessHandler = new IPAccessHandler();
+        ipAccessHandler.setWhite(new String[]{ip});
+        ipAccessHandler.setHandler(cHandler);
+        return ipAccessHandler;
+    }
 }

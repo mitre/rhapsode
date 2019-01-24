@@ -39,8 +39,8 @@ import java.io.Writer;
 import java.util.List;
 
 public class HTMLTableWriter {
-    Writer writer = null;
     private final static String DEFAULT_ENCODING = "UTF-8";
+    Writer writer = null;
 
 
     public HTMLTableWriter(Writer writer, String encoding) throws IOException {

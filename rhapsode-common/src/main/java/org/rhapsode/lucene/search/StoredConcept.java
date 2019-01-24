@@ -45,6 +45,14 @@ public class StoredConcept {
         this.conceptName = name;
     }
 
+    public static List<String> getDBColNames() {
+        List<String> cols = new ArrayList<>();
+        for (SCField field : SCField.values()) {
+            cols.add(field.getDbName());
+        }
+        return cols;
+    }
+
     public String getConceptName() {
         return conceptName;
     }
@@ -72,14 +80,6 @@ public class StoredConcept {
         } catch (NoSuchFieldException | IllegalAccessException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    public static List<String> getDBColNames() {
-        List<String> cols = new ArrayList<>();
-        for (SCField field : SCField.values()) {
-            cols.add(field.getDbName());
-        }
-        return cols;
     }
 
     @Override

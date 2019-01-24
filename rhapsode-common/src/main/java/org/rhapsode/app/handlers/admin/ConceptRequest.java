@@ -29,30 +29,19 @@
 
 package org.rhapsode.app.handlers.admin;
 
+import javax.servlet.http.HttpServletRequest;
+
+import java.util.HashMap;
+import java.util.Map;
+
 import org.apache.commons.lang3.StringUtils;
 import org.rhapsode.app.contants.C;
 import org.rhapsode.lucene.search.SCField;
 
-import javax.servlet.http.HttpServletRequest;
-import java.util.HashMap;
-import java.util.Map;
-
 public class ConceptRequest {
 
-    public Map<SCField, String> getConceptFields() {
-        return storedConceptFields;
-    }
-
-    enum ActionType {
-        DEFAULT,
-        ADD_CONCEPT,
-        ADD_DIALOGUE,
-        DELETE,
-        UPDATE_CONCEPT,
-        SAVE_DIALOGUE,
-        SAVE_CONCEPTS,
-        UPDATE_DOC_COUNTS
-    }
+    private Map<SCField, String> storedConceptFields;
+    private ActionType t;
 
     ;
 
@@ -93,10 +82,22 @@ public class ConceptRequest {
         }
     }
 
-    private Map<SCField, String> storedConceptFields;
-    private ActionType t;
+    public Map<SCField, String> getConceptFields() {
+        return storedConceptFields;
+    }
 
     public ActionType getActionType() {
         return t;
+    }
+
+    enum ActionType {
+        DEFAULT,
+        ADD_CONCEPT,
+        ADD_DIALOGUE,
+        DELETE,
+        UPDATE_CONCEPT,
+        SAVE_DIALOGUE,
+        SAVE_CONCEPTS,
+        UPDATE_DOC_COUNTS
     }
 }

@@ -1,50 +1,43 @@
 {
-  "session_manager" : {
+  "session_manager": {
     "connection_string": "jdbc:h2:mem:testdb1"
   },
-
-
-  "link_writer" : "doc",
-
-  "common_search" : {
-    "defaultLanguageDirection" : "ltr",
-    "linkDisplayField" : "display_name",
-    "defaultSearchField" : "content"
+  "link_writer": "doc",
+  "common_search": {
+    "defaultLanguageDirection": "ltr",
+    "linkDisplayField": "display_name",
+    "defaultSearchField": "content"
   },
-
-  "doc_viewer" : {
-    "display_fields" :{
-      "display_name" : -1,
-      "file_name" : -1,
-      "embedded_path" : -1,
-      "md5" : -1,
-      "mime" : -1,
-      "title" : -1,
-      "author" : -1,
-      "company" : -1,
-      "subject" : -1,
-      "description" : -1
+  "doc_viewer": {
+    "display_fields": {
+      "display_name": -1,
+      "file_name": -1,
+      "embedded_path": -1,
+      "md5": -1,
+      "mime": -1,
+      "title": -1,
+      "author": -1,
+      "company": -1,
+      "subject": -1,
+      "description": -1
     }
   },
-
-  "basic_search" : {
-    "fragmentSize" : 10,
-    "maxCharsToReadForSnippets" : 20000,
-    "maxLinkDisplaySizeChars" : 32,
-    "maxSnippetLengthChars" : 1024,
-    "snippetsPerResult" : 3,
-    "defaultResultsPerPage" : 10
+  "basic_search": {
+    "fragmentSize": 10,
+    "maxCharsToReadForSnippets": 20000,
+    "maxLinkDisplaySizeChars": 32,
+    "maxSnippetLengthChars": 1024,
+    "snippetsPerResult": 3,
+    "defaultResultsPerPage": 10
   },
-
-  "common_search" : {
-    "numThreadsForConcurrentSearches" : 10,
-    "defaultLanguageDirection" : "ltr",
-    "linkDisplayField" : "display_name",
-    "defaultSearchField" : "content",
-    "styles" : {
-      "regular" : "font-weight:bold; color:#FF0000;background-color:#FFFF00;",
-      "blue" : "font-weight:bold; color:#0000FF; background-color:#FFFF00;"
+  "common_search": {
+    "numThreadsForConcurrentSearches": 10,
+    "defaultLanguageDirection": "ltr",
+    "linkDisplayField": "display_name",
+    "defaultSearchField": "content",
+    "styles": {
+      "regular": "font-weight:bold; color:#FF0000;background-color:#FFFF00;",
+      "blue": "font-weight:bold; color:#0000FF; background-color:#FFFF00;"
     }
-
   }
 }

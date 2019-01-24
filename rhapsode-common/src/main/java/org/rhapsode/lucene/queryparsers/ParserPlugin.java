@@ -33,13 +33,16 @@ import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.search.Query;
 
 public interface ParserPlugin {
+    String getName();
+
+    ;
+
+    Query parse(String defaultField, String qString) throws ParseException;
+
     //TODO -- make this extensible at some point
     enum PARSERS {
-      CLASSIC,
-      COMPLEX,
-      SPAN
-    };
-
-    String getName();
-    Query parse(String defaultField, String qString) throws ParseException;
+        CLASSIC,
+        COMPLEX,
+        SPAN
+    }
 }

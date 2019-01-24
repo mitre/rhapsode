@@ -5,21 +5,19 @@
     "rel_path_field": "rel_path",
     "contains_digest_field": "contains_md5",
     "default_content_field": "content",
-    "attachment_offset_field" : "_ao",
-    "attachment_offset_sort_field" : "_aos"
+    "attachment_offset_field": "_ao",
+    "attachment_offset_sort_field": "_aos"
   },
-
   "field_mapper": {
     "_comment": "map fields from Tika to Lucene fields",
     "_comment": "f = from (Tika); t = to (Lucene)",
     "_comment": "for 'capture', valid fail policies include:",
     "_comment": " 'skip', 'store_as_is', 'exception'",
-
     "ignore_case": "false",
     "mappings": [
       {
-        "f":"_ao",
-        "t":"_ao"
+        "f": "_ao",
+        "t": "_ao"
       },
       {
         "f": "dc:title",
@@ -39,12 +37,12 @@
         "capture": {
           "find": "([^\/\\\\]+)$",
           "replace": "$1",
-          "fail_policy":"store_as_is"
+          "fail_policy": "store_as_is"
         }
       },
       {
-        "f":"X-TIKA:embedded_resource_path",
-        "t":"embedded_path"
+        "f": "X-TIKA:embedded_resource_path",
+        "t": "embedded_path"
       },
       {
         "f": "resourceName",
@@ -70,26 +68,26 @@
         "f": "dc:publisher",
         "t": "publisher"
       },
-      { "f":"extended-properties:Company",
-        "t":"company"
+      {
+        "f": "extended-properties:Company",
+        "t": "company"
       },
       {
-        "f":"extended-properties:Manager",
-        "t":"manager"
+        "f": "extended-properties:Manager",
+        "t": "manager"
       },
       {
-        "f":"dcterms:created",
-        "t":"created",
+        "f": "dcterms:created",
+        "t": "created",
         "capture": {
           "find": "^(\\d\\d\\d\\d)-(\\d\\d)-(\\d\\d)T",
           "replace": "$1$2$3",
           "fail_policy": "skip"
         }
-
       },
       {
-        "f":"dcterms:modified",
-        "t":"modified",
+        "f": "dcterms:modified",
+        "t": "modified",
         "capture": {
           "find": "^(\\d\\d\\d\\d)-(\\d\\d)-(\\d\\d)T",
           "replace": "$1$2$3",
@@ -99,15 +97,14 @@
       {
         "f": "X-TIKA:content",
         "t": "lang",
-        "langid":{
-          "minChars" : -1,
-          "maxChars" : 10000,
-          "langOnly" : false
+        "langid": {
+          "minChars": -1,
+          "maxChars": 10000,
+          "langOnly": false
         }
       }
     ]
   },
-
   "fields": {
     "_fid": {
       "type": "text",
@@ -119,9 +116,9 @@
       "multivalued": "false",
       "index_analyzer": "keyword"
     },
-    "_ao":{
-      "type":"string",
-      "multivalued":false
+    "_ao": {
+      "type": "string",
+      "multivalued": false
     },
     "content": {
       "type": "text",

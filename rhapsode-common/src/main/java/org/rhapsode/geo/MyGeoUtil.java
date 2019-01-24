@@ -29,6 +29,10 @@
 package org.rhapsode.geo;
 
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.StringField;
@@ -50,10 +54,6 @@ import org.locationtech.spatial4j.shape.Shape;
 import org.locationtech.spatial4j.shape.SpatialRelation;
 import org.locationtech.spatial4j.shape.impl.CircleImpl;
 import org.locationtech.spatial4j.shape.impl.PointImpl;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 
 public class MyGeoUtil {
@@ -91,9 +91,9 @@ public class MyGeoUtil {
         return new CircleImpl(p, degrees, ctx);
     }
 
-/*  query builders
- * 	
- */
+    /*  query builders
+     *
+     */
 
 
     public static Query buildQuery(String field, double lat, double lng,

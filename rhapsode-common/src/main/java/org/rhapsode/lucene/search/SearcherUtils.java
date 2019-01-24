@@ -29,6 +29,10 @@
 
 package org.rhapsode.lucene.search;
 
+import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
+
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.Term;
@@ -37,10 +41,6 @@ import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TopDocs;
-
-import java.io.IOException;
-import java.util.HashSet;
-import java.util.Set;
 
 
 public class SearcherUtils {

@@ -41,8 +41,8 @@ public class StoredQuery {
     public static final int NOT_YET_LOADED = -1;
     public static final String DEFAULT_FIELD = "content";
     public static final String DEFAULT_STYLE = "regular";
-    int id = NOT_YET_LOADED;
     final String queryName;
+    int id = NOT_YET_LOADED;
     String defaultField = DEFAULT_FIELD;
     String mainQuery;
     String mainQueryTranslation;
@@ -64,6 +64,14 @@ public class StoredQuery {
     StoredQuery(int id, String name) {
         this.id = id;
         this.queryName = name;
+    }
+
+    public static List<String> getDBColNames() {
+        List<String> cols = new ArrayList<>();
+        for (SQField field : SQField.values()) {
+            cols.add(field.getDbName());
+        }
+        return cols;
     }
 
     public String getQueryName() {
@@ -133,14 +141,6 @@ public class StoredQuery {
         } catch (NoSuchFieldException | IllegalAccessException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    public static List<String> getDBColNames() {
-        List<String> cols = new ArrayList<>();
-        for (SQField field : SQField.values()) {
-            cols.add(field.getDbName());
-        }
-        return cols;
     }
 
     public String getMainQueryExcMsg() {

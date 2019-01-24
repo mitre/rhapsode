@@ -29,6 +29,9 @@
 
 package org.rhapsode.lucene.search;
 
+import java.io.IOException;
+import java.nio.file.Path;
+
 import org.apache.lucene.index.IndexNotFoundException;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
@@ -45,13 +48,9 @@ import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.BytesRef;
 import org.rhapsode.RhapsodeCollection;
-import org.rhapsode.app.handlers.search.BasicSearchHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.tallison.util.SlowCompositeReaderWrapper;
-
-import java.io.IOException;
-import java.nio.file.Path;
 
 
 public class IndexManager {
@@ -59,6 +58,9 @@ public class IndexManager {
 
     //    IndexSearcher searcher = null;
     SearcherManager searcherManager = null;
+
+    private IndexManager() {
+    }
 
     public static void load(RhapsodeCollection collection) throws IOException {
         IndexManager indexManager = collection.getIndexManager();
@@ -73,9 +75,6 @@ public class IndexManager {
             //nope, no index yet
         }
         collection.setIndexManager(indexManager);
-    }
-
-    private IndexManager() {
     }
 
     public void close() throws IOException {

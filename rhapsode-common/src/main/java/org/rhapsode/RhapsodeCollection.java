@@ -29,6 +29,16 @@
 
 package org.rhapsode;
 
+import java.io.IOException;
+import java.io.Reader;
+import java.io.Writer;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
+import java.util.Set;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.apache.lucene.document.Document;
@@ -40,16 +50,6 @@ import org.rhapsode.lucene.schema.IndexSchema;
 import org.rhapsode.lucene.search.IndexManager;
 import org.rhapsode.lucene.utils.DocRetriever;
 import org.rhapsode.util.PathUtils;
-
-import java.io.IOException;
-import java.io.Reader;
-import java.io.Writer;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.List;
-import java.util.Set;
 
 public class RhapsodeCollection {
 
@@ -75,6 +75,15 @@ public class RhapsodeCollection {
     private IndexManager indexManager;
     private Query favoritesQuery = null;
     private Query ignoredQuery = null;
+
+    //disallow
+    private RhapsodeCollection() {
+        throw new IllegalArgumentException("MUST INCLUDE COLLECTION ROOT");
+    }
+
+    private RhapsodeCollection(Path collectionRoot) {
+        collectionPath = collectionRoot;
+    }
 
     /**
      * Builds a new collection directory with all required subdirectories.
@@ -113,6 +122,8 @@ public class RhapsodeCollection {
         return rc;
     }
 
+    ;
+
     /**
      * Loads an existing collection.  This requires that the following must exist:
      * collectionRoot
@@ -141,17 +152,6 @@ public class RhapsodeCollection {
         }
         rc.loaded = true;
         return rc;
-    }
-
-    //disallow
-    private RhapsodeCollection() {
-        throw new IllegalArgumentException("MUST INCLUDE COLLECTION ROOT");
-    }
-
-    ;
-
-    private RhapsodeCollection(Path collectionRoot) {
-        collectionPath = collectionRoot;
     }
 
     public void emptyTrash() throws IOException {
@@ -186,17 +186,16 @@ public class RhapsodeCollection {
         return collectionPath.resolve(COLLECTION_SCHEMA_FILE_NAME);
     }
 
+    public Path getOrigDocsRoot() {
+        return Paths.get(collectionSchema.getOrigDocsRoot().toString());
+    }
+
     //each time this is set, it writes to disk
     public void setOrigDocsRoot(Path origDocsRoot) throws IOException {
         this.collectionSchema.setOrigDocsRoot(origDocsRoot.toFile());
         updateCollectionSchema();
 
     }
-
-    public Path getOrigDocsRoot() {
-        return Paths.get(collectionSchema.getOrigDocsRoot().toString());
-    }
-
 
     public IndexSchema getIndexSchema() {
         return schema;
@@ -344,8 +343,8 @@ public class RhapsodeCollection {
     }
 
     public org.deeplearning4j.models.word2vec.Word2Vec getWord2Vec() throws IOException {
-        if (! hasWord2Vec()) {
-            throw new IOException("word2vec model doesn't exist: "+getWord2VecPath());
+        if (!hasWord2Vec()) {
+            throw new IOException("word2vec model doesn't exist: " + getWord2VecPath());
         }
         if (word2Vec == null) {
             try {
@@ -354,7 +353,7 @@ public class RhapsodeCollection {
                 e.printStackTrace();
             }
             word2Vec = org.deeplearning4j.models.embeddings.loader.WordVectorSerializer
-                        .readWord2VecModel(getWord2VecPath().toFile());
+                    .readWord2VecModel(getWord2VecPath().toFile());
         }
         return word2Vec;
     }

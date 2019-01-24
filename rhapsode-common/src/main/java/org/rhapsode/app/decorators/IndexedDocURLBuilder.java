@@ -29,12 +29,12 @@
 
 package org.rhapsode.app.decorators;
 
+import java.util.Locale;
+
 import org.rhapsode.app.RhapsodeSearcherApp;
 import org.rhapsode.app.contants.C;
 import org.rhapsode.lucene.search.BaseSearchRequest;
 import org.rhapsode.lucene.search.StoredQuery;
-
-import java.util.Locale;
 
 public class IndexedDocURLBuilder extends BaseURLBuilder {
     RhapsodeSearcherApp config;

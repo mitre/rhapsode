@@ -29,6 +29,11 @@
 
 package org.rhapsode.servlet.session;
 
+import static org.junit.Assert.assertEquals;
+
+import java.io.InputStream;
+import java.util.Map;
+
 import org.junit.Test;
 import org.rhapsode.app.session.DBStoredConceptManager;
 import org.rhapsode.app.session.DBStoredQueryManager;
@@ -36,11 +41,6 @@ import org.rhapsode.app.session.StoredQueryReader;
 import org.rhapsode.lucene.queryparsers.SQPParserPlugin;
 import org.rhapsode.lucene.schema.IndexSchema;
 import org.rhapsode.lucene.search.StoredQuery;
-
-import java.io.InputStream;
-import java.util.Map;
-
-import static org.junit.Assert.assertEquals;
 
 public class StoredQueryManagerTest extends ServletSessionTestBase {
     static final String DEFAULT_FIELD = "content";
@@ -90,10 +90,10 @@ public class StoredQueryManagerTest extends ServletSessionTestBase {
         DBStoredConceptManager storedConceptManager = DBStoredConceptManager.load(connection);
         DBStoredQueryManager storedQueryManager = DBStoredQueryManager.load(connection);
         IndexSchema indexSchema = IndexSchema.load(this.getClass().getResourceAsStream("/test_index_data/index_schema.json"));
-        try(DBStoredQueryManager m = DBStoredQueryManager.load(connection)) {
+        try (DBStoredQueryManager m = DBStoredQueryManager.load(connection)) {
             StoredQueryReader reader = new StoredQueryReader(storedConceptManager,
                     storedQueryManager, new SQPParserPlugin(indexSchema), indexSchema, connection);
-            try(InputStream is = getClass().getResourceAsStream("/test-docs/testQueries.xlsx")) {
+            try (InputStream is = getClass().getResourceAsStream("/test-docs/testQueries.xlsx")) {
                 reader.loadBoth(is);
             }
             Map<Integer, StoredQuery> c = m.getStoredQueryMap();

@@ -30,6 +30,13 @@
 
 package org.rhapsode.indexer;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
@@ -37,24 +44,13 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.lucene.analysis.Analyzer;
-import org.apache.lucene.document.Document;
 import org.apache.lucene.index.IndexReader;
 import org.apache.tika.batch.BatchProcessDriverCLI;
-import org.deeplearning4j.models.word2vec.Word2Vec;
 import org.rhapsode.RhapsodeCollection;
 import org.rhapsode.lucene.search.IndexManager;
 import org.rhapsode.util.ParamUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 public class IndexerCLI {
 
@@ -85,6 +81,18 @@ public class IndexerCLI {
         opts.addOption("w2v", "word2vec", false, "Optionally, build a vectors for the w2v handler");
         opts.addOption("w2vOnly", "word2vecOnly", false, "Run word2vec only");
         return opts;
+    }
+
+    private static void usage(String msg) {
+        HelpFormatter helpFormatter = new HelpFormatter();
+        helpFormatter.printHelp(msg, getOptions());
+        System.exit(-1);
+    }
+
+    public static void main(String[] args) throws Exception {
+        CommandLineParser p = new DefaultParser();
+        IndexerCLI cli = new IndexerCLI();
+        cli.execute(p.parse(getOptions(), args));
     }
 
     public void execute(CommandLine cl) throws Exception {
@@ -192,12 +200,6 @@ public class IndexerCLI {
         builder.build(reader, contentField, analyzer, rc.getWord2VecPath());
     }
 
-    private static void usage(String msg) {
-        HelpFormatter helpFormatter = new HelpFormatter();
-        helpFormatter.printHelp(msg, getOptions());
-        System.exit(-1);
-    }
-
     private void runIndexer(RhapsodeCollection rc, CommandLine cl, int numConsumers) throws Exception {
         List<String> args = new ArrayList<>();
         //make most of this more configurable!!!, jars, etc
@@ -272,11 +274,5 @@ public class IndexerCLI {
         logCommandLine("tika", commandLine);
         BatchProcessDriverCLI driverCLI = new BatchProcessDriverCLI(commandLine.toArray(new String[commandLine.size()]));
         driverCLI.execute();
-    }
-
-    public static void main(String[] args) throws Exception {
-        CommandLineParser p = new DefaultParser();
-        IndexerCLI cli = new IndexerCLI();
-        cli.execute(p.parse(getOptions(), args));
     }
 }

@@ -28,6 +28,8 @@
  */
 package org.rhapsode.app;
 
+import java.lang.reflect.Type;
+
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
@@ -38,8 +40,6 @@ import org.rhapsode.lucene.search.CommonSearchConfig;
 import org.rhapsode.lucene.search.basic.BasicSearchConfig;
 import org.rhapsode.lucene.search.concordance.ConcordanceSearchConfig;
 import org.rhapsode.lucene.search.cooccur.CooccurConfig;
-
-import java.lang.reflect.Type;
 
 public class RhapsodeSearcherAppDeserializer
         implements JsonDeserializer<RhapsodeSearcherApp> {

@@ -28,27 +28,19 @@
  */
 package org.rhapsode.app.handlers.admin;
 
-import org.rhapsode.app.RhapsodeSearcherApp;
-import org.rhapsode.app.contants.C;
-
 import javax.servlet.http.HttpServletRequest;
+
 import java.util.HashSet;
 import java.util.Set;
+
+import org.rhapsode.app.RhapsodeSearcherApp;
+import org.rhapsode.app.contants.C;
 
 public class SelectedDocumentRequest {
 
 
-    public enum ACTION_TYPE {
-        VIEW_FAVORITES,
-        CLEAR_SELECTED_FAVORITES,
-        SELECT_ALL_FAVORITES,
-        VIEW_IGNORED,
-        CLEAR_SELECTED_IGNORED,
-        SELECT_ALL_IGNORED,
-        //write favorites
-        //write ignored
-    }
-
+    ACTION_TYPE actionType;
+    Set<String> docIds;
 
     public static SelectedDocumentRequest build(RhapsodeSearcherApp searcherApp, HttpServletRequest
             httpServletRequest) {
@@ -82,16 +74,23 @@ public class SelectedDocumentRequest {
         return sdr;
     }
 
-    ACTION_TYPE actionType;
-
-    Set<String> docIds;
-
     public ACTION_TYPE getActionType() {
         return actionType;
     }
 
     public Set<String> getDocIds() {
         return docIds;
+    }
+
+    public enum ACTION_TYPE {
+        VIEW_FAVORITES,
+        CLEAR_SELECTED_FAVORITES,
+        SELECT_ALL_FAVORITES,
+        VIEW_IGNORED,
+        CLEAR_SELECTED_IGNORED,
+        SELECT_ALL_IGNORED,
+        //write favorites
+        //write ignored
     }
 
 }

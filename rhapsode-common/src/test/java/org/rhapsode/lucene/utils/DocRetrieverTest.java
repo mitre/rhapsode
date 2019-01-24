@@ -85,6 +85,7 @@ public class DocRetrieverTest {
     static Set<String> TARG_DOC_IDS = new HashSet<>();
 
     static IndexSearcher searcher;
+
     @BeforeClass
     public static void init() throws IOException {
         Analyzer standardAnalyzer = new StandardAnalyzer();
@@ -99,7 +100,7 @@ public class DocRetrieverTest {
 
         TARG_FILE_ID = UUID.randomUUID().toString();
         //write ascending to 10 parent (0) and child documents
-        for (int i = 0 ; i < 10; i++) {
+        for (int i = 0; i < 10; i++) {
             Document d = new Document();
             d.add(new TextField(FILE_ID_FIELD, TARG_FILE_ID, Field.Store.YES));
             String docId = UUID.randomUUID().toString();
@@ -110,7 +111,7 @@ public class DocRetrieverTest {
             writer.addDocument(d);
         }
         //write descending from 20 to 10 more child documents
-        for (int i = 20 ; i >= 10; i--) {
+        for (int i = 20; i >= 10; i--) {
             Document d = new Document();
             d.add(new TextField(FILE_ID_FIELD, TARG_FILE_ID, Field.Store.YES));
             String docId = UUID.randomUUID().toString();
@@ -203,8 +204,8 @@ public class DocRetrieverTest {
         }
         assertEquals("must be same size", seen.size(), TARG_DOC_IDS.size());
         for (String targ : TARG_DOC_IDS) {
-            if (! seen.contains(targ)) {
-                assertTrue("failed to find: "+targ, false);
+            if (!seen.contains(targ)) {
+                assertTrue("failed to find: " + targ, false);
             }
 
         }

@@ -29,13 +29,13 @@
 
 package org.rhapsode.servlet.session;
 
-import org.junit.Ignore;
-import org.junit.Test;
-
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.Random;
 import java.util.UUID;
+
+import org.junit.Ignore;
+import org.junit.Test;
 
 //used to figure out the right sql call to get count of
 //embedded documents with at least one hit
@@ -51,10 +51,10 @@ public class DBDevTest extends ServletSessionTestBase {
         int last = 0;
         for (int fileCount = 0; fileCount < 1000; fileCount++) {
             String file_id = UUID.randomUUID().toString();
-            for (int i = last; i < last+20; i++) {
+            for (int i = last; i < last + 20; i++) {
                 int doc_id = i;
                 for (int q = 0; q < new Random().nextInt(3); q++) {
-                    st.execute("insert into tmp values('"+file_id+"', "+doc_id+","+q+")");
+                    st.execute("insert into tmp values('" + file_id + "', " + doc_id + "," + q + ")");
                 }
             }
             last += 20;
@@ -62,14 +62,14 @@ public class DBDevTest extends ServletSessionTestBase {
 
         ResultSet rs = st.executeQuery("select * from tmp");
         while (rs.next()) {
-            System.out.println(rs.getString(1) + " : "+rs.getInt(2) + " : "+ rs.getInt(3));
+            System.out.println(rs.getString(1) + " : " + rs.getInt(2) + " : " + rs.getInt(3));
         }
 
         System.out.println("SELECTING");
         rs = st.executeQuery("select file_id, count(1) from " +
                 "(select file_id, doc_id from tmp group by file_id, doc_id) group by file_id");
         while (rs.next()) {
-            System.out.println(rs.getString(1) + " : "+rs.getInt(2));//+ " : "+rs.getInt(2) + " : "+ rs.getInt(3));
+            System.out.println(rs.getString(1) + " : " + rs.getInt(2));//+ " : "+rs.getInt(2) + " : "+ rs.getInt(3));
         }
     }
 }

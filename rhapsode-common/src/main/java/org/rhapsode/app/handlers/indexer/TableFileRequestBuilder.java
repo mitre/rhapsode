@@ -29,14 +29,15 @@
 
 package org.rhapsode.app.handlers.indexer;
 
-import org.apache.commons.lang3.StringUtils;
-import org.rhapsode.app.RhapsodeSearcherApp;
-import org.rhapsode.app.contants.C;
-
 import javax.servlet.http.HttpServletRequest;
+
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
+
+import org.apache.commons.lang3.StringUtils;
+import org.rhapsode.app.RhapsodeSearcherApp;
+import org.rhapsode.app.contants.C;
 
 
 public class TableFileRequestBuilder {

@@ -33,10 +33,10 @@ import org.eclipse.jetty.server.handler.AbstractHandler;
 import org.eclipse.jetty.server.handler.ContextHandler;
 
 class ContextHostWrapper {
-	public AbstractHandler wrap(AbstractHandler handler, String context){
-	    ContextHandler cHandler = new ContextHandler();
-	    cHandler.setContextPath(context);
-	    cHandler.setHandler(handler);
-	    return cHandler;
-	}
+    public AbstractHandler wrap(AbstractHandler handler, String context) {
+        ContextHandler cHandler = new ContextHandler();
+        cHandler.setContextPath(context);
+        cHandler.setHandler(handler);
+        return cHandler;
+    }
 }

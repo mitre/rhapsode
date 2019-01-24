@@ -30,6 +30,8 @@
 package org.rhapsode.app.handlers.search;
 
 
+import java.util.Map;
+
 import org.apache.tika.metadata.Metadata;
 import org.apache.tika.sax.XHTMLContentHandler;
 import org.rhapsode.app.RhapsodeSearcherApp;
@@ -43,8 +45,6 @@ import org.rhapsode.lucene.search.BaseSearchRequest;
 import org.rhapsode.lucene.search.StoredQuery;
 import org.xml.sax.SAXException;
 
-import java.util.Map;
-
 public abstract class AbstractSearchHandler extends AbstractRhapsodeHandler {
 
     private static final Metadata EMPTY_METADATA = new Metadata();
@@ -52,6 +52,15 @@ public abstract class AbstractSearchHandler extends AbstractRhapsodeHandler {
 
     public AbstractSearchHandler(String toolName) {
         super(toolName);
+    }
+
+    static void addHiddenInputAndButtons(RhapsodeXHTMLHandler xhtml) throws SAXException {
+        xhtml.startElement(H.INPUT,
+                H.TYPE, H.SUBMIT,
+                H.NAME, C.SEARCH,
+                H.VALUE, "Search",
+                "default", "");
+        xhtml.endElement(H.INPUT);
     }
 
     @Override
@@ -193,7 +202,6 @@ public abstract class AbstractSearchHandler extends AbstractRhapsodeHandler {
 
     }
 
-
     /**
      * This should be the query, geo query, filter query, etc.
      *
@@ -270,15 +278,6 @@ public abstract class AbstractSearchHandler extends AbstractRhapsodeHandler {
 
     void addDocLink(Map<String, String> metadata, XHTMLContentHandler xhtml) {
 
-    }
-
-    static void addHiddenInputAndButtons(RhapsodeXHTMLHandler xhtml) throws SAXException {
-        xhtml.startElement(H.INPUT,
-                H.TYPE, H.SUBMIT,
-                H.NAME, C.SEARCH,
-                H.VALUE, "Search",
-                "default", "");
-        xhtml.endElement(H.INPUT);
     }
 
 

@@ -30,11 +30,11 @@
 package org.rhapsode.text.windows;
 
 
-import org.apache.commons.lang3.StringUtils;
-import org.rhapsode.text.Offset;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import org.apache.commons.lang3.StringUtils;
+import org.rhapsode.text.Offset;
 
 public class WindowBuilder {
     /*

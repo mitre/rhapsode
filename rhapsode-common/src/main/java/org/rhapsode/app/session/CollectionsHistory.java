@@ -30,8 +30,6 @@
 
 package org.rhapsode.app.session;
 
-import org.apache.commons.lang3.tuple.Pair;
-
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.Connection;
@@ -45,6 +43,8 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.apache.commons.lang3.tuple.Pair;
+
 public class CollectionsHistory {
 
     final static String COLLECTIONS_HISTORY_TABLE = "collections_history";
@@ -54,18 +54,12 @@ public class CollectionsHistory {
 
     final static ColInfo LAST_LOADED =
             new ColInfo("LAST_LOADED", Types.TIMESTAMP);
-
-    private Connection connection;
-    private TableDef table;
-
     PreparedStatement deleteRow;
     PreparedStatement winnowOnTimeStamp;
     PreparedStatement insert;
     PreparedStatement selectStar;
-
-    public static CollectionsHistory load(Connection connection) throws SQLException {
-        return new CollectionsHistory(connection);
-    }
+    private Connection connection;
+    private TableDef table;
 
     private CollectionsHistory(Connection connection) throws SQLException {
         this.connection = connection;
@@ -82,6 +76,10 @@ public class CollectionsHistory {
 
         winnowOnTimeStamp = connection.prepareStatement("DELETE FROM " + COLLECTIONS_HISTORY_TABLE +
                 " WHERE " + LAST_LOADED.getName() + " < ?");
+    }
+
+    public static CollectionsHistory load(Connection connection) throws SQLException {
+        return new CollectionsHistory(connection);
     }
 
     public void addLoaded(Path path) throws SQLException {

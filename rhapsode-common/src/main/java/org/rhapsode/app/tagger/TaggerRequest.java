@@ -29,32 +29,14 @@
 
 package org.rhapsode.app.tagger;
 
+import java.nio.file.Path;
+import java.util.Map;
+
 import org.apache.lucene.search.IndexSearcher;
 import org.rhapsode.app.handlers.admin.ReportRequest;
 import org.rhapsode.lucene.search.MaxResultsQuery;
 
-import java.nio.file.Path;
-import java.util.Map;
-
 public class TaggerRequest {
-
-
-    public enum NORM_TYPE {
-        ONE("One"),
-        INVERSE_PRIORITY("Inverse Priority"),
-        INVERSE_RANK("Inverse Rank"),
-        WEIGHTED_INVERSE_RANK("Weighted Relevance");
-
-        private final String displayString;
-
-        NORM_TYPE(String s) {
-            displayString = s;
-        }
-
-        public String getDisplayString() {
-            return displayString;
-        }
-    }
 
 
     final Map<Integer, MaxResultsQuery> queries;
@@ -65,7 +47,6 @@ public class TaggerRequest {
     final NORM_TYPE normType;
     final int topNCombinedResults;
     final ReportRequest.REPORT_TYPE reportType;
-
     public TaggerRequest(Map<Integer, MaxResultsQuery> queries, IndexSearcher searcher,
                          String fileNameField, Path reportsDir, String reportName,
                          ReportRequest.REPORT_TYPE reportType,
@@ -88,6 +69,23 @@ public class TaggerRequest {
     public String getRelPathFieldName() {
         //TODO: parameterize this!!!!
         return "rel_path";
+    }
+
+    public enum NORM_TYPE {
+        ONE("One"),
+        INVERSE_PRIORITY("Inverse Priority"),
+        INVERSE_RANK("Inverse Rank"),
+        WEIGHTED_INVERSE_RANK("Weighted Relevance");
+
+        private final String displayString;
+
+        NORM_TYPE(String s) {
+            displayString = s;
+        }
+
+        public String getDisplayString() {
+            return displayString;
+        }
     }
 
 }

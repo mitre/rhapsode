@@ -29,8 +29,8 @@
    (C) 2013-2017 The MITRE Corporation. All Rights Reserved.
 -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <groupId>org.rhapsode</groupId>
@@ -43,12 +43,12 @@
     <artifactId>rhapsode-common</artifactId>
 
     <properties>
-        <tika.version>1.18</tika.version>
-        <lucene.version>7.3.0</lucene.version>
-        <lucene-addons.version>7.3-0.1</lucene-addons.version>
-        <jetty.version>9.4.9.v20180320</jetty.version>
-        <poi.version>3.17</poi.version>
-        <carrot2.version>3.15.1</carrot2.version>
+        <tika.version>1.20</tika.version>
+        <lucene.version>7.6.0</lucene.version>
+        <lucene-addons.version>7.6-0.1</lucene-addons.version>
+        <jetty.version>9.4.14.v20181114</jetty.version>
+        <poi.version>4.0.1</poi.version>
+        <carrot2.version>3.16.1</carrot2.version>
     </properties>
     <dependencies>
 
@@ -161,7 +161,7 @@
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-csv</artifactId>
-            <version>1.5</version>
+            <version>1.6</version>
         </dependency>
         <dependency>
             <groupId>org.apache.poi</groupId>
@@ -206,23 +206,23 @@
         <dependency>
             <groupId>org.deeplearning4j</groupId>
             <artifactId>deeplearning4j-core</artifactId>
-            <version>0.9.1</version>
+            <version>1.0.0-beta3</version>
         </dependency>
         <dependency>
             <groupId>org.deeplearning4j</groupId>
             <artifactId>deeplearning4j-nlp</artifactId>
-            <version>0.9.1</version>
+            <version>1.0.0-beta3</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.nd4j/nd4j-native-platform -->
         <dependency>
             <groupId>org.nd4j</groupId>
             <artifactId>nd4j-native-platform</artifactId>
-            <version>0.9.1</version>
+            <version>1.0.0-beta3</version>
         </dependency>
         <dependency>
             <groupId>org.nd4j</groupId>
             <artifactId>nd4j-native</artifactId>
-            <version>0.9.1</version>
+            <version>1.0.0-beta3</version>
             <classifier>windows-x86_64</classifier>
         </dependency>
 

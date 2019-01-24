@@ -29,6 +29,13 @@
 
 package org.rhapsode.app.utils;
 
+import static org.junit.Assert.assertTrue;
+
+import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
+
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.core.WhitespaceAnalyzer;
 import org.apache.lucene.index.Term;
@@ -40,23 +47,15 @@ import org.apache.tika.sax.ToHTMLContentHandler;
 import org.junit.Test;
 import org.rhapsode.app.contants.H;
 import org.rhapsode.app.decorators.RhapsodeXHTMLHandler;
-import org.rhapsode.app.utils.DocHighlighter;
 import org.rhapsode.lucene.search.HighlightingQuery;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.SAXException;
-
-import java.io.IOException;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.concurrent.atomic.AtomicBoolean;
-
-import static org.junit.Assert.assertTrue;
 
 
 public class DocHighlighterTest {
     String field = "content";
     SpanQuery foxQuick = new SpanNearQuery(
-            new SpanQuery[] {
+            new SpanQuery[]{
                     new SpanTermQuery(new Term(field, "fox")),
                     new SpanTermQuery(new Term(field, "quick"))
             },
@@ -64,7 +63,7 @@ public class DocHighlighterTest {
             false
     );
     SpanQuery foxAs = new SpanNearQuery(
-            new SpanQuery[] {
+            new SpanQuery[]{
                     new SpanTermQuery(new Term(field, "fox")),
                     new SpanTermQuery(new Term(field, "as"))
             },
@@ -76,7 +75,7 @@ public class DocHighlighterTest {
     public void testBasic() throws IOException, SAXException {
         String s = "the quick brown fox as well as some other fox and quick";
 
-        SpanQuery spanQuery = new SpanOrQuery( foxQuick, foxAs, new SpanTermQuery(new Term(field, "fox")));
+        SpanQuery spanQuery = new SpanOrQuery(foxQuick, foxAs, new SpanTermQuery(new Term(field, "fox")));
         Analyzer analyzer = new WhitespaceAnalyzer();
         ContentHandler handler = new ToHTMLContentHandler();
         RhapsodeXHTMLHandler xhtml = new RhapsodeXHTMLHandler(handler);
@@ -99,7 +98,7 @@ public class DocHighlighterTest {
     public void testPriority() throws IOException, SAXException {
         String s = "the quick brown fox as well as some other fox and quick";
 
-        SpanQuery spanQuery = new SpanOrQuery( foxQuick, foxAs);
+        SpanQuery spanQuery = new SpanOrQuery(foxQuick, foxAs);
         Analyzer analyzer = new WhitespaceAnalyzer();
         ContentHandler handler = new ToHTMLContentHandler();
         RhapsodeXHTMLHandler xhtml = new RhapsodeXHTMLHandler(handler);

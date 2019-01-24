@@ -28,28 +28,18 @@
  */
 package org.rhapsode.lucene.search;
 
-import org.apache.lucene.document.Document;
-import org.rhapsode.util.LanguageDirection;
-import org.tallison.lucene.search.concordance.classic.DocMetadataExtractor;
-import org.tallison.lucene.search.concordance.classic.impl.SimpleDocMetadataExtractor;
-
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.lucene.document.Document;
+import org.rhapsode.util.LanguageDirection;
+import org.tallison.lucene.search.concordance.classic.DocMetadataExtractor;
+import org.tallison.lucene.search.concordance.classic.impl.SimpleDocMetadataExtractor;
+
 public class BaseSearchRequest {
 
-
-    public enum ActionType {
-        SEARCH,
-        NEXT, //ditto below
-        PREVIOUS,//actually only used by basic search...refactor
-        DESELECT_ALL,
-        SELECT_ALL,
-        ADD_SELECTED_TO_FAVORITES,
-        ADD_SELECTED_TO_IGNORE
-    }
 
     private StoredQuery storedQuery = null;
     private LanguageDirection languageDirection;
@@ -61,32 +51,9 @@ public class BaseSearchRequest {
     private boolean useIgnoreQuery = false;
     private boolean useFavoritesQuery = false;
 
-
-    /**
-     * This also builds the doc metadata extractor.  This has to be called by the
-     * builder!!!!
-     *
-     * @param fields
-     */
-    public void setFields(Set<String> fields) {
-        this.fields = Collections.unmodifiableSet(fields);
-        this.docMetadataExtractor = new SimpleDocMetadataExtractor(fields);
-    }
-
-    /**
-     * This needs to be set by the builder!!!
-     *
-     * @param complexQuery
-     */
-    public void setComplexQuery(ComplexQuery complexQuery) {
-        this.complexQuery = complexQuery;
-    }
-
-
     public Map<String, String> extractMetadata(Document d) {
         return docMetadataExtractor.extract(d);
     }
-
 
     public String getContentField() {
         return getStoredQuery().getDefaultField();
@@ -104,26 +71,44 @@ public class BaseSearchRequest {
         return storedQuery != null;
     }
 
-    public void setStoredQuery(StoredQuery sq) {
-        this.storedQuery = sq;
-    }
-
     public boolean hasQuery() {
         return complexQuery != null && complexQuery.getRetrievalQuery() != null;
     }
-
 
     public ComplexQuery getComplexQuery() {
         return complexQuery;
     }
 
+    /**
+     * This needs to be set by the builder!!!
+     *
+     * @param complexQuery
+     */
+    public void setComplexQuery(ComplexQuery complexQuery) {
+        this.complexQuery = complexQuery;
+    }
 
     public Set<String> getFields() {
         return docMetadataExtractor.getFieldSelector();
     }
 
+    /**
+     * This also builds the doc metadata extractor.  This has to be called by the
+     * builder!!!!
+     *
+     * @param fields
+     */
+    public void setFields(Set<String> fields) {
+        this.fields = Collections.unmodifiableSet(fields);
+        this.docMetadataExtractor = new SimpleDocMetadataExtractor(fields);
+    }
+
     public StoredQuery getStoredQuery() {
         return storedQuery;
+    }
+
+    public void setStoredQuery(StoredQuery sq) {
+        this.storedQuery = sq;
     }
 
     public DocMetadataExtractor getDocMetadataExtractor() {
@@ -142,20 +127,20 @@ public class BaseSearchRequest {
         this.selectedDocIds = selectedDocIds;
     }
 
-    public void setActionType(ActionType actionType) {
-        this.actionType = actionType;
-    }
-
     public ActionType getActionType() {
         return actionType;
     }
 
-    public void setUseIgnoreQuery(boolean useIgnoreQuery) {
-        this.useIgnoreQuery = useIgnoreQuery;
+    public void setActionType(ActionType actionType) {
+        this.actionType = actionType;
     }
 
     public boolean getUseIgnoreQuery() {
         return useIgnoreQuery;
+    }
+
+    public void setUseIgnoreQuery(boolean useIgnoreQuery) {
+        this.useIgnoreQuery = useIgnoreQuery;
     }
 
     public boolean getUseFavoritesQuery() {
@@ -164,6 +149,16 @@ public class BaseSearchRequest {
 
     public void setUseFavoritesQuery(boolean useFavoritesQuery) {
         this.useFavoritesQuery = useFavoritesQuery;
+    }
+
+    public enum ActionType {
+        SEARCH,
+        NEXT, //ditto below
+        PREVIOUS,//actually only used by basic search...refactor
+        DESELECT_ALL,
+        SELECT_ALL,
+        ADD_SELECTED_TO_FAVORITES,
+        ADD_SELECTED_TO_IGNORE
     }
 
 }

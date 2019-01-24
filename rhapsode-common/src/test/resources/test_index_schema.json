@@ -1,6 +1,4 @@
 {
-
-
   "field_mapper": {
     "_comment": "map fields from Tika to Lucene fields",
     "_comment": "f = from (Tika); t = to (Lucene)",
@@ -21,13 +19,12 @@
       {
         "f": "tika_batch_fs:relative_path",
         "t": "display_name",
-		 "capture": {
+        "capture": {
           "find": "([^\/\\\\]+)$",
           "replace": "$1",
-          "fail_policy":"store_as_is"
+          "fail_policy": "store_as_is"
         }
       },
-	  
       {
         "f": "resourceName",
         "t": "file_name"
@@ -40,27 +37,27 @@
         "f": "X-TIKA:digest:MD5",
         "t": "md5"
       },
-	  {
+      {
         "f": "Message:From-Email",
         "t": "from_email"
       },
-	  {
+      {
         "f": "Message:From-Name",
         "t": "from_name"
       },
-	  {
+      {
         "f": "Message:To-Email",
         "t": "to_email"
       },
-	  {
+      {
         "f": "Message:To-Display-Name",
         "t": "to_name"
       },
-	  {
+      {
         "f": "contains_md5",
         "t": "contains_md5"
       },
-	  {
+      {
         "f": "dc:creator",
         "t": "author"
       },
@@ -68,118 +65,112 @@
         "f": "dc:publisher",
         "t": "publisher"
       },
-      { "f":"extended-properties:Company",
-        "t":"company"
+      {
+        "f": "extended-properties:Company",
+        "t": "company"
       },
       {
-        "f":"extended-properties:Manager",
-        "t":"manager"
+        "f": "extended-properties:Manager",
+        "t": "manager"
       },
       {
-        "f":"dcterms:created",
-        "t":"created",
-        "capture": {
-          "find": "^(\\d\\d\\d\\d)-(\\d\\d)-(\\d\\d)T",
-          "replace": "$1$2$3",
-          "fail_policy": "skip"
-        }
-
-      },
-      {
-        "f":"dcterms:modified",
-        "t":"modified",
+        "f": "dcterms:created",
+        "t": "created",
         "capture": {
           "find": "^(\\d\\d\\d\\d)-(\\d\\d)-(\\d\\d)T",
           "replace": "$1$2$3",
           "fail_policy": "skip"
         }
       },
-
-	  
-	  {
-	    "f":"X-TIKA:embedded_resource_path",
-		"t":"embedded_path"
-	  },
+      {
+        "f": "dcterms:modified",
+        "t": "modified",
+        "capture": {
+          "find": "^(\\d\\d\\d\\d)-(\\d\\d)-(\\d\\d)T",
+          "replace": "$1$2$3",
+          "fail_policy": "skip"
+        }
+      },
+      {
+        "f": "X-TIKA:embedded_resource_path",
+        "t": "embedded_path"
+      },
       {
         "f": "X-TIKA:content",
         "t": "lang",
-        "lang_id":{
-          "min_chars" : -1,
-          "max_chars" : 10000,
-          "lang_only" : false
+        "lang_id": {
+          "min_chars": -1,
+          "max_chars": 10000,
+          "lang_only": false
         }
       }
     ]
   },
-
-  "system_fields" :{
-    "default_content_field" : "content",
-    "unique_file_key_field" : "_fid",
-    "unique_doc_key_field" : "_did",
-	"display_name_field" : "display_name",
-	"rel_path_field" : "rel_path",
-	"contains_digest_field" : "child_digests",
-    "attachment_offset_field" : "_ao",
-    "attachment_offset_sort_field" : "_aos",
-	"embedded_path_field" : "embedded_path"
+  "system_fields": {
+    "default_content_field": "content",
+    "unique_file_key_field": "_fid",
+    "unique_doc_key_field": "_did",
+    "display_name_field": "display_name",
+    "rel_path_field": "rel_path",
+    "contains_digest_field": "child_digests",
+    "attachment_offset_field": "_ao",
+    "attachment_offset_sort_field": "_aos",
+    "embedded_path_field": "embedded_path"
   },
-
-
-  "fields":{
-    "_fid":{
-      "type":"text",
-      "multivalued":"false",
-      "index_analyzer":"keyword"
+  "fields": {
+    "_fid": {
+      "type": "text",
+      "multivalued": "false",
+      "index_analyzer": "keyword"
     },
-    "_did":{
-      "type":"text",
-      "multivalued":"false",
-      "index_analyzer":"keyword"
+    "_did": {
+      "type": "text",
+      "multivalued": "false",
+      "index_analyzer": "keyword"
     },
-    "_ao":{
-      "type":"string",
-      "multivalued":false
+    "_ao": {
+      "type": "string",
+      "multivalued": false
     },
-	
-	"child_digests": {
-      "type":"text",
-      "index_analyzer":"keyword",
-      "multivalued":"true"
+    "child_digests": {
+      "type": "text",
+      "index_analyzer": "keyword",
+      "multivalued": "true"
     },
-	"embedded_path" : {
-      "type":"text",
-      "index_analyzer":"keyword",
-      "multivalued":"false"	
-	},
-    "content":{
-      "type":"text",
-      "multivalued":"true",
-      "index_analyzer":"persian_icu"
+    "embedded_path": {
+      "type": "text",
+      "index_analyzer": "keyword",
+      "multivalued": "false"
     },
-	"from_email":{
-      "type":"text",
-      "multivalued":"true",
-      "index_analyzer":"persian_icu"	
-	},
-	"from_name":{
-      "type":"text",
-      "multivalued":"true",
-      "index_analyzer":"persian_icu"	
-	},
-	"to_email":{
-      "type":"text",
-      "multivalued":"true",
-      "index_analyzer":"persian_icu"	
-	},
-	"to_name":{
-      "type":"text",
-      "multivalued":"true",
-      "index_analyzer":"persian_icu"	
-	},
-    "title":{
-      "type":"text",
-      "multivalued":"true",
-      "index_analyzer":"persian_icu"
+    "content": {
+      "type": "text",
+      "multivalued": "true",
+      "index_analyzer": "persian_icu"
+    },
+    "from_email": {
+      "type": "text",
+      "multivalued": "true",
+      "index_analyzer": "persian_icu"
+    },
+    "from_name": {
+      "type": "text",
+      "multivalued": "true",
+      "index_analyzer": "persian_icu"
+    },
+    "to_email": {
+      "type": "text",
+      "multivalued": "true",
+      "index_analyzer": "persian_icu"
+    },
+    "to_name": {
+      "type": "text",
+      "multivalued": "true",
+      "index_analyzer": "persian_icu"
+    },
+    "title": {
+      "type": "text",
+      "multivalued": "true",
+      "index_analyzer": "persian_icu"
     },
     "author": {
       "type": "text",
@@ -212,21 +203,19 @@
       "index_analyzer": "keyword"
     },
     "rel_path": {
-      "type":"text",
-      "index_analyzer":"persian_icu",
-      "multivalued":"false"
+      "type": "text",
+      "index_analyzer": "persian_icu",
+      "multivalued": "false"
     },
-	
     "file_name": {
-      "type":"text",
-      "index_analyzer":"persian_icu",
-      "multivalued":"false"
+      "type": "text",
+      "index_analyzer": "persian_icu",
+      "multivalued": "false"
     },
-
     "md5": {
-      "type":"text",
-      "index_analyzer":"persian_icu",
-      "multivalued":"false"
+      "type": "text",
+      "index_analyzer": "persian_icu",
+      "multivalued": "false"
     },
     "contains_md5": {
       "type": "text",
@@ -234,31 +223,25 @@
       "multivalued": "true"
     },
     "mime": {
-      "type":"text",
-      "index_analyzer":"persian_icu",
-      "multivalued":"false"
+      "type": "text",
+      "index_analyzer": "persian_icu",
+      "multivalued": "false"
     },
-
-
     "display_name": {
       "type": "string",
       "multivalued": "false"
     },
-
     "lang": {
-      "type":"text",
-      "index_analyzer":"persian_icu",
-      "multivalued":"false"
+      "type": "text",
+      "index_analyzer": "persian_icu",
+      "multivalued": "false"
     },
-
     "langs": {
-      "type":"text",
-      "index_analyzer":"persian_icu",
-      "multivalued":"true"
+      "type": "text",
+      "index_analyzer": "persian_icu",
+      "multivalued": "true"
     }
-
   },
-
   "analyzers": {
     "persian_icu": {
       "charfilters": [

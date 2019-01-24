@@ -29,12 +29,12 @@
 
 package org.rhapsode.lucene.schema;
 
+import java.io.IOException;
+
 import com.google.common.base.Optional;
 import com.optimaize.langdetect.i18n.LdLocale;
 import org.apache.commons.lang3.StringUtils;
 import org.rhapsode.lucene.utils.LanguageIDWrapper;
-
-import java.io.IOException;
 
 
 public class LangIdMapper extends IndivFieldMapper {

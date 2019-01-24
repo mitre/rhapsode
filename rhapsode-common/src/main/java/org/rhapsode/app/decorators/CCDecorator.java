@@ -29,6 +29,10 @@
 
 package org.rhapsode.app.decorators;
 
+import java.text.DecimalFormat;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 import org.rhapsode.app.contants.C;
 import org.rhapsode.app.contants.H;
 import org.rhapsode.lucene.search.concordance.ConcordanceSearchRequest;
@@ -36,10 +40,6 @@ import org.tallison.lucene.search.concordance.classic.AbstractConcordanceWindowC
 import org.tallison.lucene.search.concordance.classic.ConcordanceWindow;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
-
-import java.text.DecimalFormat;
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 /**
  * Decorator for joint Concordance/Cooccurrence items

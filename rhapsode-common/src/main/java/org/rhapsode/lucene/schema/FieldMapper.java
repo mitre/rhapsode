@@ -28,18 +28,17 @@
  */
 package org.rhapsode.lucene.schema;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
-import com.google.gson.JsonPrimitive;
-
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
 
 public class FieldMapper {
 
@@ -159,12 +158,12 @@ public class FieldMapper {
         return mappers.keySet();
     }
 
-    public void setIgnoreCase(boolean v) {
-        this.ignoreCase = v;
-    }
-
     public boolean getIgnoreCase() {
         return ignoreCase;
+    }
+
+    public void setIgnoreCase(boolean v) {
+        this.ignoreCase = v;
     }
 
     public void clear() {

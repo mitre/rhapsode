@@ -29,15 +29,16 @@
 
 package org.rhapsode.servlet.session;
 
-import org.junit.After;
-import org.junit.Before;
-
 import java.sql.Connection;
 import java.sql.DriverManager;
+
+import org.junit.After;
+import org.junit.Before;
 
 
 public class ServletSessionTestBase {
     Connection connection;
+
     @Before
     public void init() throws Exception {
         connection = DriverManager.getConnection("jdbc:h2:mem:dbtest1");

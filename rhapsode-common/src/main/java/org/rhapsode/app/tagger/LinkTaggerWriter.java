@@ -29,6 +29,23 @@
 
 package org.rhapsode.app.tagger;
 
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.lucene.document.Document;
 import org.apache.poi.common.usermodel.HyperlinkType;
@@ -58,23 +75,6 @@ import org.rhapsode.lucene.search.ComplexQuery;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 
 public class LinkTaggerWriter {
 
@@ -87,10 +87,10 @@ public class LinkTaggerWriter {
     final DataFormat dataFormat;
     final CellStyle floatStyle;
     final CreationHelper creationHelper;
-    private final Set<String> linkDisplayField;
-    int links = 0;
     final TaggerRequest request;
     final RhapsodeSearcherApp searcherApp;
+    private final Set<String> linkDisplayField;
+    int links = 0;
     boolean alreadyCalled = false;
 
     public LinkTaggerWriter(TaggerRequest request, RhapsodeSearcherApp searcherApp) {

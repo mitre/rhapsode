@@ -29,16 +29,6 @@
 
 package org.rhapsode.app.session;
 
-import org.apache.commons.lang3.StringUtils;
-import org.apache.lucene.queryparser.classic.ParseException;
-import org.rhapsode.app.RhapsodeSearcherApp;
-import org.rhapsode.app.utils.DBUtils;
-import org.rhapsode.lucene.search.ComplexQueryBuilder;
-import org.rhapsode.lucene.search.SQField;
-import org.rhapsode.lucene.search.StoredQuery;
-import org.rhapsode.lucene.search.StoredQueryBuilder;
-import org.rhapsode.lucene.utils.SqlUtil;
-
 import java.io.Closeable;
 import java.io.IOException;
 import java.sql.Connection;
@@ -51,6 +41,16 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import org.apache.commons.lang3.StringUtils;
+import org.apache.lucene.queryparser.classic.ParseException;
+import org.rhapsode.app.RhapsodeSearcherApp;
+import org.rhapsode.app.utils.DBUtils;
+import org.rhapsode.lucene.search.ComplexQueryBuilder;
+import org.rhapsode.lucene.search.SQField;
+import org.rhapsode.lucene.search.StoredQuery;
+import org.rhapsode.lucene.search.StoredQueryBuilder;
+import org.rhapsode.lucene.utils.SqlUtil;
 
 public class DBStoredQueryManager implements Closeable {
 
@@ -68,6 +68,7 @@ public class DBStoredQueryManager implements Closeable {
     //10 notes
 
     final static ColInfo[] COL_INFO_LIST = new ColInfo[SQField.values().length];
+    private final static AtomicInteger NUM_RECORDS = new AtomicInteger(-1);
 
     static {
         int i = 0;
@@ -81,7 +82,6 @@ public class DBStoredQueryManager implements Closeable {
         }
     }
 
-
     private final Connection connection;
     private final PreparedStatement preparedLookup;
     private final PreparedStatement preparedInsert;
@@ -90,32 +90,7 @@ public class DBStoredQueryManager implements Closeable {
     private final PreparedStatement prepareMainQueryExceptionMsg;
     private final PreparedStatement prepareFilterQueryExceptionMsg;
     private final PreparedStatement prepareDeleteSelectedQuery;
-
     private final TableDef storedQueryTable;
-
-    private final static AtomicInteger NUM_RECORDS = new AtomicInteger(-1);
-
-    public static DBStoredQueryManager load(Connection connection) throws IOException, SQLException {
-        return new DBStoredQueryManager(connection);
-    }
-
-    static ColInfo build(SQField sqField) {
-        return new ColInfo(
-                sqField.getDbName(),
-                sqField.getType(),
-                sqField.getMaxLength()
-        );
-    }
-
-    public static ColInfo build(SQField sqField, String constraints) {
-        return new ColInfo(
-                sqField.getDbName(),
-                sqField.getType(),
-                sqField.getMaxLength(),
-                constraints
-        );
-    }
-
 
     private DBStoredQueryManager(Connection connection) throws SQLException {
         this.connection = connection;
@@ -181,6 +156,27 @@ public class DBStoredQueryManager implements Closeable {
                 connection.prepareStatement(sb.toString());
 
         resetMax();
+    }
+
+    public static DBStoredQueryManager load(Connection connection) throws IOException, SQLException {
+        return new DBStoredQueryManager(connection);
+    }
+
+    static ColInfo build(SQField sqField) {
+        return new ColInfo(
+                sqField.getDbName(),
+                sqField.getType(),
+                sqField.getMaxLength()
+        );
+    }
+
+    public static ColInfo build(SQField sqField, String constraints) {
+        return new ColInfo(
+                sqField.getDbName(),
+                sqField.getType(),
+                sqField.getMaxLength(),
+                constraints
+        );
     }
 
     public synchronized void resetMax() throws SQLException {

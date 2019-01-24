@@ -5,13 +5,11 @@
     "rel_path_field": "rel_path",
     "contains_digest_field": "contains_md5",
     "default_content_field": "content",
-    "attachment_offset_field" : "_ao",
-    "attachment_offset_sort_field" : "_aos"
+    "attachment_offset_field": "_ao",
+    "attachment_offset_sort_field": "_aos"
   },
-
   "field_mapper": {
   },
-
   "fields": {
     "_fid": {
       "type": "text",
@@ -19,7 +17,6 @@
       "index_analyzer": "string"
     }
   },
-
   "analyzers": {
     "text": {
       "charfilters": [

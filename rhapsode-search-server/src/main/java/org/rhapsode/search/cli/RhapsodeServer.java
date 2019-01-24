@@ -61,6 +61,8 @@ import org.rhapsode.app.utils.MyMimeTypes;
 
 public class RhapsodeServer {
 
+    final static String LOCAL_HOST = "127.0.0.1";
+    final static int DEFAULT_PORT = 8092;
     static Options OPTIONS = new Options()
             .addOption(Option.builder("p")
                     .longOpt("port")
@@ -86,13 +88,52 @@ public class RhapsodeServer {
                     .desc("search_config.json file")
                     .longOpt("searchConfig")
                     .build()
-    );
-
-    final static String LOCAL_HOST = "127.0.0.1";
-    final static int DEFAULT_PORT = 8092;
+            );
 
     public static String getVersion() {
         return "Rhapsode Prototype, v0.4.0-SNAPSHOT";
+    }
+
+    public static void main(String[] args) throws Exception {
+        CommandLineParser commandlineParser = new DefaultParser();
+        CommandLine commandLine = commandlineParser.parse(OPTIONS, args);
+        Path propsFile = null;
+        if (commandLine.hasOption("s")) {
+            propsFile = Paths.get(commandLine.getOptionValue("s"));
+        } else {
+            propsFile = Paths.get("resources/config/search_config.json");
+        }
+
+        if (!Files.isRegularFile(propsFile)) {
+            throw new RuntimeException("Couldn't find search_config.json file: " + propsFile.toAbsolutePath().toString());
+        }
+        int port = DEFAULT_PORT;
+        if (commandLine.hasOption("p")) {
+            port = Integer.parseInt(commandLine.getOptionValue("p"));
+        }
+
+        String host = null;
+        if (commandLine.hasOption("h")) {
+            host = commandLine.getOptionValue("h");
+        }
+
+        Path collectionPath = Paths.get(commandLine.getOptionValue("c"));
+        if (!Files.isDirectory(collectionPath)) {
+            throw new RuntimeException("Couldn't find collection: " + collectionPath.toAbsolutePath().toString());
+        }
+
+        RhapsodeServer server = new RhapsodeServer();
+        try {
+            server.execute(propsFile, port, host, collectionPath);
+        } catch (Exception e) {
+            System.out.println(e.toString());
+            e.printStackTrace();
+            try {
+                Thread.sleep(120000);
+            } catch (InterruptedException e2) {
+                System.err.println("Wow, things are really going wrong today.");
+            }
+        }
     }
 
     public void execute(Path propsFile, int port, String host, Path collectionPath) throws Exception {
@@ -116,7 +157,7 @@ public class RhapsodeServer {
         if (host != null) {
             connector.setHost(host);
         }
-        server.setConnectors(new Connector[]{ connector});
+        server.setConnectors(new Connector[]{connector});
 
         ContextHostWrapper handlerWrapper = new ContextHostWrapper();
 
@@ -168,7 +209,7 @@ public class RhapsodeServer {
 
 
         HandlerList handlers = new HandlerList();
-        handlers.setHandlers(new Handler[] {
+        handlers.setHandlers(new Handler[]{
                 concordanceHandler,
                 cooccurHandler,
                 variantTermCounterHandler,
@@ -186,49 +227,7 @@ public class RhapsodeServer {
         String hostString = (host == null) ? "localhost" : host;
         System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
         System.out.println("The search server has been successfully started.");
-        System.out.println("Open a browser and navigate to:\nhttp://"+hostString+":" + port + "/rhapsode/index.html");
+        System.out.println("Open a browser and navigate to:\nhttp://" + hostString + ":" + port + "/rhapsode/index.html");
 
-    }
-
-    public static void main(String[] args) throws Exception {
-        CommandLineParser commandlineParser = new DefaultParser();
-        CommandLine commandLine = commandlineParser.parse(OPTIONS, args);
-        Path propsFile = null;
-        if (commandLine.hasOption("s")) {
-            propsFile = Paths.get(commandLine.getOptionValue("s"));
-        } else {
-            propsFile = Paths.get("resources/config/search_config.json");
-        }
-
-        if (! Files.isRegularFile(propsFile)) {
-            throw new RuntimeException("Couldn't find search_config.json file: "+propsFile.toAbsolutePath().toString());
-        }
-        int port = DEFAULT_PORT;
-        if (commandLine.hasOption("p")) {
-            port = Integer.parseInt(commandLine.getOptionValue("p"));
-        }
-
-        String host = null;
-        if (commandLine.hasOption("h")) {
-            host = commandLine.getOptionValue("h");
-        }
-
-        Path collectionPath = Paths.get(commandLine.getOptionValue("c"));
-        if (!Files.isDirectory(collectionPath)) {
-            throw new RuntimeException("Couldn't find collection: "+collectionPath.toAbsolutePath().toString());
-        }
-
-        RhapsodeServer server = new RhapsodeServer();
-        try {
-            server.execute(propsFile, port, host, collectionPath);
-        } catch (Exception e) {
-            System.out.println(e.toString());
-            e.printStackTrace();
-            try {
-                Thread.sleep(120000);
-            } catch (InterruptedException e2) {
-                System.err.println("Wow, things are really going wrong today.");
-            }
-        }
     }
 }

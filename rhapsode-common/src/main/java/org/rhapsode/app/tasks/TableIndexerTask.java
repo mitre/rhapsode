@@ -29,6 +29,11 @@
 
 package org.rhapsode.app.tasks;
 
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Date;
+
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.store.Directory;
@@ -45,11 +50,6 @@ import org.rhapsode.indexer.RhapsodeIndexerConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Date;
-
 public class TableIndexerTask extends RhapsodeTask {
 
     private static final Logger LOG = LoggerFactory.getLogger(TableIndexerTask.class);
@@ -58,13 +58,12 @@ public class TableIndexerTask extends RhapsodeTask {
     private final RhapsodeCollection rc;
     private final Path inputTableFile;
     private final TableFileRequest tableFileRequest;
-    private long started;
     private final Directory luceneIndexDirectory;
     private final IndexWriter indexWriter;
     private final RowReaderIndexer perRowIndexer;
     private final String worksheetName;
-
     RhapsodeTaskStatus finishedStatus = null;
+    private long started;
 
     public TableIndexerTask(RhapsodeCollection rc, Path inputTableFile, TableFileRequest tableFileRequest)
             throws IOException {

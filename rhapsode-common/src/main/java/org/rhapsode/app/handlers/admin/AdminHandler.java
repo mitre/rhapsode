@@ -29,6 +29,9 @@
 
 package org.rhapsode.app.handlers.admin;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.rhapsode.app.contants.CSS;
@@ -37,14 +40,25 @@ import org.rhapsode.app.decorators.RhapsodeXHTMLHandler;
 import org.rhapsode.app.handlers.AbstractRhapsodeHandler;
 import org.xml.sax.SAXException;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 public abstract class AdminHandler extends AbstractRhapsodeHandler {
     private static final Pattern ALPHA_NUMERIC_PATTERN = Pattern.compile("\\A[a-zA-Z0-9_]+\\Z");
 
     public AdminHandler(String toolName) {
         super(toolName);
+    }
+
+    protected static String testBlank(String name, String value) throws ParseException {
+        if (StringUtils.isBlank(value)) {
+            throw new ParseException("Must specify a " + name);
+        }
+        return value;
+    }
+
+    protected static void testAlphanumeric(String name) throws ParseException {
+        Matcher matcher = ALPHA_NUMERIC_PATTERN.matcher(name);
+        if (!matcher.matches()) {
+            throw new ParseException("Names may contain only ASCII alpha numerics and the '_' character");
+        }
     }
 
     @Override
@@ -197,20 +211,6 @@ public abstract class AdminHandler extends AbstractRhapsodeHandler {
         xhtml.element(H.H2, getToolName());
         xhtml.startElement(H.P);
         xhtml.endElement(H.P);
-    }
-
-    protected static String testBlank(String name, String value) throws ParseException {
-        if (StringUtils.isBlank(value)) {
-            throw new ParseException("Must specify a " + name);
-        }
-        return value;
-    }
-
-    protected static void testAlphanumeric(String name) throws ParseException {
-        Matcher matcher = ALPHA_NUMERIC_PATTERN.matcher(name);
-        if (!matcher.matches()) {
-            throw new ParseException("Names may contain only ASCII alpha numerics and the '_' character");
-        }
     }
 
 }

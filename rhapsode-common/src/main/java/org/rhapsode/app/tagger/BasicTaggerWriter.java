@@ -29,11 +29,6 @@
 
 package org.rhapsode.app.tagger;
 
-import org.apache.commons.lang3.StringUtils;
-import org.apache.lucene.document.Document;
-import org.apache.lucene.search.IndexSearcher;
-import org.rhapsode.app.io.XLSXTableWriter;
-
 import java.io.IOException;
 import java.nio.file.Path;
 import java.sql.Connection;
@@ -44,6 +39,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.apache.commons.lang3.StringUtils;
+import org.apache.lucene.document.Document;
+import org.apache.lucene.search.IndexSearcher;
+import org.rhapsode.app.io.XLSXTableWriter;
 
 
 public class BasicTaggerWriter {

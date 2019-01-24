@@ -29,6 +29,17 @@
 
 package org.rhapsode.app.handlers.search;
 
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import java.io.IOException;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.queryparser.classic.ParseException;
@@ -42,16 +53,6 @@ import org.rhapsode.app.decorators.RhapsodeXHTMLHandler;
 import org.rhapsode.util.LanguageDirection;
 import org.rhapsode.util.UserLogger;
 import org.xml.sax.SAXException;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 
 
 public class Word2VecHandler extends AbstractSearchHandler {
@@ -122,8 +123,8 @@ public class Word2VecHandler extends AbstractSearchHandler {
                 }
             }
 
-            if (! app.getRhapsodeCollection().hasWord2Vec()) {
-                errorMsg = "Couldn't find w2v model here: "+app.getRhapsodeCollection()
+            if (!app.getRhapsodeCollection().hasWord2Vec()) {
+                errorMsg = "Couldn't find w2v model here: " + app.getRhapsodeCollection()
                         .getCollectionPath().resolve(app.getRhapsodeCollection().WORD_2_VEC_FILE);
             }
 
@@ -171,44 +172,6 @@ public class Word2VecHandler extends AbstractSearchHandler {
         return results;
     }
 
-    private class Word2VecResults {
-        List<Word2VecResult> results = new ArrayList<>();
-
-        void add(Word2VecResult result) {
-            results.add(result);
-        }
-    }
-
-    private static class Word2VecResult {
-        private final String term;
-        private final Double similarity;
-        private final long docFreq;
-        private final long termFreq;
-
-        public Word2VecResult(String term, Double similarity, long docFreq, long termFreq) {
-            this.term = term;
-            this.similarity = similarity;
-            this.docFreq = docFreq;
-            this.termFreq = termFreq;
-        }
-
-        public String getTerm() {
-            return term;
-        }
-
-        public Double getSimilarity() {
-            return similarity;
-        }
-
-        public long getDocFreq() {
-            return docFreq;
-        }
-
-        public long getTermFreq() {
-            return termFreq;
-        }
-    }
-
     private void addW2VQueryParameters(Word2VecRequest searchRequest, RhapsodeSearcherApp searcherApp, RhapsodeXHTMLHandler xhtml) throws SAXException {
         String mainQueryString = searchRequest.getPositivesString();
         String negativeQueryString = searchRequest.getNegativesString();
@@ -230,7 +193,6 @@ public class Word2VecHandler extends AbstractSearchHandler {
         xhtml.endElement(H.INPUT);
         xhtml.br();
     }
-
 
     private void writeResults(Word2VecRequest request, Word2VecResults results,
                               RhapsodeXHTMLHandler xhtml) throws SAXException {
@@ -289,5 +251,43 @@ public class Word2VecHandler extends AbstractSearchHandler {
         xhtml.br();
         xhtml.br();
 
+    }
+
+    private static class Word2VecResult {
+        private final String term;
+        private final Double similarity;
+        private final long docFreq;
+        private final long termFreq;
+
+        public Word2VecResult(String term, Double similarity, long docFreq, long termFreq) {
+            this.term = term;
+            this.similarity = similarity;
+            this.docFreq = docFreq;
+            this.termFreq = termFreq;
+        }
+
+        public String getTerm() {
+            return term;
+        }
+
+        public Double getSimilarity() {
+            return similarity;
+        }
+
+        public long getDocFreq() {
+            return docFreq;
+        }
+
+        public long getTermFreq() {
+            return termFreq;
+        }
+    }
+
+    private class Word2VecResults {
+        List<Word2VecResult> results = new ArrayList<>();
+
+        void add(Word2VecResult result) {
+            results.add(result);
+        }
     }
 }

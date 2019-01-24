@@ -34,20 +34,20 @@ public class BaseSearchResult {
     private Map<String, String> metadata = null;
     private int luceneDocId = -1;
 
-    public void setMetadata(Map<String, String> metadata) {
-        this.metadata = metadata;
-    }
-
     public Map<String, String> getMetadata() {
         return metadata;
     }
 
-    public void setLuceneDocId(int luceneDocId) {
-        this.luceneDocId = luceneDocId;
+    public void setMetadata(Map<String, String> metadata) {
+        this.metadata = metadata;
     }
 
     public int getLuceneDocId() {
         return luceneDocId;
+    }
+
+    public void setLuceneDocId(int luceneDocId) {
+        this.luceneDocId = luceneDocId;
     }
 
 }

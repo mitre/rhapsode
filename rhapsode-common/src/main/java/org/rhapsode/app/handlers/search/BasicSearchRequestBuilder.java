@@ -29,6 +29,12 @@
 
 package org.rhapsode.app.handlers.search;
 
+import javax.servlet.http.HttpServletRequest;
+
+import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
+
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.rhapsode.app.RhapsodeSearcherApp;
 import org.rhapsode.app.contants.C;
@@ -37,11 +43,6 @@ import org.rhapsode.lucene.search.BaseSearchRequest;
 import org.rhapsode.lucene.search.basic.BasicSearchRequest;
 import org.rhapsode.lucene.search.basic.PagingDirection;
 import org.rhapsode.util.ParamUtil;
-
-import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
-import java.util.HashSet;
-import java.util.Set;
 
 public class BasicSearchRequestBuilder extends BaseRequestBuilder {
 

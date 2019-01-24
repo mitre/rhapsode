@@ -31,34 +31,13 @@ package org.rhapsode.app.session;
 abstract public class DynamicParameter<T> {
 
 
-    public enum PREFIX {
-        COMMON("Common Search"),//common to most search features
-        BS("Basic Search"),//basic_search
-        CONC("Concordance Search"), //concordance search
-        COOCCUR("Co-occurrence Search"),
-        REPORT_WRITER("Report Writer"),
-        STORED_QUERY("Stored Query Admin"),
-        TABLE_FILE_INDEXER("Table File Indexer");
-
-        private final String displayName;
-
-        PREFIX(String displayName) {
-            this.displayName = displayName;
-        }
-
-        public String getDisplayName() {
-            return displayName;
-        }
-    }
+    private final String displayName;
 
     ;
-
-    private final String displayName;
     private final PREFIX prefix;
     private final String name;
     private final T defaultValue;
     private final String fullName;
-
     public DynamicParameter(String displayName,
                             PREFIX prefix, String name, T defaultValue) {
         this.displayName = displayName;
@@ -71,7 +50,6 @@ abstract public class DynamicParameter<T> {
     public String getName() {
         return name;
     }
-
 
     public String getFullName() {
         return fullName;
@@ -116,6 +94,26 @@ abstract public class DynamicParameter<T> {
         result = 31 * result + (defaultValue != null ? defaultValue.hashCode() : 0);
         result = 31 * result + (fullName != null ? fullName.hashCode() : 0);
         return result;
+    }
+
+    public enum PREFIX {
+        COMMON("Common Search"),//common to most search features
+        BS("Basic Search"),//basic_search
+        CONC("Concordance Search"), //concordance search
+        COOCCUR("Co-occurrence Search"),
+        REPORT_WRITER("Report Writer"),
+        STORED_QUERY("Stored Query Admin"),
+        TABLE_FILE_INDEXER("Table File Indexer");
+
+        private final String displayName;
+
+        PREFIX(String displayName) {
+            this.displayName = displayName;
+        }
+
+        public String getDisplayName() {
+            return displayName;
+        }
     }
 
 

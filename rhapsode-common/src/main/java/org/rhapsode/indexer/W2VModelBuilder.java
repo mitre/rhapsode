@@ -28,26 +28,6 @@
  */
 package org.rhapsode.indexer;
 
-import org.apache.lucene.analysis.Analyzer;
-import org.apache.lucene.analysis.CharArraySet;
-import org.apache.lucene.analysis.TokenStream;
-import org.apache.lucene.analysis.standard.StandardAnalyzer;
-import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
-import org.apache.lucene.document.Document;
-import org.apache.lucene.index.IndexReader;
-import org.apache.lucene.index.MultiFields;
-import org.apache.lucene.util.Bits;
-import org.deeplearning4j.models.embeddings.loader.WordVectorSerializer;
-import org.deeplearning4j.models.word2vec.Word2Vec;
-import org.deeplearning4j.text.sentenceiterator.LineSentenceIterator;
-import org.deeplearning4j.text.sentenceiterator.SentenceIterator;
-import org.deeplearning4j.text.sentenceiterator.SentencePreProcessor;
-import org.deeplearning4j.text.tokenization.tokenizer.preprocessor.CommonPreprocessor;
-import org.deeplearning4j.text.tokenization.tokenizerfactory.DefaultTokenizerFactory;
-import org.deeplearning4j.text.tokenization.tokenizerfactory.TokenizerFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -59,6 +39,23 @@ import java.util.Locale;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.analysis.TokenStream;
+import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
+import org.apache.lucene.document.Document;
+import org.apache.lucene.index.IndexReader;
+import org.apache.lucene.index.MultiFields;
+import org.apache.lucene.util.Bits;
+import org.deeplearning4j.models.embeddings.loader.WordVectorSerializer;
+import org.deeplearning4j.models.word2vec.Word2Vec;
+import org.deeplearning4j.text.sentenceiterator.SentenceIterator;
+import org.deeplearning4j.text.sentenceiterator.SentencePreProcessor;
+import org.deeplearning4j.text.tokenization.tokenizer.preprocessor.CommonPreprocessor;
+import org.deeplearning4j.text.tokenization.tokenizerfactory.DefaultTokenizerFactory;
+import org.deeplearning4j.text.tokenization.tokenizerfactory.TokenizerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class W2VModelBuilder {
 
@@ -89,17 +86,16 @@ public class W2VModelBuilder {
     }
 
     private class IndexReaderIterator implements SentenceIterator {
-        Matcher sentMatcher = Pattern.compile("(?i)([a-z]{2,})([?!;\\.])").matcher("");
-
-        List<String> sents = new LinkedList<>();
-        int docId = 0;
         final int maxDoc;
         final IndexReader reader;
         final Set<String> fieldsToLoad;
         final String field;
         final Bits liveDocs;
-        private Set<String> commonAbbrevs = new HashSet<>();
         private final Analyzer analyzer;
+        Matcher sentMatcher = Pattern.compile("(?i)([a-z]{2,})([?!;\\.])").matcher("");
+        List<String> sents = new LinkedList<>();
+        int docId = 0;
+        private Set<String> commonAbbrevs = new HashSet<>();
 
         public IndexReaderIterator(IndexReader reader, String field, Analyzer analyzer) {
 
@@ -150,7 +146,7 @@ public class W2VModelBuilder {
                 docId = -1;
                 return;
             }
-            LOG.info("working on "+docId);
+            LOG.info("working on " + docId);
             Document d = reader.document(docId, fieldsToLoad);
             String content = d.get(field);
             if (content == null) {
@@ -196,24 +192,24 @@ public class W2VModelBuilder {
             List<String> ret = new ArrayList<>();
             try {
                 ts.reset();
-            CharTermAttribute charTermAttribute = ts.getAttribute(CharTermAttribute.class);
-            int tokens = 0;
-            while (ts.incrementToken()) {
-                if (tokens > MAX_TOKENS_PER_SENT) {
-                    ret.add(sb.toString().trim());
-                    sb.setLength(0);
-                    tokens = 0;
+                CharTermAttribute charTermAttribute = ts.getAttribute(CharTermAttribute.class);
+                int tokens = 0;
+                while (ts.incrementToken()) {
+                    if (tokens > MAX_TOKENS_PER_SENT) {
+                        ret.add(sb.toString().trim());
+                        sb.setLength(0);
+                        tokens = 0;
+                    }
+                    sb.append(charTermAttribute.toString());
+                    sb.append(" ");
+                    tokens++;
                 }
-                sb.append(charTermAttribute.toString());
-                sb.append(" ");
-                tokens++;
-            }
             } finally {
                 ts.close();
                 ts.end();
             }
             String last = sb.toString().trim();
-            if (! last.isEmpty()) {
+            if (!last.isEmpty()) {
                 ret.add(last);
             }
             return ret;

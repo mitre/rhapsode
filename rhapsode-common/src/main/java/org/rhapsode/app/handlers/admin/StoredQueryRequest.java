@@ -29,37 +29,27 @@
 
 package org.rhapsode.app.handlers.admin;
 
+import javax.servlet.http.HttpServletRequest;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 import org.apache.commons.lang3.StringUtils;
 import org.rhapsode.app.contants.C;
 import org.rhapsode.app.utils.StoredQCUtils;
 import org.rhapsode.lucene.search.SQField;
 import org.rhapsode.lucene.search.StoredQuery;
 
-import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
 public class StoredQueryRequest {
 
 
-    enum ActionType {
-        DEFAULT,
-        ADD_QUERY,
-        ADD_DIALOGUE,
-        LOAD_STORED_QUERIES_DIALOGUE,
-        LOAD_STORED_QUERIES,
-        DELETE_ALL_STORED_QUERIES,
-        SELECT_QUERIES_FOR_UPDATE,
-        UPDATE_SELECTED_QUERY_DIALOGUE,
-        UPDATE_SELECTED_QUERY,
-        SAVE_DIALOGUE,
-        SAVE_QUERIES,
-        UPDATE_DOC_COUNTS,
-        DELETE_SELECTED_QUERIES;
-    }
+    private Map<SQField, String> query;
 
     ;
+    private ActionType t;
+    private String fileToLoad;
+    private List<Integer> selectedQueries = new ArrayList<>();
 
     public static StoredQueryRequest build(HttpServletRequest httpServletRequest) {
         StoredQueryRequest r = new StoredQueryRequest();
@@ -125,17 +115,16 @@ public class StoredQueryRequest {
         return StoredQuery.RETRIEVE_ALL_HITS;
     }
 
-    private Map<SQField, String> query;
-    private ActionType t;
-    private String fileToLoad;
-    private List<Integer> selectedQueries = new ArrayList<>();
-
     public ActionType getActionType() {
         return t;
     }
 
     public Map<SQField, String> getQuery() {
         return query;
+    }
+
+    public void setQuery(Map<SQField, String> query) {
+        this.query = query;
     }
 
     public String getFileToLoad() {
@@ -146,8 +135,20 @@ public class StoredQueryRequest {
         return selectedQueries;
     }
 
-    public void setQuery(Map<SQField, String> query) {
-        this.query = query;
+    enum ActionType {
+        DEFAULT,
+        ADD_QUERY,
+        ADD_DIALOGUE,
+        LOAD_STORED_QUERIES_DIALOGUE,
+        LOAD_STORED_QUERIES,
+        DELETE_ALL_STORED_QUERIES,
+        SELECT_QUERIES_FOR_UPDATE,
+        UPDATE_SELECTED_QUERY_DIALOGUE,
+        UPDATE_SELECTED_QUERY,
+        SAVE_DIALOGUE,
+        SAVE_QUERIES,
+        UPDATE_DOC_COUNTS,
+        DELETE_SELECTED_QUERIES;
     }
 
 }

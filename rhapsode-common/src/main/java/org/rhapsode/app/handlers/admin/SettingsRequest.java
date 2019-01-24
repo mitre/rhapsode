@@ -29,6 +29,16 @@
 
 package org.rhapsode.app.handlers.admin;
 
+import javax.servlet.http.HttpServletRequest;
+
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
+
 import org.apache.commons.lang3.StringUtils;
 import org.rhapsode.app.RhapsodeSearcherApp;
 import org.rhapsode.app.contants.C;
@@ -40,26 +50,13 @@ import org.rhapsode.util.LanguageDirection;
 import org.rhapsode.util.MapUtil;
 import org.rhapsode.util.ParamUtil;
 
-import javax.servlet.http.HttpServletRequest;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
-
 public class SettingsRequest {
 
 
-    public enum ACTION_TYPE {
-        UPDATE,
-        VIEW
-    }
-
     static final String SETTINGS_REQUEST_NS = "sr:";
     static final String LIST_ITEM = SETTINGS_REQUEST_NS + "li:";
-
+    ACTION_TYPE actionType;
+    private Map<DynamicParameter, String> settings;
 
     public static SettingsRequest build(RhapsodeSearcherApp searcherApp, HttpServletRequest
             httpServletRequest) {
@@ -185,16 +182,17 @@ public class SettingsRequest {
         return tag.substring(SETTINGS_REQUEST_NS.length());
     }
 
-
-    ACTION_TYPE actionType;
-    private Map<DynamicParameter, String> settings;
-
     public ACTION_TYPE getActionType() {
         return actionType;
     }
 
     public Map<DynamicParameter, String> getSettings() {
         return settings;
+    }
+
+    public enum ACTION_TYPE {
+        UPDATE,
+        VIEW
     }
 
 }

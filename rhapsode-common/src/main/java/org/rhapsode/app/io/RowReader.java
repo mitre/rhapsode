@@ -39,11 +39,11 @@ public abstract class RowReader {
 
     public abstract boolean process(Map<String, String> data) throws IOException;
 
-    public void setHeaders(List<String> headers) {
-        this.headers = headers;
-    }
-
     public List<String> getHeaders() {
         return headers;
+    }
+
+    public void setHeaders(List<String> headers) {
+        this.headers = headers;
     }
 }

@@ -29,6 +29,15 @@
 
 package org.rhapsode.app.handlers.search;
 
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import java.io.IOException;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.util.List;
+
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.eclipse.jetty.server.Request;
@@ -50,15 +59,6 @@ import org.tallison.lucene.search.concordance.windowvisitor.ConcordanceArrayWind
 import org.tallison.lucene.search.concordance.windowvisitor.CooccurVisitor;
 import org.tallison.lucene.search.concordance.windowvisitor.WGrammer;
 import org.xml.sax.SAXException;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
-import java.util.Date;
-import java.util.List;
 
 public class CooccurHandler extends AbstractSearchHandler {
     private static final String TOOL_NAME = "Concordance Co-Occurrence Counter";

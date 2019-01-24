@@ -29,18 +29,15 @@
 
 package org.rhapsode.servlet.session;
 
-import org.apache.commons.lang3.tuple.Pair;
-import org.junit.Test;
-import org.rhapsode.app.session.CollectionsHistory;
+import static junit.framework.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
 
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 
-import static junit.framework.Assert.assertTrue;
-import static org.junit.Assert.assertEquals;
+import org.junit.Test;
+import org.rhapsode.app.session.CollectionsHistory;
 
 public class CollectionHistoryTest extends ServletSessionTestBase {
 
@@ -48,7 +45,7 @@ public class CollectionHistoryTest extends ServletSessionTestBase {
     public void basicTest() throws Exception {
         CollectionsHistory ch = CollectionsHistory.load(connection);
         for (int i = 0; i < 15; i++) {
-            ch.addLoaded(Paths.get("collection_"+i));
+            ch.addLoaded(Paths.get("collection_" + i));
             Thread.sleep(500);
         }
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");

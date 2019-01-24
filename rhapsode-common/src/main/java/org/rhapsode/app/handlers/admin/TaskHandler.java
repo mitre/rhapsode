@@ -29,6 +29,12 @@
 
 package org.rhapsode.app.handlers.admin;
 
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import java.io.IOException;
+
 import org.eclipse.jetty.server.Request;
 import org.rhapsode.app.RhapsodeSearcherApp;
 import org.rhapsode.app.decorators.RhapsodeXHTMLHandler;
@@ -36,11 +42,6 @@ import org.rhapsode.app.tasks.RhapsodeTaskStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
 
 public class TaskHandler extends AdminHandler {

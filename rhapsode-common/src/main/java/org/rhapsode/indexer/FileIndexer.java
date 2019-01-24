@@ -29,7 +29,14 @@
 
 package org.rhapsode.indexer;
 
-import org.apache.commons.compress.compressors.FileNameUtil;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.UUID;
+
 import org.apache.commons.io.FilenameUtils;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
@@ -45,22 +52,14 @@ import org.rhapsode.lucene.schema.IndivFieldMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.UUID;
-
 public class FileIndexer {
     private static final Logger LOG = LoggerFactory.getLogger(FileIndexer.class);
     private static final String TIKA_MD5_KEY = "X-TIKA:digest:MD5";
-    private final Object lock = new Object();
-    private boolean committing = false;
     final RhapsodeIndexerConfig config;
     final IndexWriter writer;
     final IndexSchema indexSchema;
+    private final Object lock = new Object();
+    private boolean committing = false;
 
     public FileIndexer(RhapsodeIndexerConfig config, IndexWriter writer) {
         this.config = config;

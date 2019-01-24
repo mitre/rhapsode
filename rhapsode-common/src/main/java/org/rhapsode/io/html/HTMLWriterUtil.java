@@ -29,6 +29,12 @@
 
 package org.rhapsode.io.html;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import org.apache.commons.lang3.StringUtils;
 import org.rhapsode.text.Offset;
 import org.rhapsode.text.OffsetOverlapDecider;
@@ -36,12 +42,6 @@ import org.rhapsode.text.OffsetStartComparator;
 import org.rhapsode.text.PriorityOffset;
 import org.rhapsode.text.PriorityOffsetLengthStartComparator;
 import org.rhapsode.util.StringUtil;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class HTMLWriterUtil {
 

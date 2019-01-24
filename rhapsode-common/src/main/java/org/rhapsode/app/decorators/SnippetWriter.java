@@ -29,12 +29,12 @@
 
 package org.rhapsode.app.decorators;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
-
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 
 public class SnippetWriter {

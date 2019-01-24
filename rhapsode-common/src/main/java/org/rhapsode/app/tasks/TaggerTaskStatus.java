@@ -29,18 +29,11 @@
 
 package org.rhapsode.app.tasks;
 
-import org.rhapsode.app.tagger.TaggerRequest;
-
 import java.util.Date;
 
-public class TaggerTaskStatus extends RhapsodeTaskStatus {
+import org.rhapsode.app.tagger.TaggerRequest;
 
-    enum TAGGER_STATES {
-        CREATED_TABLES,
-        CALCULATED_MAX_HITS,
-        COMPLETED_SEARCHES,
-        WRITING_OUTPUT
-    }
+public class TaggerTaskStatus extends RhapsodeTaskStatus {
 
     TaggerTaskStatus(Tasker.STATE state,
                      Tasker.REASON_FOR_COMPLETION reasonForCompletion,
@@ -52,5 +45,12 @@ public class TaggerTaskStatus extends RhapsodeTaskStatus {
     @Override
     public String toString() {
         return super.toString();
+    }
+
+    enum TAGGER_STATES {
+        CREATED_TABLES,
+        CALCULATED_MAX_HITS,
+        COMPLETED_SEARCHES,
+        WRITING_OUTPUT
     }
 }

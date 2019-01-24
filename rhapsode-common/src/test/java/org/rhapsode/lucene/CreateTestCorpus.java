@@ -36,6 +36,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import org.apache.commons.lang3.StringUtils;
+
 public class CreateTestCorpus {
 
     public static void main(String[] args) {
@@ -43,21 +44,21 @@ public class CreateTestCorpus {
         //for (int k = 1; k < 11; k++) {
         int k = 1;
         StringBuilder sb = new StringBuilder();
-            for (int i = 100000; i > 0; i--) {
-                sb.append(i).append(" ");
+        for (int i = 100000; i > 0; i--) {
+            sb.append(i).append(" ");
 //                Path subdir = outdir.resolve(Integer.toString(k));
-                Path subdir = outdir.resolve(StringUtils.leftPad(Integer.toString(i), 6, '0').substring(0, 3));
-                Path outputFile = subdir.resolve(StringUtils.leftPad(Integer.toString(i), 6, '0')+".txt");
-                try {
-                    Files.createDirectories(outputFile.getParent());
-                    Writer w = Files.newBufferedWriter(outputFile);
-                    w.write(sb.toString());
-                    w.flush();
-                    w.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+            Path subdir = outdir.resolve(StringUtils.leftPad(Integer.toString(i), 6, '0').substring(0, 3));
+            Path outputFile = subdir.resolve(StringUtils.leftPad(Integer.toString(i), 6, '0') + ".txt");
+            try {
+                Files.createDirectories(outputFile.getParent());
+                Writer w = Files.newBufferedWriter(outputFile);
+                w.write(sb.toString());
+                w.flush();
+                w.close();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
+        }
 
 
         //}

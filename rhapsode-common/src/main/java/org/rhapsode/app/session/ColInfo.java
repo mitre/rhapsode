@@ -29,9 +29,9 @@
 package org.rhapsode.app.session;
 
 
-import org.rhapsode.lucene.utils.SqlUtil;
-
 import java.sql.Types;
+
+import org.rhapsode.lucene.utils.SqlUtil;
 
 public class ColInfo {
     private final String name;

@@ -29,15 +29,6 @@
 
 package org.rhapsode.app.io;
 
-import org.apache.commons.csv.CSVFormat;
-import org.apache.commons.csv.CSVParser;
-import org.apache.commons.csv.CSVRecord;
-import org.apache.commons.io.ByteOrderMark;
-import org.apache.commons.io.input.BOMInputStream;
-import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -55,6 +46,15 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVParser;
+import org.apache.commons.csv.CSVRecord;
+import org.apache.commons.io.ByteOrderMark;
+import org.apache.commons.io.input.BOMInputStream;
+import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class CSVTableReader extends AbstractTableReader {
 
     private static final Logger LOG = LoggerFactory.getLogger(CSVTableReader.class);
@@ -69,10 +69,44 @@ public class CSVTableReader extends AbstractTableReader {
     };
 
     private static char DEFAULT_DELIMITER = ',';
-
+    private final RowReader rowReader;
     Reader reader = null;
     CSVParser parser = null;
     Iterator<CSVRecord> iterator = null;
+
+    private CSVTableReader(Path path, RowReader rowReader) throws IOException {
+        this(path, rowReader, DEFAULT_DELIMITER);
+    }
+
+    private CSVTableReader(Path path, RowReader rowReader, char delimiter) throws IOException {
+        this(path, rowReader, delimiter, ENCODING, true);
+    }
+
+    public CSVTableReader(Path path, RowReader rowReader, char delimiter, Charset encoding, boolean hasHeaders) throws IOException {
+        super(hasHeaders);
+        this.rowReader = rowReader;
+        ByteOrderMark mark = null;
+        if (encoding.equals(StandardCharsets.UTF_8)) {
+            mark = ByteOrderMark.UTF_8;
+        } else if (encoding.equals(StandardCharsets.UTF_16LE)) {
+            mark = ByteOrderMark.UTF_16LE;
+        } else if (encoding.equals(StandardCharsets.UTF_16BE)) {
+            mark = ByteOrderMark.UTF_16BE;
+        }
+
+        if (mark == null) {
+            reader = new BufferedReader(
+                    new InputStreamReader(
+                            new BufferedInputStream(Files.newInputStream(path)), encoding));
+        } else {
+            reader = new BufferedReader(
+                    new InputStreamReader(
+                            new BOMInputStream(
+                                    new BufferedInputStream(Files.newInputStream(path)), mark), encoding));
+        }
+        parser = new CSVParser(reader, CSVFormat.EXCEL.withDelimiter(delimiter));
+        iterator = parser.iterator();
+    }
 
     public static EncodingDelimiterPair guessEncodingDelimiter(Path p) throws IOException {
         String charsetName = "UTF-8";
@@ -107,8 +141,6 @@ public class CSVTableReader extends AbstractTableReader {
         return colCounter.hasSameNumCols() && colCounter.lastNumColumns > 1;
     }
 
-    private final RowReader rowReader;
-
     public static CSVTableReader build(Path p, RowReader rowReader) throws IOException {
         return new CSVTableReader(p, rowReader);
     }
@@ -116,42 +148,6 @@ public class CSVTableReader extends AbstractTableReader {
     public static CSVTableReader build(Path p, RowReader rowReader, char delimiter) throws IOException {
         return new CSVTableReader(p, rowReader, delimiter);
     }
-
-    private CSVTableReader(Path path, RowReader rowReader) throws IOException {
-        this(path, rowReader, DEFAULT_DELIMITER);
-    }
-
-
-    private CSVTableReader(Path path, RowReader rowReader, char delimiter) throws IOException {
-        this(path, rowReader, delimiter, ENCODING, true);
-    }
-
-    public CSVTableReader(Path path, RowReader rowReader, char delimiter, Charset encoding, boolean hasHeaders) throws IOException {
-        super(hasHeaders);
-        this.rowReader = rowReader;
-        ByteOrderMark mark = null;
-        if (encoding.equals(StandardCharsets.UTF_8)) {
-            mark = ByteOrderMark.UTF_8;
-        } else if (encoding.equals(StandardCharsets.UTF_16LE)) {
-            mark = ByteOrderMark.UTF_16LE;
-        } else if (encoding.equals(StandardCharsets.UTF_16BE)) {
-            mark = ByteOrderMark.UTF_16BE;
-        }
-
-        if (mark == null) {
-            reader = new BufferedReader(
-                    new InputStreamReader(
-                            new BufferedInputStream(Files.newInputStream(path)), encoding));
-        } else {
-            reader = new BufferedReader(
-                    new InputStreamReader(
-                            new BOMInputStream(
-                                    new BufferedInputStream(Files.newInputStream(path)), mark), encoding));
-        }
-        parser = new CSVParser(reader, CSVFormat.EXCEL.withDelimiter(delimiter));
-        iterator = parser.iterator();
-    }
-
 
     private String[] readNext() throws TableReaderException {
 

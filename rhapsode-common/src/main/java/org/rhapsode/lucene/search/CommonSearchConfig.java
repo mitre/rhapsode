@@ -29,14 +29,14 @@
 
 package org.rhapsode.lucene.search;
 
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import org.apache.commons.lang3.StringUtils;
 import org.rhapsode.lucene.utils.JsonUtil;
-
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 
 public class CommonSearchConfig {

@@ -29,6 +29,17 @@
 
 package org.rhapsode.app.handlers.search;
 
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.carrot2.clustering.kmeans.BisectingKMeansClusteringAlgorithm;
@@ -64,17 +75,6 @@ import org.tallison.lucene.search.concordance.classic.impl.DefaultSortKeyBuilder
 import org.tallison.lucene.search.concordance.classic.impl.FieldBasedDocIdBuilder;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
 
 
 public class ConcordanceSearchHandler extends AbstractSearchHandler {
@@ -162,7 +162,7 @@ public class ConcordanceSearchHandler extends AbstractSearchHandler {
                         searcherApp.getRhapsodeCollection().getIndexSchema().getOffsetAnalyzer(),
                         windowCollector);
                 elapsed = System.currentTimeMillis() - started;
-                UserLogger.log(TOOL_NAME, searchRequest.getComplexQuery(),windowCollector.getNumDocs(), elapsed);
+                UserLogger.log(TOOL_NAME, searchRequest.getComplexQuery(), windowCollector.getNumDocs(), elapsed);
 
             } catch (TargetTokenNotFoundException e) {
                 e.printStackTrace();
@@ -170,7 +170,7 @@ public class ConcordanceSearchHandler extends AbstractSearchHandler {
                 UserLogger.logException(TOOL_NAME, errorMsg, httpServletRequest);
             } catch (Exception e) {
                 e.printStackTrace();
-                UserLogger.logException(TOOL_NAME, "unknown ex "+e.getMessage(), httpServletRequest);
+                UserLogger.logException(TOOL_NAME, "unknown ex " + e.getMessage(), httpServletRequest);
             }
         }
 

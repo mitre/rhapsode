@@ -63,6 +63,7 @@ public class HighlighterTest {
         scorer.setExpandMultiTermQuery(true);
         highlighter.setTextFragmenter(fragmenter);
     }
+
     @Test
     public void testBasic() throws Exception {
         Analyzer analyzer = new StandardAnalyzer();

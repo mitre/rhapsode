@@ -29,7 +29,14 @@
 
 package org.rhapsode.app.session;
 
-import org.apache.poi.POIXMLProperties;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.sql.Types;
+import java.util.Map;
+
+import org.apache.poi.ooxml.POIXMLProperties;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.CreationHelper;
@@ -44,13 +51,6 @@ import org.rhapsode.lucene.search.SQField;
 import org.rhapsode.lucene.search.StoredConcept;
 import org.rhapsode.lucene.search.StoredQuery;
 
-import java.io.IOException;
-import java.io.OutputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.sql.Types;
-import java.util.Map;
-
 
 public class StoredQueryWriter {
 
@@ -62,6 +62,16 @@ public class StoredQueryWriter {
 
     public StoredQueryWriter(RhapsodeSearcherApp searcherConfig) {
         this.searcherConfig = searcherConfig;
+
+    }
+
+    public static void updateMetadata(XSSFWorkbook wb, String creator, String title) {
+        POIXMLProperties.CoreProperties coreProperties = wb.getProperties().getCoreProperties();
+        coreProperties.setCreator(creator);
+        coreProperties.setTitle(title);
+
+        wb.getProperties().getExtendedProperties().getUnderlyingProperties().setCompany("The MITRE Corporation");
+        wb.getProperties().getExtendedProperties().getUnderlyingProperties().setApplication("Rhapsode");
 
     }
 
@@ -171,15 +181,5 @@ public class StoredQueryWriter {
                 row.createCell(colCount++).setCellValue(sc.getString(f));
             }
         }
-    }
-
-    public static void updateMetadata(XSSFWorkbook wb, String creator, String title) {
-        POIXMLProperties.CoreProperties coreProperties = wb.getProperties().getCoreProperties();
-        coreProperties.setCreator(creator);
-        coreProperties.setTitle(title);
-
-        wb.getProperties().getExtendedProperties().getUnderlyingProperties().setCompany("The MITRE Corporation");
-        wb.getProperties().getExtendedProperties().getUnderlyingProperties().setApplication("Rhapsode");
-
     }
 }

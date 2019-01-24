@@ -29,10 +29,10 @@
 
 package org.rhapsode.util;
 
-import org.apache.commons.lang3.StringUtils;
-
 import java.nio.file.Path;
 import java.nio.file.Paths;
+
+import org.apache.commons.lang3.StringUtils;
 
 public class ParamUtil {
 

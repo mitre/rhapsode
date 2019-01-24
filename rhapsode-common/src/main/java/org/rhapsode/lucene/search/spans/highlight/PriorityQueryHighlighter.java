@@ -28,15 +28,15 @@
  */
 package org.rhapsode.lucene.search.spans.highlight;
 
+import java.io.IOException;
+import java.util.List;
+
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.document.Document;
 import org.rhapsode.io.html.HTMLWriterUtil;
 import org.rhapsode.lucene.analysis.charoffsets.SingleDocSpanQueryOffsetsGrabber;
 import org.rhapsode.lucene.search.spans.PriorityQuery;
 import org.rhapsode.text.PriorityOffset;
-
-import java.io.IOException;
-import java.util.List;
 
 public class PriorityQueryHighlighter {
 

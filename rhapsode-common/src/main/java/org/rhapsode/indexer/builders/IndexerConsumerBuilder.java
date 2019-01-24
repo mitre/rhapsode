@@ -29,6 +29,14 @@
 
 package org.rhapsode.indexer.builders;
 
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ArrayBlockingQueue;
+
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.store.Directory;
@@ -48,20 +56,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Node;
 
-import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ArrayBlockingQueue;
-
 public class IndexerConsumerBuilder extends AbstractConsumersBuilder {
-
-    private static final Logger LOG = LoggerFactory.getLogger(BasicSearchHandler.class);
 
     public final static String RHAPSODE_INDEXER_CONFIG_PATH = "indexerConfigPath";
     public final static String RHAPSODE_COLLECTION_PATH_KEY = "collectionPath";
+    private static final Logger LOG = LoggerFactory.getLogger(BasicSearchHandler.class);
 
     @Override
     public ConsumersManager build(Node node, Map<String, String> runtimeAttributes,

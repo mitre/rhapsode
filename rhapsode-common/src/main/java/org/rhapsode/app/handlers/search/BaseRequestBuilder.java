@@ -29,6 +29,12 @@
 
 package org.rhapsode.app.handlers.search;
 
+import javax.servlet.http.HttpServletRequest;
+
+import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
+
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.search.MultiTermQuery;
 import org.apache.lucene.search.Query;
@@ -46,11 +52,6 @@ import org.rhapsode.lucene.search.StoredQueryBuilder;
 import org.rhapsode.util.LanguageDirection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
-import java.util.HashSet;
-import java.util.Set;
 
 
 public class BaseRequestBuilder {
