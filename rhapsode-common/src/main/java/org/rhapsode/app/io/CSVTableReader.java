@@ -39,6 +39,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -73,6 +74,7 @@ public class CSVTableReader extends AbstractTableReader {
     Reader reader = null;
     CSVParser parser = null;
     Iterator<CSVRecord> iterator = null;
+    private String[] lastRow = null;
 
     private CSVTableReader(Path path, RowReader rowReader) throws IOException {
         this(path, rowReader, DEFAULT_DELIMITER);
@@ -214,10 +216,16 @@ public class CSVTableReader extends AbstractTableReader {
                 if (!keepGoing) {
                     break;
                 }
-            } catch (IOException e) {
-                throw new TableReaderException("IOException while reading csv?!", e);
+                lastRow = row;
+                row = readNext();
+            } catch (Exception e) {
+                e.printStackTrace();
+                if (lastRow != null) {
+                    System.err.println("Last successfully indexed row:");
+                    System.err.println(Arrays.asList(lastRow));
+                }
+                throw new TableReaderException("Exception while reading csv", e);
             }
-            row = readNext();
         }
     }
 

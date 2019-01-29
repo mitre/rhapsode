@@ -644,7 +644,7 @@ public class TableFileHandler extends AbstractSearchHandler {
             AttributesImpl attrs = new AttributesImpl();
             attrs.addAttribute("", H.TYPE, H.TYPE, "", H.TEXT);
             String headerKey = tableFileRequest.tableHasHeaders ? TableFileRequest.COL_HEADER_PREFIX+h:
-                    TableFileRequest.COL_HEADER_PREFIX+AbstractTableReader.getNonHeaderLabel(i);
+                    TableFileRequest.COL_HEADER_PREFIX+AbstractTableReader.getNonHeaderLabel(i++);
             attrs.addAttribute("", H.NAME, H.NAME, "", headerKey);
 //TODO:            attrs.addAttribute("", H.DIRECTION, H.DIRECTION, "", direction.name().toLowerCase());
             attrs.addAttribute("", H.SIZE, H.SIZE, "", "40");
