@@ -37,7 +37,7 @@ public abstract class AbstractTableReader implements TableReader {
         this.hasHeaders = hasHeaders;
     }
 
-    protected String getNonHeaderLabel(int colIndex) {
+    public static String getNonHeaderLabel(int colIndex) {
         return "COL_" + colIndex;
     }
 

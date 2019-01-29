@@ -66,6 +66,7 @@ import org.rhapsode.app.io.CSVTableReader;
 import org.rhapsode.app.io.EncodingDelimiterPair;
 import org.rhapsode.app.io.HeaderReader;
 import org.rhapsode.app.io.TableReaderException;
+import org.rhapsode.app.io.XLSBStreamingTableReader;
 import org.rhapsode.app.io.XLSTableReader;
 import org.rhapsode.app.io.XLSXStreamingTableReader;
 import org.rhapsode.app.session.DynamicParameters;
@@ -193,17 +194,24 @@ public class TableFileHandler extends AbstractSearchHandler {
                     break;
                 case SELECT_WORKSHEET:
                     List<String> sheets = getSheets(tableFileRequest, searcherApp);
-                    if (sheets.size() > 1) {
-                        selectWorksheet(sheets, tableFileRequest, xhtml);
-                    } else {
-                        selectColumns(tableFileRequest, searcherApp, xhtml);
-                    }
+                    selectWorksheet(sheets, tableFileRequest, xhtml);
                     break;
                 case SELECT_COLUMNS:
                     selectColumns(tableFileRequest, searcherApp, xhtml);
                     break;
                 case START_INDEXING:
-                    buildIndex(tableFileRequest, searcherApp, xhtml);
+                    int luceneFields = 0;
+                    for (FieldTypePair fieldTypePair : tableFileRequest.getFields().values()) {
+                        if (! StringUtils.isBlank(fieldTypePair.luceneFieldName)) {
+                            luceneFields++;
+                        }
+                    }
+                    //if no fields have been selected
+                    if (luceneFields == 0) {
+                        selectColumns(tableFileRequest, searcherApp, xhtml);
+                    } else {
+                        buildIndex(tableFileRequest, searcherApp, xhtml);
+                    }
                     break;
                 case LOAD_COLLECTION:
                     loadCollection(tableFileRequest, searcherApp, xhtml);
@@ -317,16 +325,23 @@ public class TableFileHandler extends AbstractSearchHandler {
                                  RhapsodeXHTMLHandler xhtml) throws SAXException {
         xhtml.startElement(H.FORM, H.METHOD, H.POST);
         xhtml.startElement(H.TABLE);
-        for (String sheet : sheets) {
-            xhtml.startElement(H.TR);
-            xhtml.element(H.TD, sheet);
-            xhtml.startElement(H.TD);
-            xhtml.startElement(H.INPUT,
-                    H.TYPE, H.RADIO,
-                    H.NAME, C.TABLE_WORKSHEET_NAME,
-                    H.VALUE, sheet);
-            xhtml.endElement(H.TD);
+        if (sheets.size() > 1) {
+            for (String sheet : sheets) {
+                xhtml.startElement(H.TR);
+                xhtml.element(H.TD, sheet);
+                xhtml.startElement(H.TD);
+                xhtml.startElement(H.INPUT,
+                        H.TYPE, H.RADIO,
+                        H.NAME, C.TABLE_WORKSHEET_NAME,
+                        H.VALUE, sheet);
+                xhtml.endElement(H.TD);
 
+                xhtml.endElement(H.TR);
+            }
+        } else {
+            xhtml.startElement(H.TR);
+            xhtml.element(H.TD, "Sheet:");
+            xhtml.element(H.TD, sheets.get(0));
             xhtml.endElement(H.TR);
         }
 
@@ -395,6 +410,8 @@ public class TableFileHandler extends AbstractSearchHandler {
         try {
             if (file.toString().endsWith(".xlsx") || file.toString().endsWith("xlsm")) {
                 reader = new XLSXStreamingTableReader(file, null, null, true);
+            } else if (file.toString().endsWith(".xlsb")) {
+                reader = new XLSBStreamingTableReader(file, null, null, true);
             } else if (file.toString().endsWith(".xls")) {
                 reader = new XLSTableReader(file, null, null, true);
             } else {
@@ -447,7 +464,7 @@ public class TableFileHandler extends AbstractSearchHandler {
     private void buildIndex(TableFileRequest tableFileRequest,
                             RhapsodeSearcherApp searcherApp,
                             RhapsodeXHTMLHandler xhtml) throws Exception {
-        long start = System.currentTimeMillis();
+
         Path inputTableFile = validateInputDirectory(searcherApp).resolve(tableFileRequest.inputFileName);
         Path collectionPath = validateCollectionDirectory(searcherApp).resolve(tableFileRequest.collectionName);
         //check p
@@ -461,7 +478,12 @@ public class TableFileHandler extends AbstractSearchHandler {
         } finally {
             Files.delete(tmpSchemaPath);
         }
-        xhtml.element("p", "Indexer has been started.");
+        xhtml.element(H.P, "Indexer has been started.");
+        xhtml.startElement(H.P);
+        xhtml.characters("Please navigate to ");
+        xhtml.href("/rhapsode/tasks", "tasks");
+        xhtml.characters(" for the current status");
+        xhtml.endElement(H.P);
 /*        long elapsed = System.currentTimeMillis()-start;
 
         xhtml.startElement(H.P);
@@ -551,10 +573,17 @@ public class TableFileHandler extends AbstractSearchHandler {
         HeaderReader headerReader = new HeaderReader(tableFileRequest.getTableHasHeaders());
         String worksheetName = tableFileRequest.worksheetName;
         AbstractTableReader reader = null;
+        //open all initially as if they do have headers to capture that first value
         if (fileName.endsWith(".xlsx") || fileName.endsWith(".xlsm")) {
-            reader = new XLSXStreamingTableReader(dir.resolve(fileName), worksheetName, headerReader, true);
+            reader = new XLSXStreamingTableReader(dir.resolve(fileName), worksheetName,
+                    headerReader,
+                    true);
+        } else if (fileName.endsWith(".xlsb")) {
+                reader = new XLSBStreamingTableReader(dir.resolve(fileName), worksheetName,
+                        headerReader, true);
         } else if (fileName.endsWith(".xls")) {
-            reader = new XLSTableReader(dir.resolve(fileName), worksheetName, headerReader, true);
+            reader = new XLSTableReader(dir.resolve(fileName), worksheetName,
+                    headerReader, true);
         } else if (fileName.endsWith(".txt") || fileName.endsWith(".csv")) {
             reader = new CSVTableReader(
                     dir.resolve(fileName), headerReader,
@@ -589,7 +618,11 @@ public class TableFileHandler extends AbstractSearchHandler {
         xhtml.startElement(H.TABLE);
         xhtml.startElement(H.TR);
         xhtml.startElement(H.TD);
-        xhtml.characters("Column Name");
+        if (tableFileRequest.getTableHasHeaders()) {
+            xhtml.characters("Column Name");
+        } else {
+            xhtml.characters("First Row Values");
+        }
         xhtml.endElement(H.TD);
         xhtml.startElement(H.TD);
         xhtml.characters("Lucene Field Name");
@@ -601,7 +634,7 @@ public class TableFileHandler extends AbstractSearchHandler {
         xhtml.characters("Default Content");
         xhtml.endElement(H.TD);
         xhtml.endElement(H.TR);
-
+        int i = 0;
         for (String h : headers) {
             xhtml.startElement(H.TR);
             xhtml.startElement(H.TD);
@@ -610,7 +643,9 @@ public class TableFileHandler extends AbstractSearchHandler {
             xhtml.startElement(H.TD);
             AttributesImpl attrs = new AttributesImpl();
             attrs.addAttribute("", H.TYPE, H.TYPE, "", H.TEXT);
-            attrs.addAttribute("", H.NAME, H.NAME, "", TableFileRequest.COL_HEADER_PREFIX + h);
+            String headerKey = tableFileRequest.tableHasHeaders ? TableFileRequest.COL_HEADER_PREFIX+h:
+                    TableFileRequest.COL_HEADER_PREFIX+AbstractTableReader.getNonHeaderLabel(i);
+            attrs.addAttribute("", H.NAME, H.NAME, "", headerKey);
 //TODO:            attrs.addAttribute("", H.DIRECTION, H.DIRECTION, "", direction.name().toLowerCase());
             attrs.addAttribute("", H.SIZE, H.SIZE, "", "40");
             if (tableFileRequest.tableHasHeaders) {
@@ -663,7 +698,11 @@ public class TableFileHandler extends AbstractSearchHandler {
                 H.NAME, C.COLLECTION_NAME,
                 H.VALUE, tableFileRequest.collectionName);
         xhtml.endElement(H.INPUT);
-
+        xhtml.startElement(H.INPUT,
+                H.TYPE, H.HIDDEN,
+                H.NAME, C.TABLE_HAS_HEADERS,
+                H.VALUE, Boolean.toString(tableFileRequest.tableHasHeaders));
+        xhtml.endElement(H.INPUT);
         xhtml.br();
         if (tableFileRequest.inputFileName.endsWith(".csv") ||
                 tableFileRequest.inputFileName.endsWith(".txt")) {

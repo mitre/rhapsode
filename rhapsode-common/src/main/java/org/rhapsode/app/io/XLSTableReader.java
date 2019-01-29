@@ -40,6 +40,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
@@ -154,7 +155,7 @@ public class XLSTableReader extends AbstractWorkbookTableReader {
 
     private void setSheet() throws TableReaderException {
 
-        if (sheetName != null) {
+        if (!StringUtils.isBlank(sheetName)) {
             sheet = wb.getSheet(sheetName);
             if (sheet == null) {
                 StringBuilder sb = new StringBuilder();
@@ -169,7 +170,8 @@ public class XLSTableReader extends AbstractWorkbookTableReader {
                         appended = true;
                     }
                 }
-                throw new TableReaderException("I regret, I could not find a sheet with name'" + sheetName + "'.\n" +
+                throw new TableReaderException(
+                        "I regret that I could not find a sheet with name'" + sheetName + "'.\n" +
                         "I did find: " + sb.toString());
             }
 

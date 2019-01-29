@@ -43,6 +43,7 @@ import org.xml.sax.SAXException;
 public abstract class AdminHandler extends AbstractRhapsodeHandler {
     private static final Pattern ALPHA_NUMERIC_PATTERN = Pattern.compile("\\A[a-zA-Z0-9_]+\\Z");
 
+    int refresh = -1;
     public AdminHandler(String toolName) {
         super(toolName);
     }
@@ -84,7 +85,14 @@ public abstract class AdminHandler extends AbstractRhapsodeHandler {
                 H.CONTENT, "IE=Edge");
         xhtml.endElement(H.META);
 
-        if (optionalStyleString != null) {
+        if (refresh > -1) {
+            xhtml.startElement(H.META,
+                    H.HTTP_EQUIV, "refresh",
+                    H.CONTENT, Integer.toString(refresh));
+            xhtml.endElement(H.META);
+
+        }
+        if (!StringUtils.isBlank(optionalStyleString)) {
             xhtml.startElement(H.STYLE);
             xhtml.characters(optionalStyleString);
             xhtml.endElement(H.STYLE);
@@ -213,4 +221,7 @@ public abstract class AdminHandler extends AbstractRhapsodeHandler {
         xhtml.endElement(H.P);
     }
 
+    public void setRefresh(int seconds) {
+        this.refresh = seconds;
+    }
 }

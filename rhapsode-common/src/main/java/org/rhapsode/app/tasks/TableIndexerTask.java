@@ -43,6 +43,7 @@ import org.rhapsode.app.handlers.indexer.TableFileRequest;
 import org.rhapsode.app.io.AbstractTableReader;
 import org.rhapsode.app.io.CSVTableReader;
 import org.rhapsode.app.io.RowReaderIndexer;
+import org.rhapsode.app.io.XLSBStreamingTableReader;
 import org.rhapsode.app.io.XLSTableReader;
 import org.rhapsode.app.io.XLSXStreamingTableReader;
 import org.rhapsode.indexer.FileIndexer;
@@ -107,10 +108,14 @@ public class TableIndexerTask extends RhapsodeTask {
         started = System.currentTimeMillis();
         AbstractTableReader reader = null;
         try {
-            if (inputTableFile.toString().endsWith(".xlsx")) {
+            if (inputTableFile.toString().endsWith(".xlsx") ||
+                inputTableFile.toString().endsWith(".xlsm")) {
                 reader =
                         new XLSXStreamingTableReader(inputTableFile, worksheetName,
                                 perRowIndexer, tableFileRequest.getTableHasHeaders());
+            } else if (inputTableFile.toString().endsWith(".xlsb")) {
+                reader = new XLSBStreamingTableReader(inputTableFile, worksheetName, perRowIndexer,
+                        tableFileRequest.getTableHasHeaders());
             } else if (inputTableFile.toString().endsWith(".xls")) {
                 reader = new XLSTableReader(inputTableFile, worksheetName, perRowIndexer,
                         tableFileRequest.getTableHasHeaders());
@@ -118,7 +123,7 @@ public class TableIndexerTask extends RhapsodeTask {
                 reader = new CSVTableReader(inputTableFile, perRowIndexer, tableFileRequest.getCSVDelimiterChar(),
                         tableFileRequest.getCSVEncoding(), tableFileRequest.getTableHasHeaders());
             } else {
-                throw new RuntimeException("I'm sorry, table files must end in .xlsx, .xlsm, .xls, .txt or .csv");
+                throw new RuntimeException("I'm sorry, table files must end in .xlsx, .xlsm, .xlsb, .xls, .txt or .csv");
             }
             reader.parse();
             indexWriter.flush();

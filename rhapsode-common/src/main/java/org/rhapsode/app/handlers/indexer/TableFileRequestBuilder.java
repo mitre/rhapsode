@@ -101,7 +101,8 @@ public class TableFileRequestBuilder {
                 tableFileRequest.actionType = TableFileRequest.ActionType.SELECT_COLLECTION_NAME;
             } else if (StringUtils.isBlank(tableFileRequest.inputFileName)) {
                 tableFileRequest.actionType = TableFileRequest.ActionType.SELECT_INPUT_FILE;
-            } else if (tableFileRequest.inputFileName.endsWith(".xlsx") || tableFileRequest.inputFileName.endsWith("xls")) {
+            } else if (tableFileRequest.inputFileName.endsWith(".xlsx") ||
+                    tableFileRequest.inputFileName.endsWith("xls") || tableFileRequest.inputFileName.endsWith(".xlsb")) {
                 tableFileRequest.actionType = TableFileRequest.ActionType.SELECT_WORKSHEET;
             } else if (tableFileRequest.inputFileName.endsWith(".csv") || tableFileRequest.inputFileName.endsWith(".txt")) {
                 tableFileRequest.actionType = TableFileRequest.ActionType.SELECT_ENCODING_DELIMITER;

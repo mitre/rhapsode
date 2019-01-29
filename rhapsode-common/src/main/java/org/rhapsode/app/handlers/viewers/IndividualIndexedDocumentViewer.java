@@ -204,7 +204,10 @@ public class IndividualIndexedDocumentViewer extends AbstractSearchHandler {
         if (relPath == null) {
             LOG.warn("rel path is null for document with " + docId);
         }
-        Path originalFile = searcherApp.getRhapsodeCollection().getOrigDocsRoot().resolve(relPath);
+        Path originalFile = null;
+        if (searcherApp.getRhapsodeCollection().getOrigDocsRoot() != null && relPath != null) {
+            originalFile = searcherApp.getRhapsodeCollection().getOrigDocsRoot().resolve(relPath);
+        }
         if (originalFile == null || !Files.isRegularFile(originalFile)) {
             System.err.println("couldn't find original file:" + originalFile + " from >" +
                     searcherApp.getRhapsodeCollection().getOrigDocsRoot() + "< and >" + relPath);

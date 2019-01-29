@@ -51,8 +51,9 @@ public class TaskHandler extends AdminHandler {
     private final RhapsodeSearcherApp searcherApp;
 
     public TaskHandler(RhapsodeSearcherApp searcherApp) {
-        super("Task Status Checker");
+        super("Task Status");
         this.searcherApp = searcherApp;
+        setRefresh(1);
     }
 
 
@@ -70,7 +71,7 @@ public class TaskHandler extends AdminHandler {
             }
             RhapsodeTaskStatus lastTaskStatus = searcherApp.getLastTaskStatus();
             if (lastTaskStatus == null) {
-                xhtml.element("p", "There is currently no last task");
+                xhtml.element("p", " ");
             } else {
                 xhtml.element("p", lastTaskStatus.toString());
             }
