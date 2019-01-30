@@ -55,6 +55,7 @@ import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.LeafReader;
 import org.apache.lucene.index.LeafReaderContext;
 import org.eclipse.jetty.server.Request;
+import org.rhapsode.RhapsodeCollection;
 import org.rhapsode.app.RhapsodeSearcherApp;
 import org.rhapsode.app.contants.C;
 import org.rhapsode.app.contants.H;
@@ -107,6 +108,7 @@ public class CollectionHandler extends AdminHandler {
                 }
             }
             if (searcherApp.getRhapsodeCollection() == null ||
+                    ! searcherApp.getRhapsodeCollection().hasIndex() ||
                     httpServletRequest.getParameter(C.OPEN_NEW_COLLECTION_DIALOGUE) != null) {
                 String errMsg = loadCollectionDialogue(xhtml);
                 if (errMsg != null) {
@@ -136,6 +138,15 @@ public class CollectionHandler extends AdminHandler {
                 RhapsodeDecorator.writeErrorMessage("index manager is null?!", xhtml);
                 RhapsodeDecorator.addFooter(xhtml);
                 xhtml.endDocument();
+                return;
+            }
+
+            if (! searcherApp.getRhapsodeCollection().hasIndex()) {
+                RhapsodeDecorator.writeErrorMessage("No valid index in collection: "+
+                        searcherApp.getRhapsodeCollection().getCollectionPath(), xhtml);
+                RhapsodeDecorator.addFooter(xhtml);
+                xhtml.endDocument();
+                return;
             }
 
             if (httpServletRequest.getParameter(C.REFRESH_COLLECTION) != null) {
@@ -239,25 +250,37 @@ public class CollectionHandler extends AdminHandler {
         xhtml.startElement(H.TABLE);
         for (File f : files) {
             xhtml.startElement(H.TR);
-            xhtml.element(H.TD, f.getName());
-            xhtml.startElement(H.TD);
-            if (searcherApp.getRhapsodeCollection() != null &&
-                    searcherApp.getRhapsodeCollection().getCollectionPath() != null &&
-                    f.getName().equals(searcherApp.getRhapsodeCollection().getCollectionPath().getFileName().toString())) {
-                xhtml.startElement(H.INPUT,
-                        H.TYPE, H.RADIO,
-                        H.NAME, C.COLLECTION_NAME,
-                        H.VALUE, f.getName(),
-                        H.CHECKED, H.CHECKED);
+            if (!RhapsodeCollection.isProbablyACompleteCollection(f.toPath())
+            ) {
+                xhtml.startElement(H.TD);
+                xhtml.startElement(H.FONT, H.COLOR, H.RED);
+                xhtml.startElement(H.BOLD);
+                xhtml.characters(f.getName());
+                xhtml.endElement(H.BOLD);
+                xhtml.endElement(H.FONT);
+                xhtml.endElement(H.TD);
+                xhtml.element(H.TD, " ");
             } else {
-                xhtml.startElement(H.INPUT,
-                        H.TYPE, H.RADIO,
-                        H.NAME, C.COLLECTION_NAME,
-                        H.VALUE, f.getName());
-
+                xhtml.element(H.TD, f.getName());
+                xhtml.startElement(H.TD);
+                if (searcherApp.getRhapsodeCollection() != null &&
+                        searcherApp.getRhapsodeCollection().getCollectionPath() != null &&
+                        f.getName().equals(searcherApp.getRhapsodeCollection().getCollectionPath().getFileName().toString())) {
+                    xhtml.startElement(H.INPUT,
+                            H.TYPE, H.RADIO,
+                            H.NAME, C.COLLECTION_NAME,
+                            H.VALUE, f.getName(),
+                            H.CHECKED, H.CHECKED);
+                } else {
+                    xhtml.startElement(H.INPUT,
+                            H.TYPE, H.RADIO,
+                            H.NAME, C.COLLECTION_NAME,
+                            H.VALUE, f.getName());
+                }
+                xhtml.endElement(H.INPUT);
+                xhtml.endElement(H.TD);
             }
-            xhtml.endElement(H.INPUT);
-            xhtml.endElement(H.TD);
+
             xhtml.endElement(H.TR);
         }
         xhtml.endElement(H.TABLE);

@@ -39,6 +39,7 @@ import org.eclipse.jetty.server.Request;
 import org.rhapsode.app.RhapsodeSearcherApp;
 import org.rhapsode.app.decorators.RhapsodeXHTMLHandler;
 import org.rhapsode.app.tasks.RhapsodeTaskStatus;
+import org.rhapsode.app.tasks.Tasker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
@@ -53,7 +54,7 @@ public class TaskHandler extends AdminHandler {
     public TaskHandler(RhapsodeSearcherApp searcherApp) {
         super("Task Status");
         this.searcherApp = searcherApp;
-        setRefresh(1);
+
     }
 
 
@@ -62,8 +63,18 @@ public class TaskHandler extends AdminHandler {
                        HttpServletResponse response) throws IOException, ServletException {
         RhapsodeXHTMLHandler xhtml = null;
         try {
-            xhtml = initResponse(response, null);
             RhapsodeTaskStatus status = searcherApp.getTaskStatus();
+            if (status != null) {
+                if (status.getState().equals(Tasker.STATE.PROCESSING)) {
+                    setRefresh(1);
+                } else {
+                    setRefresh(10);
+                }
+            } else {
+                setRefresh(10);
+            }
+            xhtml = initResponse(response, null);
+            status = searcherApp.getTaskStatus();
             if (status == null) {
                 xhtml.element("p", "There is currently no running task");
             } else {

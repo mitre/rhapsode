@@ -29,6 +29,7 @@
 
 package org.rhapsode;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
@@ -50,8 +51,12 @@ import org.rhapsode.lucene.schema.IndexSchema;
 import org.rhapsode.lucene.search.IndexManager;
 import org.rhapsode.lucene.utils.DocRetriever;
 import org.rhapsode.util.PathUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class RhapsodeCollection {
+
+    private static final Logger LOG = LoggerFactory.getLogger(RhapsodeCollection.class);
 
     //constant names of subdirectories
     public static final String LUCENE_INDEX_SUBDIR = "index";
@@ -147,6 +152,32 @@ public class RhapsodeCollection {
         IndexManager.load(rc);
         rc.loaded = true;
         return rc;
+    }
+
+    public static boolean isProbablyACompleteCollection(Path p) {
+        if (!Files.isDirectory(p)) {
+            LOG.warn("not a directory: "+p);
+            return false;
+        }
+        if (!Files.isRegularFile(p.resolve(INDEX_SCHEMA_FILE_NAME))) {
+            LOG.warn("no index schema file in: "+p);
+            return false;
+        }
+        if (!Files.isRegularFile(p.resolve(COLLECTION_SCHEMA_FILE_NAME))) {
+            LOG.warn("no collection schema file in: "+p);
+            return false;
+        }
+        if (!Files.isDirectory(p.resolve(LUCENE_INDEX_SUBDIR))) {
+            LOG.warn("no lucene index directory in: "+p);
+            return false;
+        }
+        File[] files = p.resolve(LUCENE_INDEX_SUBDIR).toFile().listFiles();
+        if (files.length < 2) {
+            LOG.warn("too few files in lucene index directory ("+(files.length+1)
+                    +") in "+p);
+            return false;
+        }
+        return true;
     }
 
     public void emptyTrash() throws IOException {
@@ -330,4 +361,10 @@ public class RhapsodeCollection {
 
     }
 
+    public boolean hasIndex() {
+        if (indexManager != null && indexManager.hasSearcher()) {
+            return true;
+        }
+        return false;
+    }
 }

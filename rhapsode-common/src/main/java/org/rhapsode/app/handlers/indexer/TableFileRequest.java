@@ -80,11 +80,15 @@ public class TableFileRequest {
 
     public void setDelimiter(String delimiter) {
         this.delimiterString = delimiter;
-        if ("\t".equals(delimiter)) {
+        if ("\t".equals(delimiter) || "\\t".equals(delimiter) ||
+                (delimiter != null && delimiter.contains("tab"))) {
             this.delimiterString = "<tab>";
         }
     }
 
+    public String getDelimiterString() {
+        return this.delimiterString;
+    }
     public char getCSVDelimiterChar() {
         if (delimiterString != null) {
             if (delimiterString.equals(",") || delimiterString.equalsIgnoreCase("comma")) {

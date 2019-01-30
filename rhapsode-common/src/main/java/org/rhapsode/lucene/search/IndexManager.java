@@ -77,6 +77,11 @@ public class IndexManager {
         collection.setIndexManager(indexManager);
     }
 
+
+    public boolean hasSearcher() {
+        return searcherManager != null;
+    }
+
     public void close() throws IOException {
         searcherManager.close();
     }

@@ -702,6 +702,19 @@ public class TableFileHandler extends AbstractSearchHandler {
                 H.TYPE, H.HIDDEN,
                 H.NAME, C.TABLE_HAS_HEADERS,
                 H.VALUE, Boolean.toString(tableFileRequest.tableHasHeaders));
+        if (tableFileRequest.getCSVEncoding() != null) {
+            xhtml.startElement(H.INPUT,
+                    H.TYPE, H.HIDDEN,
+                    H.NAME, C.TABLE_ENCODING,
+                    H.VALUE, tableFileRequest.getCSVEncoding().toString());
+        }
+        if (tableFileRequest.getDelimiterString() != null) {
+            xhtml.startElement(H.INPUT,
+                    H.TYPE, H.HIDDEN,
+                    H.NAME, C.TABLE_DELIMITER,
+                    H.VALUE, tableFileRequest.getDelimiterString());
+        }
+
         xhtml.endElement(H.INPUT);
         xhtml.br();
         if (tableFileRequest.inputFileName.endsWith(".csv") ||
