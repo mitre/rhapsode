@@ -209,13 +209,13 @@ public class IndividualIndexedDocumentViewer extends AbstractSearchHandler {
             originalFile = searcherApp.getRhapsodeCollection().getOrigDocsRoot().resolve(relPath);
         }
         if (originalFile == null || !Files.isRegularFile(originalFile)) {
-            System.err.println("couldn't find original file:" + originalFile + " from >" +
-                    searcherApp.getRhapsodeCollection().getOrigDocsRoot() + "< and >" + relPath);
+//            System.err.println("couldn't find original file:" + originalFile + " from >" +
+  //                  searcherApp.getRhapsodeCollection().getOrigDocsRoot() + "< and >" + relPath);
         }
         Path extractFile = ExtractViewer.getExtractPath(searcherApp.getRhapsodeCollection(), relPath);
         if (extractFile == null || !Files.isRegularFile(extractFile)) {
-            System.err.println("couldn't find extract file:" + extractFile + " from >" +
-                    searcherApp.getRhapsodeCollection().getExtractedTextRoot() + "< and >" + relPath);
+    //        System.err.println("couldn't find extract file:" + extractFile + " from >" +
+      //              searcherApp.getRhapsodeCollection().getExtractedTextRoot() + "< and >" + relPath);
         }
 
         String originalFileURL = RawFileURLBuilder.build(

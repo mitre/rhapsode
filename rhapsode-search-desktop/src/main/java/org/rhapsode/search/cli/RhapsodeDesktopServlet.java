@@ -321,10 +321,9 @@ public class RhapsodeDesktopServlet {
             Path lastCollectionPath = collections.get(0).getKey();
             try {
                 searchConfig.tryToLoadRhapsodeCollection(lastCollectionPath);
-                System.out.println("Successfully loaded collection at: " + lastCollectionPath);
+                System.out.println("Successfully loaded collection: " + lastCollectionPath);
             } catch (IOException e) {
-                System.err.println("tried to load collection at path: " + lastCollectionPath);
-                e.printStackTrace();
+
             }
         }
 
