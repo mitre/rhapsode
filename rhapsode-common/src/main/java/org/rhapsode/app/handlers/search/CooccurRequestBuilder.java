@@ -74,6 +74,11 @@ public class CooccurRequestBuilder extends ConcSearchRequestBuilderBase {
                         params.getInt(DynamicParameters.COOCCUR_MAX_RESULTS),
                         0,
                         Integer.MAX_VALUE));
+        request.setMinIDF(
+                ParamUtil.getFloat(
+                        servletRequest.getParameter(C.MIN_IDF),
+                        -1, 0, Float.MAX_VALUE)
+                );
         Set<String> fields = new HashSet<>();
         fields.add(request.getContentField());
 

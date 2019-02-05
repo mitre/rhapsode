@@ -189,11 +189,46 @@ public class ParamUtil {
         return val;
     }
 
+    public static float rangeCheckFloat(float val, float min, float max) {
+        if (val < min)
+            return min;
+        if (val > max)
+            return max;
+        return val;
+    }
+
     public static double rangeCheckDouble(double val, double defaultOutOfBounds, double min, double max) {
         if (val < min)
             return defaultOutOfBounds;
         if (val > max)
             return defaultOutOfBounds;
         return val;
+    }
+
+    public static float getFloat(String val, float defaultMissing) {
+        float ret = defaultMissing;
+        if (val == null || val.equals(""))
+            return ret;
+
+        try {
+            ret = Float.parseFloat(val);
+        } catch (NumberFormatException e) {
+            //swallow
+        }
+        return ret;
+    }
+
+    public static float getFloat(String val, float defaultMissing,
+                                 float min, float max) {
+        float ret = defaultMissing;
+        if (val == null || val.equals(""))
+            return ret;
+
+        try {
+            ret = Float.parseFloat(val);
+        } catch (NumberFormatException e) {
+            //swallow
+        }
+        return rangeCheckFloat(ret, min, max);
     }
 }

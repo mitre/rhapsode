@@ -203,4 +203,5 @@ public class C {
     public static final String START_INDEXER = "sind";
     public static final String SELECT_ENCODING_DELIMITER_WORKSHEET = "sedw";
     public static final String TABLE_HAS_HEADERS = "thh";
+    public static final String MIN_IDF = "minidf";
 }

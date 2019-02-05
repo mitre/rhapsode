@@ -55,6 +55,8 @@ import org.tallison.lucene.corpus.stats.IDFIndexCalc;
 import org.tallison.lucene.corpus.stats.TermIDF;
 import org.tallison.lucene.search.concordance.charoffsets.TargetTokenNotFoundException;
 import org.tallison.lucene.search.concordance.classic.impl.IndexIdDocIdBuilder;
+import org.tallison.lucene.search.concordance.util.EmptyTokenBlackList;
+import org.tallison.lucene.search.concordance.util.IDFThresholdTokenBlackList;
 import org.tallison.lucene.search.concordance.windowvisitor.ConcordanceArrayWindowSearcher;
 import org.tallison.lucene.search.concordance.windowvisitor.CooccurVisitor;
 import org.tallison.lucene.search.concordance.windowvisitor.WGrammer;
@@ -122,16 +124,26 @@ public class CooccurHandler extends AbstractSearchHandler {
             e.printStackTrace();
             UserLogger.logException(TOOL_NAME, errorMsg, httpServletRequest);
         }
+        float idfThreshold = cooccurRequest.getMinIDF();
+
         IndexReader reader = searcherApp.getRhapsodeCollection().
                 getIndexManager().getSearcher().getIndexReader();
 
 
         IDFIndexCalc idfCalc = new IDFIndexCalc(reader);
-
+        WGrammer wGrammer = (idfThreshold <= 0) ?
+                new WGrammer(cooccurRequest.getMinXGram(), cooccurRequest.getMaxXGram(),
+                        cooccurRequest.getContentField(),
+                        new EmptyTokenBlackList(),
+                        false) :
+                new WGrammer(cooccurRequest.getMinXGram(), cooccurRequest.getMaxXGram(),
+                        cooccurRequest.getContentField(),
+                        new IDFThresholdTokenBlackList(idfCalc, idfThreshold),
+                        false);
         CooccurVisitor visitor = new CooccurVisitor(
                 cooccurRequest.getContentField(),
-                cooccurRequest.getTokensBefore(), cooccurRequest.getTokensAfter(),
-                new WGrammer(cooccurRequest.getMinXGram(), cooccurRequest.getMaxXGram(), false), idfCalc,
+                cooccurRequest.getTokensBefore(), cooccurRequest.getTokensAfter(), wGrammer,
+                idfCalc,
                 cooccurRequest.getMaxStoredWindows(),
                 !cooccurRequest.getIgnoreDuplicateWindows());
         visitor.setMinTermFreq(cooccurRequest.getMinTermFreq());
@@ -177,6 +189,8 @@ public class CooccurHandler extends AbstractSearchHandler {
             xhtml.br();
             addMinMaxXGram(cooccurRequest, xhtml);
             xhtml.br();
+            addMinIDF(cooccurRequest, xhtml);
+            xhtml.br();
             CCDecorator.addMaxWindows(cooccurRequest.getMaxStoredWindows(), xhtml);
             xhtml.br();
             CCDecorator.includeDuplicateWindows(cooccurRequest, xhtml);
@@ -201,6 +215,19 @@ public class CooccurHandler extends AbstractSearchHandler {
         } catch (SAXException e) {
             throw new IOException(e);
         }
+    }
+
+    private void addMinIDF(CooccurRequest cooccurRequest, RhapsodeXHTMLHandler xhtml) throws SAXException {
+        xhtml.characters("Minimum IDF: ");
+        String minIDF =
+                (cooccurRequest.getMinIDF() < 0) ? " " :
+                        Float.toString(cooccurRequest.getMinIDF());
+        xhtml.startElement(H.INPUT,
+                H.TYPE, H.TEXT,
+                H.NAME, C.MIN_IDF,
+                H.VALUE, minIDF,
+                H.SIZE, "2");
+        xhtml.endElement(H.INPUT);
     }
 
     private void addMinMaxXGram(CooccurRequest cooccurRequest, RhapsodeXHTMLHandler xhtml) throws SAXException {

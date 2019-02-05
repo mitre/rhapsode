@@ -36,6 +36,7 @@ public class CooccurRequest extends ConcordanceSearchRequest {
     private int maxXGram = 2;
     private int minTermFreq = 1;
     private int maxNumResults = 50;
+    private float minIDF = 1.0f;
 
     public CooccurRequest(CooccurConfig config) {
         super(config);
@@ -73,13 +74,22 @@ public class CooccurRequest extends ConcordanceSearchRequest {
         this.maxNumResults = maxNumResults;
     }
 
+    public float getMinIDF() {
+        return minIDF;
+    }
+
+    public void setMinIDF(float minIDF) {
+        this.minIDF = minIDF;
+    }
+
     @Override
     public String toString() {
         return "CooccurRequest{" +
-                "cooccurMinNGram=" + minXGram +
-                ", cooccurMaxNGram=" + maxXGram +
+                "minXGram=" + minXGram +
+                ", maxXGram=" + maxXGram +
                 ", minTermFreq=" + minTermFreq +
                 ", maxNumResults=" + maxNumResults +
+                ", minIDF=" + minIDF +
                 '}';
     }
 }

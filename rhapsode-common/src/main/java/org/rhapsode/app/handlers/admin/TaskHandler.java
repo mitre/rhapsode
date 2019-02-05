@@ -64,15 +64,12 @@ public class TaskHandler extends AdminHandler {
         RhapsodeXHTMLHandler xhtml = null;
         try {
             RhapsodeTaskStatus status = searcherApp.getTaskStatus();
-            if (status != null) {
-                if (status.getState().equals(Tasker.STATE.PROCESSING)) {
+            if (status != null && status.getState().equals(Tasker.STATE.PROCESSING)) {
                     setRefresh(1);
-                } else {
-                    setRefresh(10);
-                }
             } else {
-                setRefresh(10);
+               setRefresh(10);
             }
+
             xhtml = initResponse(response, null);
             status = searcherApp.getTaskStatus();
             if (status == null) {
