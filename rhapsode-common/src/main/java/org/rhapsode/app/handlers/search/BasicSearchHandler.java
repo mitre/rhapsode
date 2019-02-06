@@ -148,6 +148,9 @@ public class BasicSearchHandler extends AbstractSearchHandler {
             } catch (Exception e) {
                 e.printStackTrace();
                 errorMsg = e.getMessage();
+                if (errorMsg == null) {
+                    errorMsg = "SERIOUS ERROR: " + e.toString();
+                }
                 LOG.error("prob w search", e);
             } finally {
                 //release collection
@@ -194,7 +197,8 @@ public class BasicSearchHandler extends AbstractSearchHandler {
             addHiddenInputAndButtons(basicSearchRequest, results, xhtml);
 
             if (errorMessage == null && basicSearchRequest.hasQuery() &&
-                    results.getResults().size() > 0) {
+                    results != null && results.getResults() != null
+                    && results.getResults().size() > 0) {
                 writeNextPrev(basicSearchRequest, results.getTotalHits(), xhtml);
                 BasicSearchUtil.writeBasicResults(searcherApp, basicSearchRequest, results, xhtml);
                 writeNextPrev(basicSearchRequest, results.getTotalHits(), xhtml);
