@@ -138,8 +138,11 @@ public class IndexSchema {
                 map.put(fieldName, e.getValue().getOffsetAnalyzer());
             }
         }
-        Analyzer defaultAnalyzer = fields.get(getDefaultContentField()).getOffsetAnalyzer();
-        return new PerFieldAnalyzerWrapper(defaultAnalyzer, map);
+        return new PerFieldAnalyzerWrapper(null, map);
+    }
+
+    public Analyzer getOffsetAnalyzer(String field) {
+        return fields.get(field).getOffsetAnalyzer();
     }
 
     public Analyzer getQueryAnalyzer() {

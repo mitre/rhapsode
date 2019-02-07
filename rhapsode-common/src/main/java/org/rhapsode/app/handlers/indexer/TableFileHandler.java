@@ -44,14 +44,18 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.lucene.document.FieldType;
+import org.apache.tika.sax.XHTMLContentHandler;
 import org.eclipse.jetty.server.Request;
 import org.rhapsode.RhapsodeCollection;
 import org.rhapsode.app.RhapsodeSearcherApp;
@@ -88,12 +92,12 @@ import org.xml.sax.helpers.AttributesImpl;
 public class TableFileHandler extends AbstractSearchHandler {
 
     private static final Logger LOG = LoggerFactory.getLogger(TableFileHandler.class);
-
+    private static final Pattern VALID_LUCENE_FIELD_NAME = Pattern.compile("^(?si)[_a-z0-9]+$");
     private final RhapsodeSearcherApp searcherApp;
     private final TableFileRequestBuilder requestBuilder;
 
     public TableFileHandler(RhapsodeSearcherApp searcherApp) {
-        super("CSV/XLS/XLSX");
+        super("CSV/XLS/XLSX/XLSB");
         this.searcherApp = searcherApp;
         requestBuilder = new TableFileRequestBuilder();
     }
@@ -200,17 +204,10 @@ public class TableFileHandler extends AbstractSearchHandler {
                     selectColumns(tableFileRequest, searcherApp, xhtml);
                     break;
                 case START_INDEXING:
-                    int luceneFields = 0;
-                    for (FieldTypePair fieldTypePair : tableFileRequest.getFields().values()) {
-                        if (! StringUtils.isBlank(fieldTypePair.luceneFieldName)) {
-                            luceneFields++;
-                        }
-                    }
-                    //if no fields have been selected
-                    if (luceneFields == 0) {
-                        selectColumns(tableFileRequest, searcherApp, xhtml);
-                    } else {
+                    if (validateRequest(tableFileRequest, xhtml)) {
                         buildIndex(tableFileRequest, searcherApp, xhtml);
+                    } else {
+                        selectColumns(tableFileRequest, searcherApp, xhtml);
                     }
                     break;
                 case LOAD_COLLECTION:
@@ -235,7 +232,55 @@ public class TableFileHandler extends AbstractSearchHandler {
         response.getOutputStream().flush();
     }
 
-    private void selectEncodingDelimiter(TableFileRequest tableFileRequest,
+    public boolean validateRequest(TableFileRequest tableFileRequest,
+                                   RhapsodeXHTMLHandler xhtml) throws SAXException {
+        int luceneFields = 0;
+        boolean defaultContentFieldFound = false;
+        boolean emptyLinkContent = false;
+        boolean linkFieldFound = false;
+        List<String> badFieldNames = new ArrayList<>();
+        for (FieldTypePair fieldTypePair : tableFileRequest.getFields().values()) {
+            if (StringUtils.isBlank(fieldTypePair.luceneFieldName)) {
+                if (fieldTypePair.isLinkField || fieldTypePair.isDefaultContent) {
+                    emptyLinkContent = true;
+                }
+            } else {
+                luceneFields++;
+                if (!isValidLuceneFieldName(fieldTypePair.luceneFieldName)) {
+                    badFieldNames.add(fieldTypePair.luceneFieldName);
+                }
+            }
+            if (fieldTypePair.isDefaultContent) {
+                defaultContentFieldFound = true;
+            }
+            if (fieldTypePair.isLinkField) {
+                linkFieldFound = true;
+            }
+        }
+        //if no fields have been selected
+        if (luceneFields == 0) {
+            RhapsodeDecorator.writeErrorMessage("Must specify index field names", xhtml);
+            return false;
+        } else if (emptyLinkContent) {
+            RhapsodeDecorator.writeErrorMessage("Can't select an empty field for the link or content field", xhtml);
+            return false;
+        } else if (!linkFieldFound) {
+            RhapsodeDecorator.writeErrorMessage("Must select a display name/link field.", xhtml);
+            return false;
+        } else if (!defaultContentFieldFound) {
+            RhapsodeDecorator.writeErrorMessage("Must select a default content field.", xhtml);
+            return false;
+        } else if (badFieldNames.size() > 0) {
+            RhapsodeDecorator.writeErrorMessage("Index field names must consist only of _, a-z and 0-9", xhtml);
+            for (String badName : badFieldNames) {
+                RhapsodeDecorator.writeErrorMessage("Bad field name:" + badName, xhtml);
+            }
+            return false;
+        }
+        return true;
+    }
+
+            private void selectEncodingDelimiter(TableFileRequest tableFileRequest,
                                          RhapsodeSearcherApp searcherApp,
                                          RhapsodeXHTMLHandler xhtml) throws Exception {
         Path inputDir = validateInputDirectory(searcherApp);
@@ -569,6 +614,7 @@ public class TableFileHandler extends AbstractSearchHandler {
                                RhapsodeXHTMLHandler xhtml) throws Exception {
         Path dir = validateInputDirectory(searcherApp);
         String fileName = tableFileRequest.inputFileName;
+
         List<String> headers;
         HeaderReader headerReader = new HeaderReader(tableFileRequest.getTableHasHeaders());
         String worksheetName = tableFileRequest.worksheetName;
@@ -636,6 +682,7 @@ public class TableFileHandler extends AbstractSearchHandler {
         xhtml.endElement(H.TR);
         int i = 0;
         for (String h : headers) {
+            FieldTypePair ftp = tableFileRequest.getFields().get(h);
             xhtml.startElement(H.TR);
             xhtml.startElement(H.TD);
             xhtml.characters(h);
@@ -648,7 +695,12 @@ public class TableFileHandler extends AbstractSearchHandler {
             attrs.addAttribute("", H.NAME, H.NAME, "", headerKey);
 //TODO:            attrs.addAttribute("", H.DIRECTION, H.DIRECTION, "", direction.name().toLowerCase());
             attrs.addAttribute("", H.SIZE, H.SIZE, "", "40");
-            if (tableFileRequest.tableHasHeaders) {
+
+            if (ftp != null && isValidLuceneFieldName(ftp.luceneFieldName)) {
+                attrs.addAttribute("", H.VALUE, H.VALUE, "", ftp.luceneFieldName);
+            } else if (ftp != null && StringUtils.isBlank(ftp.luceneFieldName)) {
+                attrs.addAttribute("", H.VALUE, H.VALUE, "", "");
+            } else if (tableFileRequest.tableHasHeaders) {
                 attrs.addAttribute("", H.VALUE, H.VALUE, "", reduceColHeaders(h));
             } else {
                 attrs.addAttribute("", H.VALUE, H.VALUE, "", "");
@@ -658,17 +710,34 @@ public class TableFileHandler extends AbstractSearchHandler {
             xhtml.endElement(H.TD);
 
             xhtml.startElement(H.TD);
-            xhtml.startElement(H.INPUT,
-                    H.TYPE, H.RADIO,
-                    H.NAME, C.TABLE_COL_IS_LINK,
-                    H.VALUE, h);
+            if (ftp != null && ftp.isLinkField && ! StringUtils.isBlank(ftp.luceneFieldName)) {
+                xhtml.startElement(H.INPUT,
+                        H.TYPE, H.RADIO,
+                        H.NAME, C.TABLE_COL_IS_LINK,
+                        H.VALUE, h,
+                        H.CHECKED, H.CHECKED);
+            } else {
+                xhtml.startElement(H.INPUT,
+                        H.TYPE, H.RADIO,
+                        H.NAME, C.TABLE_COL_IS_LINK,
+                        H.VALUE, h);
+            }
             xhtml.endElement(H.TD);
 
             xhtml.startElement(H.TD);
-            xhtml.startElement(H.INPUT,
-                    H.TYPE, H.RADIO,
-                    H.NAME, C.TABLE_COL_IS_CONTENT,
-                    H.VALUE, h);
+            if (ftp != null && ftp.isDefaultContent && ! StringUtils.isBlank(ftp.luceneFieldName)) {
+                xhtml.startElement(H.INPUT,
+                        H.TYPE, H.RADIO,
+                        H.NAME, C.TABLE_COL_IS_CONTENT,
+                        H.VALUE, h,
+                        H.CHECKED, H.CHECKED);
+            } else {
+                xhtml.startElement(H.INPUT,
+                        H.TYPE, H.RADIO,
+                        H.NAME, C.TABLE_COL_IS_CONTENT,
+                        H.VALUE, h);
+            }
+
             xhtml.endElement(H.TD);
 
             xhtml.endElement(H.TR);
@@ -877,5 +946,11 @@ public class TableFileHandler extends AbstractSearchHandler {
             throw new RequestException("Must specify a valid path for the collection directory: " + e.getMessage());
         }
         return path;
+    }
+
+    private boolean isValidLuceneFieldName(String f) {
+        Matcher m = VALID_LUCENE_FIELD_NAME.matcher(f);
+        return m.matches();
+
     }
 }

@@ -192,7 +192,7 @@ public class BasicSearcher {
         highlighter.setMaxDocCharsToAnalyze(maxCharsToReadForSnippets);
         List<String> bits = new ArrayList<>();
         for (int i = 0; i < text.length; i++) {
-            String[] tmpBits = highlighter.getBestFragments(indexSchema.getOffsetAnalyzer(),
+            String[] tmpBits = highlighter.getBestFragments(indexSchema.getOffsetAnalyzer(request.getContentField()),
                     request.getContentField(), text[i],
                     request.getSnippetsPerResult());
             for (String s : tmpBits) {

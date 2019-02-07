@@ -158,6 +158,9 @@ public class CollectionHandler extends AdminHandler {
             xhtml.element(H.P, formatDocCount(r.numDeletedDocs(), "deleted document"));
             xhtml.element(H.P, formatDocCount(searcherApp.getRhapsodeCollection().getIgnoredSize(), "ignored document"));
             xhtml.element(H.P, formatDocCount(searcherApp.getRhapsodeCollection().getFavoritesSize(), "favorite document"));
+            String defaultContentField =
+                    searcherApp.getRhapsodeCollection().getIndexSchema().getDefaultContentField();
+            boolean foundDefaultContent = false;
             Map<String, Long> m = new HashMap<>();
             for (LeafReaderContext c : r.leaves()) {
                 LeafReader reader = c.reader();
@@ -166,6 +169,9 @@ public class CollectionHandler extends AdminHandler {
                 while (it.hasNext()) {
                     FieldInfo info = it.next();
                     String name = info.name;
+                    if (name.equals(defaultContentField)) {
+                        foundDefaultContent = true;
+                    }
                     int nbr = reader.getDocCount(name);
                     Long curr = m.get(name);
                     curr = (curr == null) ? 0 : curr;
@@ -175,6 +181,10 @@ public class CollectionHandler extends AdminHandler {
             }
             xhtml.br();
             xhtml.br();
+            if (! foundDefaultContent) {
+                RhapsodeDecorator.writeErrorMessage("Couldn't find default content field ("+defaultContentField+") in index!", xhtml);
+                RhapsodeDecorator.writeErrorMessage("Please navigate to Interface Settings and set 'Default Content Field' to a field that exists in this collection.", xhtml);
+            }
             xhtml.characters("Fields:");
             xhtml.startElement(H.TABLE, H.BORDER, "2");
             SortedSet<String> keys = new TreeSet<>(m.keySet());

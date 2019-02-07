@@ -141,7 +141,9 @@ public class RhapsodeDecorator {
                 H.NAME, C.DEFAULT_QUERY_FIELD);
 
         List<String> fields = new ArrayList<>();
-        fields.add(currDefaultField);
+        if (schema.getDefinedFields().contains(currDefaultField)) {
+            fields.add(currDefaultField);
+        }
         List<String> rest = new ArrayList<>();
         for (String other : schema.getDefinedFields()) {
             FieldDef def = schema.getFieldDef(other);
@@ -150,7 +152,9 @@ public class RhapsodeDecorator {
                 continue;
             }
             FieldType t = def.getFieldType();
-            if (t.tokenized() && !other.equals(currDefaultField)) {
+            if (t.tokenized() &&
+                    !other.equals(currDefaultField)
+                && !other.startsWith("_")) {
                 rest.add(other);
             }
         }
