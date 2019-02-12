@@ -29,7 +29,7 @@
 
 package org.rhapsode.search;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.core.WhitespaceAnalyzer;
@@ -43,8 +43,8 @@ import org.apache.lucene.search.highlight.SimpleFragmenter;
 import org.apache.lucene.search.highlight.SpanGradientFormatter;
 import org.apache.tika.metadata.Metadata;
 import org.apache.tika.sax.ToHTMLContentHandler;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.rhapsode.app.decorators.RhapsodeXHTMLHandler;
 import org.rhapsode.app.decorators.SnippetWriter;
 import org.rhapsode.lucene.search.basic.LTGTEncoder;
@@ -64,7 +64,7 @@ public class SnippetTest {
             new LTGTEncoder(),
             scorer);
 
-    @Before
+    @BeforeEach
     public void setUp() {
         scorer.setExpandMultiTermQuery(true);
         highlighter.setTextFragmenter(fragmenter);

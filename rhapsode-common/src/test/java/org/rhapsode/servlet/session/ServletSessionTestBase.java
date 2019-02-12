@@ -32,19 +32,19 @@ package org.rhapsode.servlet.session;
 import java.sql.Connection;
 import java.sql.DriverManager;
 
-import org.junit.After;
-import org.junit.Before;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 
 
 public class ServletSessionTestBase {
     Connection connection;
 
-    @Before
+    @BeforeEach
     public void init() throws Exception {
         connection = DriverManager.getConnection("jdbc:h2:mem:dbtest1");
     }
 
-    @After
+    @AfterEach
     public void tearDown() throws Exception {
         connection.close();
     }

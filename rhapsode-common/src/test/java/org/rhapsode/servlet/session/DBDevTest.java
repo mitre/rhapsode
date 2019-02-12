@@ -34,8 +34,8 @@ import java.sql.Statement;
 import java.util.Random;
 import java.util.UUID;
 
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
 //used to figure out the right sql call to get count of
 //embedded documents with at least one hit
@@ -43,7 +43,7 @@ public class DBDevTest extends ServletSessionTestBase {
 
 
     @Test
-    @Ignore("until we have an actual test")
+    @Disabled("until we have an actual test")
     public void testBasic() throws Exception {
         Statement st = connection.createStatement();
         st.execute("create table tmp (file_id char(36), doc_id integer, query_id integer)");

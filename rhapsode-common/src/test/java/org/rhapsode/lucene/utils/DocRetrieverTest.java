@@ -29,8 +29,9 @@
 
 package org.rhapsode.lucene.utils;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -65,10 +66,11 @@ import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TotalHitCountCollector;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Ignore;
-import org.junit.Test;
+
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 import org.rhapsode.util.PathUtils;
 
 public class DocRetrieverTest {
@@ -86,7 +88,7 @@ public class DocRetrieverTest {
 
     static IndexSearcher searcher;
 
-    @BeforeClass
+    @BeforeAll
     public static void init() throws IOException {
         Analyzer standardAnalyzer = new StandardAnalyzer();
         Analyzer keywordAnalyzer = new KeywordAnalyzer();
@@ -142,7 +144,7 @@ public class DocRetrieverTest {
         searcher = new IndexSearcher(DirectoryReader.open(luceneDirectory));
     }
 
-    @AfterClass
+    @AfterAll
     public static void cleanUp() throws IOException {
         searcher.getIndexReader().close();
         luceneDirectory.close();
@@ -173,7 +175,7 @@ public class DocRetrieverTest {
     }
 
     @Test
-    @Ignore
+    @Disabled
     public void oneOffTestBooleanQuery() throws Exception {
         BooleanQuery.Builder builder = new BooleanQuery.Builder();
         builder.add(new TermQuery(new Term(CONTENT_FIELD, "fox")), BooleanClause.Occur.SHOULD);
@@ -193,19 +195,20 @@ public class DocRetrieverTest {
 
     private void checkResults(List<Document> docs) {
         if (docs == null) {
-            assertTrue("docs cannot be null", false);
+
+            assertTrue(false, "docs cannot be null");
         }
         Set<String> seen = new HashSet<>();
         for (int i = 0; i < docs.size(); i++) {
             String attachment_id = docs.get(i).get(EMBEDDED_ID_FIELD);
-            assertEquals("equals", Integer.toString(i), attachment_id);
+            assertEquals(Integer.toString(i), attachment_id, "equals");
             String doc_id = docs.get(i).get(DOC_ID_FIELD);
             seen.add(doc_id);
         }
-        assertEquals("must be same size", seen.size(), TARG_DOC_IDS.size());
+        assertEquals(seen.size(), TARG_DOC_IDS.size(), "must be same size");
         for (String targ : TARG_DOC_IDS) {
             if (!seen.contains(targ)) {
-                assertTrue("failed to find: " + targ, false);
+                assertTrue(false, "failed to find: " + targ);
             }
 
         }

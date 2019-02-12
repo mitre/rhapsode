@@ -29,7 +29,8 @@
 
 package org.rhapsode.app.utils;
 
-import static org.junit.Assert.assertTrue;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
 import java.util.HashSet;
@@ -44,7 +45,8 @@ import org.apache.lucene.search.spans.SpanOrQuery;
 import org.apache.lucene.search.spans.SpanQuery;
 import org.apache.lucene.search.spans.SpanTermQuery;
 import org.apache.tika.sax.ToHTMLContentHandler;
-import org.junit.Test;
+
+import org.junit.jupiter.api.Test;
 import org.rhapsode.app.contants.H;
 import org.rhapsode.app.decorators.RhapsodeXHTMLHandler;
 import org.rhapsode.lucene.search.HighlightingQuery;

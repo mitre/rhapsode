@@ -29,14 +29,15 @@
 
 package org.rhapsode.servlet.session;
 
-import static junit.framework.Assert.assertTrue;
-import static org.junit.Assert.assertEquals;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.rhapsode.app.session.CollectionsHistory;
 
 public class CollectionHistoryTest extends ServletSessionTestBase {

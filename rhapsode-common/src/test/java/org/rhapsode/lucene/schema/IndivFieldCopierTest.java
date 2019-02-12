@@ -29,23 +29,23 @@
 
 package org.rhapsode.lucene.schema;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.nio.file.Paths;
 
 import com.google.common.collect.Lists;
 import org.apache.commons.io.FileUtils;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 
 public class IndivFieldCopierTest {
 
     static String LANG_ID_STRING = null;
 
-    @Before
+    @BeforeEach
     public void init() throws Exception {
 
         LANG_ID_STRING = FileUtils.readFileToString(

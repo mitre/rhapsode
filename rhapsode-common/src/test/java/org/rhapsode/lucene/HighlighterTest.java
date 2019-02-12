@@ -39,8 +39,9 @@ import org.apache.lucene.search.highlight.Highlighter;
 import org.apache.lucene.search.highlight.QueryScorer;
 import org.apache.lucene.search.highlight.SimpleFragmenter;
 import org.apache.lucene.search.highlight.SpanGradientFormatter;
-import org.junit.Before;
-import org.junit.Test;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.rhapsode.lucene.search.basic.LTGTEncoder;
 
 public class HighlighterTest {
@@ -58,7 +59,7 @@ public class HighlighterTest {
             new LTGTEncoder(),
             scorer);
 
-    @Before
+    @BeforeEach
     public void setUp() {
         scorer.setExpandMultiTermQuery(true);
         highlighter.setTextFragmenter(fragmenter);

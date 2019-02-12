@@ -29,12 +29,12 @@
 
 package org.rhapsode.servlet.session;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.InputStream;
 import java.util.Map;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.rhapsode.app.session.DBStoredConceptManager;
 import org.rhapsode.app.session.DBStoredQueryManager;
 import org.rhapsode.app.session.StoredQueryReader;
@@ -102,7 +102,7 @@ public class StoredQueryManagerTest extends ServletSessionTestBase {
             assertEquals(DEFAULT_FIELD, q.getDefaultField());
             assertEquals("regular", q.getHighlightingStyle());
             assertEquals(-1, q.getPriority());
-            System.out.println(c.keySet());
+            //System.out.println(c.keySet());
         }
     }
 
