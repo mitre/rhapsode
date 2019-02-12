@@ -44,8 +44,8 @@
 
     <properties>
         <tika.version>1.20</tika.version>
-        <lucene.version>7.6.0</lucene.version>
-        <lucene-addons.version>7.6-SNAPSHOT</lucene-addons.version>
+        <lucene.version>7.7.0</lucene.version>
+        <lucene-addons.version>7.7-0.1</lucene-addons.version>
         <jetty.version>9.4.14.v20181114</jetty.version>
         <poi.version>4.0.1</poi.version>
         <carrot2.version>3.16.1</carrot2.version>
