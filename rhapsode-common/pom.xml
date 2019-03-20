@@ -203,6 +203,10 @@
                     <artifactId>jackson-databind</artifactId>
                 </exclusion>
                 <exclusion>
+                    <groupId>com.fasterxml.jackson.core</groupId>
+                    <artifactId>jackson-annotations</artifactId>
+                </exclusion>
+                <exclusion>
                     <groupId>org.simpleframework</groupId>
                     <artifactId>simple-xml</artifactId>
                 </exclusion>
