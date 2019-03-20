@@ -30,5 +30,5 @@
 package org.rhapsode.app.contants;
 
 public class Version {
-    public final static String VERSION = "Rhapsode Prototype, v0.4.0-SNAPSHOT";
+    public final static String VERSION = "Rhapsode Prototype, v0.4.0";
 }
