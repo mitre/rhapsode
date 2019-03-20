@@ -88,7 +88,7 @@ public class RhapsodeDesktopServlet {
     }
 
     public static String getVersion() {
-        return "Rhapsode Prototype, v0.4.0";
+        return "Rhapsode Prototype, v0.4.1-SNAPSHOT";
     }
 
     public static void main(String[] args) {

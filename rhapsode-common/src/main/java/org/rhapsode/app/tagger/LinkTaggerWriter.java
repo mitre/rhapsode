@@ -106,7 +106,7 @@ public class LinkTaggerWriter {
                 searcherApp.getSessionManager()
                         .getDynamicParameterConfig()
                         .getString(DynamicParameters.METADATA_CREATOR),
-                "Rhapsode 0.4.0 Report"
+                "Rhapsode 0.4.1-SNAPSHOT Report"
         );
         wb.getXSSFWorkbook().getProperties().getCoreProperties().setDescription("Rhapsode Report, type: " + request.reportType.toString());
 
