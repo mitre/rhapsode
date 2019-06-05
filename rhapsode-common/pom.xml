@@ -43,10 +43,11 @@
     <artifactId>rhapsode-common</artifactId>
 
     <properties>
-        <tika.version>1.20</tika.version>
-        <lucene.version>7.7.0</lucene.version>
-        <lucene-addons.version>7.7-0.1</lucene-addons.version>
-        <jetty.version>9.4.15.v20190215</jetty.version>
+        <tika.version>1.21</tika.version>
+        <lucene.version>8.1.1</lucene.version>
+        <lucene-addons.version>8.0-0.1</lucene-addons.version>
+        <jackson.version>2.9.9</jackson.version>
+        <jetty.version>9.4.18.v20190429</jetty.version>
         <poi.version>4.0.1</poi.version>
         <carrot2.version>3.16.1</carrot2.version>
     </properties>
@@ -89,22 +90,12 @@
         </dependency>
         <dependency>
             <groupId>org.apache.lucene</groupId>
-            <artifactId>lucene-spatial</artifactId>
-            <version>${lucene.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.lucene</groupId>
             <artifactId>lucene-spatial-extras</artifactId>
             <version>${lucene.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.lucene</groupId>
             <artifactId>lucene-highlighter</artifactId>
-            <version>${lucene.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.lucene</groupId>
-            <artifactId>lucene-analyzers-smartcn</artifactId>
             <version>${lucene.version}</version>
         </dependency>
         <dependency>
@@ -130,7 +121,7 @@
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
-            <version>3.8.1</version>
+            <version>3.9</version>
         </dependency>
         <dependency>
             <groupId>commons-cli</groupId>
@@ -167,7 +158,7 @@
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-csv</artifactId>
-            <version>1.6</version>
+            <version>1.7</version>
         </dependency>
         <dependency>
             <groupId>org.apache.poi</groupId>
@@ -223,7 +214,7 @@
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-            <version>2.9.8</version>
+            <version>${jackson.version}</version>
             <exclusions>
                 <exclusion>
                     <groupId>com.fasterxml.jackson.core</groupId>
@@ -238,12 +229,12 @@
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-core</artifactId>
-            <version>2.9.8</version>
+            <version>${jackson.version}</version>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-annotations</artifactId>
-            <version>2.9.8</version>
+            <version>${jackson.version}</version>
         </dependency>
         <dependency>
             <groupId>org.simpleframework</groupId>
