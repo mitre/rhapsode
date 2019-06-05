@@ -156,17 +156,6 @@ public class IndexSchema {
         return new PerFieldAnalyzerWrapper(null, map);
     }
 
-    public Analyzer getMTQueryAnalyzer() {
-        Map<String, Analyzer> map = new HashMap<>();
-        for (Map.Entry<String, FieldDef> e : fields.entrySet()) {
-            String fieldName = e.getKey();
-            if (e.getValue().fieldType.tokenized()) {
-                map.put(fieldName, e.getValue().getMultitermQueryAnalyzer());
-            }
-        }
-        return new PerFieldAnalyzerWrapper(null, map);
-    }
-
     /**
      * The unique id for each Lucene document.
      * If a complex document has many many attachments,

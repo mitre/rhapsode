@@ -54,6 +54,7 @@ import org.apache.lucene.index.Term;
 import org.apache.lucene.index.memory.MemoryIndex;
 import org.apache.lucene.search.DocIdSetIterator;
 import org.apache.lucene.search.IndexSearcher;
+import org.apache.lucene.search.ScoreMode;
 import org.apache.lucene.search.spans.SpanCollector;
 import org.apache.lucene.search.spans.SpanQuery;
 import org.apache.lucene.search.spans.SpanWeight;
@@ -323,7 +324,8 @@ public class DocHighlighter {
         SpanQuery sq = highlightingQuery.getSpanQuery();
 
         sq = (SpanQuery) sq.rewrite(reader);
-        SpanWeight weight = sq.createWeight(indexSearcher, false, 1.0f);
+
+        SpanWeight weight = sq.createWeight(indexSearcher, ScoreMode.COMPLETE_NO_SCORES, 1.0f);
         Spans spans = weight.getSpans(reader.leaves().get(0),
                 SpanWeight.Postings.OFFSETS);
 

@@ -58,8 +58,7 @@ public class SQPParserPlugin implements ParserPlugin {
     @Override
     public Query parse(String defaultField, String qString) throws ParseException {
         SpanQueryParser p = new SpanQueryParser(
-                defaultField, indexSchema.getQueryAnalyzer(),
-                indexSchema.getMTQueryAnalyzer());
+                defaultField, indexSchema.getQueryAnalyzer());
         //TODO: set configs!
         p.setAllowLeadingWildcard(true);
         p.setMaxExpansions(BooleanQuery.getMaxClauseCount());

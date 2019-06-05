@@ -39,7 +39,6 @@ import org.apache.lucene.analysis.core.KeywordTokenizerFactory;
 import org.apache.lucene.analysis.custom.CustomAnalyzer;
 import org.apache.lucene.analysis.util.AbstractAnalysisFactory;
 import org.apache.lucene.analysis.util.CharFilterFactory;
-import org.apache.lucene.analysis.util.MultiTermAwareComponent;
 import org.apache.lucene.analysis.util.TokenFilterFactory;
 import org.apache.lucene.analysis.util.TokenizerFactory;
 
@@ -76,7 +75,6 @@ abstract class AnalyzingFieldDefBase {
         this.offsetAnalyzer = (namedOffsetAnalyzer != null) ? namedOffsetAnalyzer.analyzer : this.indexAnalyzer;
         indexAnalyzerName = (namedIndexAnalyzer != null) ? namedIndexAnalyzer.name : null;
         queryAnalyzerName = (namedQueryAnalyzer != null) ? namedQueryAnalyzer.name : null;
-        mtQueryAnalyzerName = (namedMTQueryAnalyzer != null) ? namedMTQueryAnalyzer.name : null;
         offsetAnalyzerName = (namedOffsetAnalyzer != null) ? namedOffsetAnalyzer.name : null;
     }
 
@@ -86,10 +84,6 @@ abstract class AnalyzingFieldDefBase {
 
     public Analyzer getQueryAnalyzer() {
         return queryAnalyzer;
-    }
-
-    public Analyzer getMultitermQueryAnalyzer() {
-        return mtQueryAnalyzer;
     }
 
     public Analyzer getOffsetAnalyzer() {
@@ -126,11 +120,7 @@ abstract class AnalyzingFieldDefBase {
             mtAwareBuilder.addCharFilter(factory.getClass(), copyArgs(factory));
         }
 
-        if (tc.getTokenizerFactory() instanceof MultiTermAwareComponent) {
-            mtAwareBuilder.withTokenizer(tc.getTokenizerFactory().getClass(), copyArgs(tc.getTokenizerFactory()));
-        } else {
-            mtAwareBuilder.withTokenizer(KeywordTokenizerFactory.class, copyArgs(null));
-        }
+        mtAwareBuilder.withTokenizer(tc.getTokenizerFactory().getClass(), copyArgs(tc.getTokenizerFactory()));
 
         for (TokenFilterFactory fact : tc.getTokenFilterFactories()) {
             mtAwareBuilder.addTokenFilter(fact.getClass(), copyArgs(fact));
@@ -145,46 +135,4 @@ abstract class AnalyzingFieldDefBase {
         }
         return new HashMap<>(factory.getOriginalArgs());
     }
-
-    private static class MultiTermChainBuilder {
-        static final KeywordTokenizerFactory keyFactory = new KeywordTokenizerFactory(new HashMap<String, String>());
-
-        ArrayList<CharFilterFactory> charFilters = null;
-        ArrayList<TokenFilterFactory> filters = new ArrayList<>(2);
-        TokenizerFactory tokenizer = keyFactory;
-
-        public void add(Object current) {
-            if (!(current instanceof MultiTermAwareComponent)) return;
-            AbstractAnalysisFactory newComponent = ((MultiTermAwareComponent) current).getMultiTermComponent();
-            if (newComponent instanceof TokenFilterFactory) {
-                if (filters == null) {
-                    filters = new ArrayList<>(2);
-                }
-                filters.add((TokenFilterFactory) newComponent);
-            } else if (newComponent instanceof TokenizerFactory) {
-                tokenizer = (TokenizerFactory) newComponent;
-            } else if (newComponent instanceof CharFilterFactory) {
-                if (charFilters == null) {
-                    charFilters = new ArrayList<>(1);
-                }
-                charFilters.add((CharFilterFactory) newComponent);
-
-            } else {
-                throw new IllegalArgumentException("Unknown analysis component from MultiTermAwareComponent: " + newComponent);
-            }
-        }
-
-        public CustomAnalyzer build() throws IOException {
-            CustomAnalyzer.Builder builder = CustomAnalyzer.builder();
-            for (CharFilterFactory charFilterFactory : charFilters) {
-                builder.addCharFilter(charFilterFactory.getClass(), charFilterFactory.getOriginalArgs());
-            }
-            builder.withTokenizer(tokenizer.getClass(), tokenizer.getOriginalArgs());
-            for (TokenFilterFactory tokenFilterFactory : filters) {
-                builder.addTokenFilter(tokenFilterFactory.getClass(), tokenFilterFactory.getOriginalArgs());
-            }
-            return builder.build();
-        }
-    }
-
 }

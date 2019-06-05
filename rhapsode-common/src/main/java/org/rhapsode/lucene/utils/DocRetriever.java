@@ -103,7 +103,7 @@ public class DocRetriever {
             TopDocs topDocs = searcher.search(q, MAX_EMBEDDED_DOCS);
             scoreDocs = topDocs.scoreDocs;
         } else {
-            TopFieldDocs topFieldDocs = searcher.search(q, MAX_EMBEDDED_DOCS, sort, false, false);
+            TopFieldDocs topFieldDocs = searcher.search(q, MAX_EMBEDDED_DOCS, sort);
             scoreDocs = topFieldDocs.scoreDocs;
         }
 

@@ -46,6 +46,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.index.IndexReader;
 import org.apache.tika.batch.BatchProcessDriverCLI;
+import org.apache.tika.utils.ProcessUtils;
 import org.rhapsode.RhapsodeCollection;
 import org.rhapsode.lucene.search.IndexManager;
 import org.rhapsode.util.ParamUtil;
@@ -204,9 +205,9 @@ public class IndexerCLI {
         args.add("-bc");
         args.add("resources/config/batch-indexer-config.xml");
         args.add("-inputDir");
-        args.add(rc.getExtractedTextRoot().toAbsolutePath().toString());
+        args.add(ProcessUtils.escapeCommandLine(rc.getExtractedTextRoot().toAbsolutePath().toString()));
         args.add("-collectionPath");
-        args.add(rc.getCollectionPath().toAbsolutePath().toString());
+        args.add(ProcessUtils.escapeCommandLine(rc.getCollectionPath().toAbsolutePath().toString()));
         if (numConsumers > 0) {
             args.add("-numConsumers");
             args.add(Integer.toString(numConsumers));
@@ -245,9 +246,9 @@ public class IndexerCLI {
         commandLine.add("-bc");
         commandLine.add("resources/config/tika-batch-config.xml");
         commandLine.add("-inputDir");
-        commandLine.add(rc.getOrigDocsRoot().toAbsolutePath().toString());
+        commandLine.add(ProcessUtils.escapeCommandLine(rc.getOrigDocsRoot().toAbsolutePath().toString()));
         commandLine.add("-outputDir");
-        commandLine.add(rc.getExtractedTextRoot().toAbsolutePath().toString());
+        commandLine.add(ProcessUtils.escapeCommandLine(rc.getExtractedTextRoot().toAbsolutePath().toString()));
         //make this configurable
 
         if (numConsumers > 0) {

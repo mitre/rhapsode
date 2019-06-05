@@ -51,6 +51,7 @@ import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.Collector;
 import org.apache.lucene.search.MultiTermQuery;
 import org.apache.lucene.search.Query;
+import org.apache.lucene.search.ScoreMode;
 import org.apache.lucene.search.TotalHitCountCollector;
 import org.apache.lucene.search.Weight;
 import org.apache.lucene.search.spans.SpanQuery;
@@ -211,7 +212,7 @@ public class VariantTermHandler extends AbstractSearchHandler {
         int totalHits = ((TotalHitCountCollector) collector).getTotalHits();
         Set<Term> terms = new HashSet<>();
         Weight weight = q.createWeight(searcherConfig.getRhapsodeCollection().
-                getIndexManager().getSearcher(), false, 1.0f);
+                getIndexManager().getSearcher(), ScoreMode.COMPLETE_NO_SCORES, 1.0f);
 
         weight.extractTerms(terms);
         List<TermDFTF> results = new ArrayList<>();

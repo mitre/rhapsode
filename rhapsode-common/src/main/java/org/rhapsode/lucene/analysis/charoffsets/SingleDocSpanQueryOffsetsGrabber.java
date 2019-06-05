@@ -43,6 +43,7 @@ import org.apache.lucene.index.memory.MemoryIndex;
 import org.apache.lucene.search.DocIdSetIterator;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
+import org.apache.lucene.search.ScoreMode;
 import org.apache.lucene.search.spans.SpanQuery;
 import org.apache.lucene.search.spans.SpanWeight;
 import org.apache.lucene.search.spans.Spans;
@@ -145,7 +146,7 @@ public class SingleDocSpanQueryOffsetsGrabber {
 
         SpanQuery query = converter.convert(fieldName, pQuery.getQuery());
         query = (SpanQuery) query.rewrite(searcher.getIndexReader());
-        SpanWeight sw = query.createWeight(searcher, false, 1.0f);
+        SpanWeight sw = query.createWeight(searcher, ScoreMode.COMPLETE_NO_SCORES, 1.0f);
         Spans spans = sw.getSpans(ctx, SpanWeight.Postings.OFFSETS);
         int docs = 0;
         while (spans.nextDoc() != DocIdSetIterator.NO_MORE_DOCS) {

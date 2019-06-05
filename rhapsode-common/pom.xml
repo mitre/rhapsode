@@ -45,7 +45,7 @@
     <properties>
         <tika.version>1.21</tika.version>
         <lucene.version>8.1.1</lucene.version>
-        <lucene-addons.version>8.0-0.1</lucene-addons.version>
+        <lucene-addons.version>8.0-1.0</lucene-addons.version>
         <jackson.version>2.9.9</jackson.version>
         <jetty.version>9.4.18.v20190429</jetty.version>
         <poi.version>4.0.1</poi.version>
@@ -112,6 +112,12 @@
             <groupId>org.tallison.lucene</groupId>
             <artifactId>gramreaper</artifactId>
             <version>${lucene-addons.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.commons</groupId>
+                    <artifactId>commons-lang3</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>commons-io</groupId>
@@ -121,7 +127,7 @@
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
-            <version>3.9</version>
+            <version>${commons-lang3.version}</version>
         </dependency>
         <dependency>
             <groupId>commons-cli</groupId>

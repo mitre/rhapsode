@@ -84,15 +84,15 @@ public class BasicSearcher {
         try {
             //according to the javadocs (v4.5.1, including Sort() slightly increases overhead)
             if (sort == null) {
-                TopScoreDocCollector collector = TopScoreDocCollector.create(howMany);
+                TopScoreDocCollector collector = TopScoreDocCollector.create(howMany, Integer.MAX_VALUE);
                 searcher.search(searchRequest.getComplexQuery().getRetrievalQuery(), collector);
                 TopDocs topDocs = collector.topDocs();
                 sds = topDocs.scoreDocs;
-                totalHits = topDocs.totalHits;
+                totalHits = topDocs.totalHits.value;
             } else {
                 TopDocs topDocs = searcher.search(searchRequest.getComplexQuery().getRetrievalQuery(), howMany, sort);
                 sds = topDocs.scoreDocs;
-                totalHits = topDocs.totalHits;
+                totalHits = topDocs.totalHits.value;
             }
             return fillResults(searchRequest, sds, totalHits, searcher, start, end);
         } catch (BooleanQuery.TooManyClauses e) {

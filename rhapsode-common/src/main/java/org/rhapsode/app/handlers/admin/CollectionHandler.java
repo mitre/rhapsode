@@ -114,7 +114,9 @@ public class CollectionHandler extends AdminHandler {
                 if (errMsg != null) {
                     xhtml.br();
                     RhapsodeDecorator.writeErrorMessage(errMsg, xhtml);
-                    loadCollectionDialogue(xhtml);
+                    if (! errMsg.contains("any valid")) {
+                        loadCollectionDialogue(xhtml);
+                    }
                     xhtml.endDocument();
                 }
                 return;
@@ -235,6 +237,8 @@ public class CollectionHandler extends AdminHandler {
     }
 
     private String loadCollectionDialogue(RhapsodeXHTMLHandler xhtml) throws SAXException {
+
+        String errMsg = null;
         List<Pair<Path, Date>> paths = null;
         //TODO: if there was an error in the last request
         //pull that out of the requestlet
@@ -258,6 +262,7 @@ public class CollectionHandler extends AdminHandler {
                     " Please update the 'Collections Directory' via the 'Settings Interface' button.";
         }
         xhtml.startElement(H.TABLE);
+        int validCollections = 0;
         for (File f : files) {
             xhtml.startElement(H.TR);
             if (!RhapsodeCollection.isProbablyACompleteCollection(f.toPath())
@@ -271,6 +276,7 @@ public class CollectionHandler extends AdminHandler {
                 xhtml.endElement(H.TD);
                 xhtml.element(H.TD, " ");
             } else {
+                validCollections++;
                 xhtml.element(H.TD, f.getName());
                 xhtml.startElement(H.TD);
                 if (searcherApp.getRhapsodeCollection() != null &&
@@ -294,11 +300,15 @@ public class CollectionHandler extends AdminHandler {
             xhtml.endElement(H.TR);
         }
         xhtml.endElement(H.TABLE);
-        xhtml.startElement(H.INPUT,
-                H.TYPE, H.SUBMIT,
-                H.NAME, C.OPEN_NEW_COLLECTION,
-                H.VALUE, "Open Collection",
-                "default", "");
+        if (validCollections == 0) {
+            errMsg = "I regret that I couldn't " +
+                    "find any valid indices here: "+collectionsDir.toAbsolutePath().toString();
+        } else {
+            xhtml.startElement(H.INPUT,
+                    H.TYPE, H.SUBMIT,
+                    H.NAME, C.OPEN_NEW_COLLECTION,
+                    H.VALUE, "Open Collection",
+                    "default", "");
 /*
 
         if (paths != null && paths.size() > 0) {
@@ -324,10 +334,11 @@ public class CollectionHandler extends AdminHandler {
 
         xhtml.endElement(H.INPUT);
 */
-        xhtml.endElement(H.FORM);
+            xhtml.endElement(H.FORM);
+        }
         RhapsodeDecorator.addFooter(xhtml);
         xhtml.endDocument();
-        return null;
+        return errMsg;
     }
 
 
