@@ -1,3 +1,7 @@
+NOTE: Active development of this project has moved to https://github.com/tballison/rhapsode.  The namespaces in the new repo and on maven central have been converted from 'org.mitre' to 'org.tallison'. This repository is no longer actively maintained.
+===========================
+
+
 Rhapsode
 ========
 Advanced* desktop search/corpus exploration prototype
