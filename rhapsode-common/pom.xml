@@ -47,7 +47,7 @@
         <lucene.version>8.1.1</lucene.version>
         <lucene-addons.version>8.0-1.0</lucene-addons.version>
         <jackson.version>2.9.9</jackson.version>
-        <jetty.version>9.4.18.v20190429</jetty.version>
+        <jetty.version>9.4.35.v20201120</jetty.version>
         <poi.version>4.0.1</poi.version>
         <carrot2.version>3.16.1</carrot2.version>
     </properties>
